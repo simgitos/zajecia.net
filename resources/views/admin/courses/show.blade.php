@@ -59,6 +59,11 @@
                             </div>
 
                             <div>
+                                <span class="text-secondary d-block fs-5">Zrealizowane lekcje</span>
+                                <strong class="fs-2 text-primary">{{ $course->lessons->count() }}</strong>
+                            </div>
+
+                            <div>
                                 <span class="text-secondary d-block fs-5">Sala</span>
                                 @if($course->room)
                                     <span class="badge bg-blue-lt fs-4"><i class="ti ti-door me-1"></i>{{ $course->room->name }}</span>
@@ -186,6 +191,64 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Tabela zrealizowanych lekcji dla admina -->
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-surface border-bottom d-flex justify-content-between align-items-center">
+                <h3 class="card-title fw-bold">
+                    <i class="ti ti-history me-2 text-primary"></i> Lista zrealizowanych lekcji ({{ $course->lessons->count() }})
+                </h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="w-1">Lp.</th>
+                            <th>Data lekcji</th>
+                            <th>Temat lekcji</th>
+                            <th>Prowadzący</th>
+                            <th>Frekwencja (Obecni)</th>
+                            <th>Uwagi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($course->lessons->sortByDesc('realized_at') as $index => $lesson)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>
+                                    <strong class="text-dark"><i class="ti ti-calendar me-1 text-primary"></i>{{ $lesson->realized_at->format('d.m.Y') }}</strong>
+                                </td>
+                                <td>
+                                    <span class="fw-bold">{{ $lesson->topic ?: 'Brak tematu' }}</span>
+                                </td>
+                                <td>
+                                    {{ $lesson->teacher?->name ?? 'Brak danych' }}
+                                </td>
+                                <td>
+                                    @php
+                                        $present = $lesson->attendances->where('status', 'present')->count();
+                                        $total = $lesson->attendances->count();
+                                    @endphp
+                                    <span class="badge bg-success-lt fw-bold fs-4">
+                                        <i class="ti ti-users me-1"></i> {{ $present }} / {{ $total }} obecnych
+                                    </span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">{{ Str::limit($lesson->notes, 60) ?: '-' }}</small>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-5">
+                                    <i class="ti ti-calendar-off fs-1 d-block mb-2 text-secondary"></i>
+                                    Nie przeprowadzono jeszcze żadnych lekcji dla tych zajęć.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

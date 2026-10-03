@@ -16,6 +16,13 @@
 
     <div class="page-body">
         <div class="container-xl">
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show shadow-sm mb-3" role="alert">
+                    <i class="ti ti-check me-1"></i> {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             @if($courses->isEmpty())
                 <div class="card card-md shadow-sm text-center py-5">
                     <div class="card-body">
@@ -91,9 +98,12 @@
                                     </div>
                                 </div>
 
-                                <div class="card-footer bg-surface border-top">
-                                    <a href="{{ route('teacher.courses.show', $course->id) }}" class="btn btn-primary w-100">
-                                        <i class="ti ti-eye me-1"></i> Zobacz listę dzieci & szczegóły
+                                <div class="card-footer bg-surface border-top d-flex flex-column gap-2">
+                                    <a href="{{ route('teacher.lessons.create', $course->id) }}" class="btn btn-success w-100">
+                                        <i class="ti ti-checkup-list me-1"></i> Przeprowadź lekcję
+                                    </a>
+                                    <a href="{{ route('teacher.courses.show', $course->id) }}" class="btn btn-outline-primary w-100">
+                                        <i class="ti ti-eye me-1"></i> Szczegóły i dzieci
                                     </a>
                                 </div>
                             </div>

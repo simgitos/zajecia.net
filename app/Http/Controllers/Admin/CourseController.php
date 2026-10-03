@@ -36,8 +36,8 @@ class CourseController extends Controller
             abort(403);
         }
 
-        $course->load(['instructor', 'room', 'children.parent'])
-            ->loadCount('children');
+        $course->load(['instructor', 'room', 'children.parent', 'lessons.attendances', 'lessons.teacher'])
+            ->loadCount(['children', 'lessons']);
 
         return view('admin.courses.show', compact('course'));
     }

@@ -59,4 +59,9 @@ class Course extends Model
     {
         return max(0, $this->max_participants - $this->children()->count());
     }
+
+    public function lessons(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Lesson::class);
+    }
 }

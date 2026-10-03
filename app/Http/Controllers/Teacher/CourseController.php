@@ -39,8 +39,8 @@ class CourseController extends Controller
             abort(403, 'Dostęp zabroniony. Nie jesteś przypisanym nauczycielem tych zajęć.');
         }
 
-        $course->load(['room', 'children.parent'])
-            ->loadCount('children');
+        $course->load(['room', 'children.parent', 'lessons.attendances'])
+            ->loadCount(['children', 'lessons']);
 
         return view('teacher.courses.show', compact('course'));
     }
