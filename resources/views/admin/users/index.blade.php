@@ -19,8 +19,8 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>
-                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm">Edytuj</a>
-                        <a href="{{ route('users.destroy', $user->id) }}" class="btn btn-danger btn-sm">Usuń</a>
+                        <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-primary btn-sm">Edytuj</a>
+                        <a href="{{ route('admin.user.destroy', $user->id) }}" class="btn btn-danger btn-sm">Usuń</a>
                     </td>
                 </tr>
             @endforeach
