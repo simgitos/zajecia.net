@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Room;
@@ -32,7 +33,9 @@ class CourseController extends Controller
     {
         $schoolId = Auth::user()->school_id;
         $rooms = Room::where('school_id', $schoolId)->orderBy('name')->get();
-        $instructors = User::where('school_id', $schoolId)->orderBy('name')->get();
+        $instructors = User::where('school_id', $schoolId)
+            ->whereJsonContains('roles', UserRole::TEACHER->value)
+            ->orderBy('name')->get();
 
         return view('admin.courses.create', compact('rooms', 'instructors'));
     }
@@ -102,7 +105,9 @@ class CourseController extends Controller
         }
 
         $rooms = Room::where('school_id', $schoolId)->orderBy('name')->get();
-        $instructors = User::where('school_id', $schoolId)->orderBy('name')->get();
+        $instructors = User::where('school_id', $schoolId)
+            ->whereJsonContains('roles', UserRole::TEACHER->value)
+            ->orderBy('name')->get();
 
         return view('admin.courses.edit', compact('course', 'rooms', 'instructors'));
     }
