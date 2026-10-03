@@ -12,7 +12,7 @@ enum UserRole: string
     {
         return match($this) {
             self::ADMIN => 'Administrator',
-            self::TEACHER => 'Nauczyciel',
+            self::TEACHER => 'Nauczyciel (Instruktor)',
             self::USER => 'Użytkownik',
         };
     }
