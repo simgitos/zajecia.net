@@ -19,6 +19,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])
     ->name('admin.')
     ->group(function () {
         Route::resource('/users', UserController::class)->names('user');
+        Route::resource('/courses', \App\Http\Controllers\Admin\CourseController::class)->names('courses');
     });
 
 ////////////////////////////////////// User / Rodzic
