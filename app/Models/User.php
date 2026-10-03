@@ -17,6 +17,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'roles',
+        'school_id',
     ];
 
     /**
@@ -52,5 +53,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->roles->contains(
             fn (UserRole $role) => in_array($role, $enumRoles, true)
         );
+    }
+
+    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(School::class);
     }
 }

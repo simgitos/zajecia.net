@@ -13,8 +13,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('nip')->nullable();
-            $table->string('email');
-            $table->string('phone');
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
             $table->string('bank_account_number')->nullable();
             $table->enum('subscription_plan', ['micro', 'standard', 'pro', 'enterprise'])->default('micro');
             $table->integer('cancellation_cutoff_hours')->default(24);

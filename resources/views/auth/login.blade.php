@@ -63,10 +63,10 @@
       </div>
     </div>
 
-    @if (Route::has('register'))
+    <!-- @if (Route::has('register'))
       <div class="text-center text-secondary mt-3">
         Nie masz jeszcze konta? <a href="{{ route('register') }}" tabindex="-1">Zarejestruj się</a>
       </div>
-    @endif
+    @endif -->
 </div>
 @endsection
