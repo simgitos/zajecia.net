@@ -59,4 +59,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(School::class);
     }
+
+    public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Child::class, 'parent_id');
+    }
 }

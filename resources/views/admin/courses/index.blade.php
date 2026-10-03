@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h3 class="card-title"><i class="ti ti-books me-2"></i> Zarządzanie zajęciami (Kursy)</h3>
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-surface d-flex justify-content-between align-items-center">
+        <h3 class="card-title fw-bold"><i class="ti ti-books me-2 text-primary"></i> Zarządzanie zajęciami (Kursy)</h3>
         <a href="{{ route('admin.courses.create') }}" class="btn btn-primary">
             <i class="ti ti-plus me-1"></i> Dodaj nowe zajęcia
         </a>
@@ -11,13 +11,13 @@
 
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show m-3 mb-0" role="alert">
-            {{ session('success') }}
+            <i class="ti ti-check me-1"></i> {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
     <div class="table-responsive">
-        <table class="table table-vcenter card-table">
+        <table class="table table-vcenter card-table table-hover">
             <thead>
                 <tr>
                     <th>Nazwa zajęć</th>
@@ -26,7 +26,7 @@
                     <th>Typ</th>
                     <th>Rozliczenie</th>
                     <th>Cena</th>
-                    <th>Maks. os.</th>
+                    <th>Obłożenie</th>
                     <th>Wiek</th>
                     <th>Status</th>
                     <th class="w-1">Akcje</th>
@@ -36,9 +36,11 @@
                 @forelse ($courses as $course)
                     <tr>
                         <td>
-                            <strong class="d-block">{{ $course->title }}</strong>
+                            <a href="{{ route('admin.courses.show', $course->id) }}" class="text-reset fw-bold d-block text-primary">
+                                {{ $course->title }}
+                            </a>
                             @if($course->description)
-                                <small class="text-muted text-truncate d-inline-block" style="max-width: 200px;">{{ $course->description }}</small>
+                                <small class="text-muted text-truncate d-inline-block" style="max-width: 220px;">{{ $course->description }}</small>
                             @endif
                         </td>
                         <td>{{ $course->instructor?->name ?? 'Brak' }}</td>
@@ -46,7 +48,7 @@
                             @if($course->room)
                                 <span class="badge bg-blue-lt"><i class="ti ti-door me-1"></i>{{ $course->room->name }}</span>
                             @else
-                                <span class="text-muted">Brak sal</span>
+                                <span class="text-muted">Brak sali</span>
                             @endif
                         </td>
                         <td>
@@ -68,7 +70,14 @@
                             @endswitch
                         </td>
                         <td><strong>{{ number_format($course->price_per_unit, 2, ',', ' ') }} zł</strong></td>
-                        <td>{{ $course->max_participants }}</td>
+                        <td>
+                            @php
+                                $isFull = $course->children_count >= $course->max_participants;
+                            @endphp
+                            <span class="badge {{ $isFull ? 'bg-danger-lt' : 'bg-blue-lt' }} fw-bold fs-4">
+                                <i class="ti ti-users me-1"></i>{{ $course->children_count }} / {{ $course->max_participants }}
+                            </span>
+                        </td>
                         <td>
                             @if($course->min_age || $course->max_age)
                                 {{ $course->min_age ?? 0 }} - {{ $course->max_age ?? '∞' }} lat
@@ -85,6 +94,9 @@
                         </td>
                         <td>
                             <div class="btn-list flex-nowrap">
+                                <a href="{{ route('admin.courses.show', $course->id) }}" class="btn btn-outline-info btn-sm">
+                                    <i class="ti ti-eye me-1"></i> Podgląd
+                                </a>
                                 <a href="{{ route('admin.courses.edit', $course->id) }}" class="btn btn-primary btn-sm">
                                     <i class="ti ti-edit me-1"></i> Edytuj
                                 </a>

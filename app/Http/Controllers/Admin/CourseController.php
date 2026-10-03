@@ -19,11 +19,27 @@ class CourseController extends Controller
     {
         $schoolId = Auth::user()->school_id;
         $courses = Course::with(['instructor', 'room'])
+            ->withCount('children')
             ->where('school_id', $schoolId)
             ->latest()
             ->paginate(15);
 
         return view('admin.courses.index', compact('courses'));
+    }
+
+    /**
+     * Szczegóły konkretnych zajęć z listą zapisanych dzieci.
+     */
+    public function show(Course $course)
+    {
+        if ($course->school_id !== Auth::user()->school_id) {
+            abort(403);
+        }
+
+        $course->load(['instructor', 'room', 'children.parent'])
+            ->loadCount('children');
+
+        return view('admin.courses.show', compact('course'));
     }
 
     /**

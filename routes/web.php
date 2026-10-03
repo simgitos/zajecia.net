@@ -20,6 +20,16 @@ Route::middleware(['auth', 'verified', 'role:admin'])
     ->group(function () {
         Route::resource('/users', UserController::class)->names('user');
         Route::resource('/courses', \App\Http\Controllers\Admin\CourseController::class)->names('courses');
+        Route::get('/children', [\App\Http\Controllers\Admin\ChildController::class, 'index'])->name('children.index');
+    });
+
+////////////////////////////////////// Teacher / Nauczyciel
+Route::middleware(['auth', 'verified', 'role:teacher'])
+    ->prefix('teacher')
+    ->name('teacher.')
+    ->group(function () {
+        Route::get('/courses', [\App\Http\Controllers\Teacher\CourseController::class, 'index'])->name('courses.index');
+        Route::get('/courses/{course}', [\App\Http\Controllers\Teacher\CourseController::class, 'show'])->name('courses.show');
     });
 
 ////////////////////////////////////// User / Rodzic
@@ -37,7 +47,10 @@ Route::middleware(['auth', 'verified', 'role:user'])
     ->prefix('user')
     ->name('user.')
     ->group(function () {
-        
+        Route::resource('/children', \App\Http\Controllers\User\ChildController::class)->names('children');
+        Route::post('/children/enroll', [\App\Http\Controllers\User\ChildController::class, 'enroll'])->name('children.enroll');
+        Route::delete('/children/{child}/unenroll/{course}', [\App\Http\Controllers\User\ChildController::class, 'unenroll'])->name('children.unenroll');
+        Route::get('/courses', [\App\Http\Controllers\User\ChildController::class, 'coursesCatalog'])->name('courses.index');
     });
 
 require __DIR__ . '/auth.php';

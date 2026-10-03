@@ -1,29 +1,21 @@
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside"
-        role="button" aria-haspopup="true" aria-expanded="false">
-        <span class="nav-link-icon">
-            <i class="ti ti-user"></i>
-        </span>
-        <span class="nav-link-title">Administrator</span>
-    </a>
-    <div class="dropdown-menu">
-        <a class="dropdown-item" href="#">Overview</a>
-        <a class="dropdown-item" href="#">Sales</a>
-        <a class="dropdown-item" href="#">Traffic</a>
-        <a class="dropdown-item" href="?theme=dark">Tryb ciemny</a>
-        <a class="dropdown-item" href="?theme=light">Tryb jasny</a>
-    </div>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="{{route('admin.courses.index')}}">
+<li class="nav-item {{ request()->routeIs('admin.courses.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('admin.courses.index') }}">
         <span class="nav-link-icon">
             <i class="ti ti-books"></i>
         </span>
         <span class="nav-link-title">Zajęcia (Kursy)</span>
     </a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="{{route('admin.user.index')}}">
+<li class="nav-item {{ request()->routeIs('admin.children.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('admin.children.index') }}">
+        <span class="nav-link-icon">
+            <i class="ti ti-mood-kid"></i>
+        </span>
+        <span class="nav-link-title">Dzieci</span>
+    </a>
+</li>
+<li class="nav-item {{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('admin.user.index') }}">
         <span class="nav-link-icon">
             <i class="ti ti-users"></i>
         </span>

@@ -1,16 +1,17 @@
-<li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside"
-                            role="button" aria-haspopup="true" aria-expanded="false">
-                            <span class="nav-link-icon">
-                                <i class="ti ti-user"></i>
-                            </span>
-                            <span class="nav-link-title">Użytkownik</span>
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Overview</a>
-                            <a class="dropdown-item" href="#">Sales</a>
-                            <a class="dropdown-item" href="#">Traffic</a>
-                            <a class="dropdown-item" href="?theme=dark">Tryb ciemny</a>
-                            <a class="dropdown-item" href="?theme=light">Tryb jasny</a>
-                        </div>
-                    </li>
+<li class="nav-item {{ request()->routeIs('user.children.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('user.children.index') }}">
+        <span class="nav-link-icon">
+            <i class="ti ti-mood-kid"></i>
+        </span>
+        <span class="nav-link-title">Moje Dzieci</span>
+    </a>
+</li>
+
+<li class="nav-item {{ request()->routeIs('user.courses.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('user.courses.index') }}">
+        <span class="nav-link-icon">
+            <i class="ti ti-school"></i>
+        </span>
+        <span class="nav-link-title">Katalog Zajęć</span>
+    </a>
+</li>

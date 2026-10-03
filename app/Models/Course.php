@@ -44,4 +44,19 @@ class Course extends Model
     {
         return $this->belongsTo(Room::class);
     }
+
+    public function children(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Child::class, 'child_course')->withTimestamps();
+    }
+
+    public function isFull(): bool
+    {
+        return $this->children()->count() >= $this->max_participants;
+    }
+
+    public function availableSlots(): int
+    {
+        return max(0, $this->max_participants - $this->children()->count());
+    }
 }
