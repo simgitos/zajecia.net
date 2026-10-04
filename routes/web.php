@@ -54,6 +54,7 @@ Route::middleware(['auth', 'verified', 'role:user'])
         Route::post('/children/enroll', [\App\Http\Controllers\User\ChildController::class, 'enroll'])->name('children.enroll');
         Route::delete('/children/{child}/unenroll/{course}', [\App\Http\Controllers\User\ChildController::class, 'unenroll'])->name('children.unenroll');
         Route::get('/courses', [\App\Http\Controllers\User\ChildController::class, 'coursesCatalog'])->name('courses.index');
+        Route::get('/platnosci', [\App\Http\Controllers\User\PaymentController::class, 'index'])->name('payments.index');
     });
 
 require __DIR__ . '/auth.php';
