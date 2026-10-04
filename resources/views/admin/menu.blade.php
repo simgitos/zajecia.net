@@ -14,6 +14,14 @@
         <span class="nav-link-title">Dzieci</span>
     </a>
 </li>
+<li class="nav-item {{ request()->routeIs('admin.billing.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('admin.billing.index') }}">
+        <span class="nav-link-icon">
+            <i class="ti ti-receipt-2"></i>
+        </span>
+        <span class="nav-link-title">Płatności & Rozliczenia</span>
+    </a>
+</li>
 <li class="nav-item {{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('admin.user.index') }}">
         <span class="nav-link-icon">

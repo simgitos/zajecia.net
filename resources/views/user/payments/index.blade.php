@@ -7,7 +7,7 @@
                         <i class="ti ti-wallet me-2"></i> Podsumowanie Płatności
                     </h2>
                     <div class="text-secondary mt-1">
-                        Zestawienie opłat za zajęcia Twoich dzieci w wybranym miesiącu rozliczeniowym.
+                        Zestawienie pozycji rozliczeniowych i statusu płatności za zajęcia Twoich dzieci.
                     </div>
                 </div>
                 <!-- Wybór miesiąca rozliczeniowego -->
@@ -35,7 +35,7 @@
                     <div class="card shadow-sm border-0 bg-primary-subtle text-primary">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-2">
-                                <div class="subheader text-primary fw-bold text-uppercase fs-5">Suma do zapłaty</div>
+                                <div class="subheader text-primary fw-bold text-uppercase fs-5">Łączna kwota rozliczenia</div>
                                 <div class="ms-auto text-primary fs-2">
                                     <i class="ti ti-cash"></i>
                                 </div>
@@ -44,45 +44,45 @@
                                 {{ number_format($totalAmount, 2, ',', ' ') }} zł
                             </div>
                             <div class="text-secondary mt-1 fs-5">
-                                Razem za okres: <strong>{{ $selectedMonthName }}</strong>
+                                Okres: <strong>{{ $selectedMonthName }}</strong>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-sm-6 col-lg-4">
-                    <div class="card shadow-sm border-0">
+                    <div class="card shadow-sm border-0 bg-danger-subtle text-danger">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-2">
-                                <div class="subheader text-secondary fw-bold text-uppercase fs-5">Miesiąc rozliczeniowy</div>
-                                <div class="ms-auto text-secondary fs-2">
-                                    <i class="ti ti-calendar"></i>
+                                <div class="subheader text-danger fw-bold text-uppercase fs-5">Do zapłaty (Nieopłacone)</div>
+                                <div class="ms-auto text-danger fs-2">
+                                    <i class="ti ti-clock"></i>
                                 </div>
                             </div>
-                            <div class="h2 mb-0 fw-bold text-dark">
-                                {{ $selectedMonthName }}
+                            <div class="h1 mb-0 fw-bold text-danger">
+                                {{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł
                             </div>
                             <div class="text-secondary mt-1 fs-5">
-                                Liczba aktywnych kursów: <strong>{{ $totalCoursesCount }}</strong>
+                                Status: <strong>W oczekiwaniu na wpłatę</strong>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-sm-6 col-lg-4">
-                    <div class="card shadow-sm border-0">
+                    <div class="card shadow-sm border-0 bg-success-subtle text-success">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-2">
-                                <div class="subheader text-secondary fw-bold text-uppercase fs-5">Dzieci w systemie</div>
-                                <div class="ms-auto text-secondary fs-2">
-                                    <i class="ti ti-mood-kid"></i>
+                                <div class="subheader text-success fw-bold text-uppercase fs-5">Opłacono</div>
+                                <div class="ms-auto text-success fs-2">
+                                    <i class="ti ti-check"></i>
                                 </div>
                             </div>
-                            <div class="h2 mb-0 fw-bold text-dark">
-                                {{ count($childSummaries) }} {{ count($childSummaries) === 1 ? 'dziecko' : 'dzieci' }}
+                            <div class="h1 mb-0 fw-bold text-success">
+                                {{ number_format($totalPaidAmount, 2, ',', ' ') }} zł
                             </div>
                             <div class="text-secondary mt-1 fs-5">
-                                Przypisane do Twojego konta
+                                Za zaksięgowane wpłaty
                             </div>
                         </div>
                     </div>
@@ -108,8 +108,9 @@
                 @foreach($childSummaries as $summary)
                     @php
                         $child = $summary['child'];
-                        $courses = $summary['courses'];
+                        $items = $summary['items'];
                         $childTotal = $summary['child_total'];
+                        $childUnpaid = $summary['child_unpaid'];
                     @endphp
 
                     <div class="card shadow-sm border-0 mb-4">
@@ -127,15 +128,15 @@
                             </div>
                             <div>
                                 <span class="text-secondary me-2 fs-4">Należność za dziecko:</span>
-                                <span class="badge bg-success-lt fs-2 fw-extrabold px-3 py-2">
+                                <span class="badge {{ $childUnpaid > 0 ? 'bg-danger-lt' : 'bg-success-lt' }} fs-2 fw-extrabold px-3 py-2">
                                     {{ number_format($childTotal, 2, ',', ' ') }} zł
                                 </span>
                             </div>
                         </div>
 
-                        @if(empty($courses))
+                        @if($items->isEmpty())
                             <div class="card-body text-center text-secondary py-4">
-                                Dziecko {{ $child->name }} nie jest obecnie zapisane na żadne zajęcia.
+                                Dziecko {{ $child->name }} nie posiada jeszcze pozycji rozliczeniowych w tym miesiącu.
                                 <div class="mt-2">
                                     <a href="{{ route('user.courses.index') }}" class="btn btn-outline-primary btn-sm">
                                          Przeglądaj katalog zajęć
@@ -151,29 +152,30 @@
                                             <th>Sposób rozliczenia</th>
                                             <th>Stawka jednostkowa</th>
                                             <th>Lekcje w miesiącu</th>
-                                            <th>Sposób wyliczenia kwoty</th>
-                                            <th class="text-end">Należność</th>
+                                            <th>Kalkulacja kwoty</th>
+                                            <th>Kwota</th>
+                                            <th class="text-end">Status płatności</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($courses as $detail)
+                                        @foreach($items as $item)
                                             @php
-                                                $course = $detail['course'];
+                                                $course = $item->course;
                                             @endphp
                                             <tr>
                                                 <td>
-                                                    <strong class="text-dark d-block fs-3">{{ $course->title }}</strong>
+                                                    <strong class="text-dark d-block fs-3">{{ $course?->title ?? 'Zajęcia usunięte' }}</strong>
                                                     <small class="text-secondary">
-                                                        @if($course->instructor)
+                                                        @if($course?->instructor)
                                                             Instruktor: {{ $course->instructor->name }} |
                                                         @endif
-                                                        @if($course->room)
+                                                        @if($course?->room)
                                                             Sala: {{ $course->room->name }}
                                                         @endif
                                                     </small>
                                                 </td>
                                                 <td>
-                                                    @switch($detail['billing_type'])
+                                                    @switch($item->billing_type)
                                                         @case('monthly_flat')
                                                             <span class="badge bg-purple-lt">
                                                                 <i class="ti ti-calendar me-1"></i> Ryczałt miesięczny
@@ -193,39 +195,58 @@
                                                 </td>
                                                 <td>
                                                     <strong class="text-dark">
-                                                        {{ number_format($detail['price_per_unit'], 2, ',', ' ') }} zł
+                                                        {{ number_format((float) $item->price_per_unit, 2, ',', ' ') }} zł
                                                     </strong>
-                                                    <small class="text-secondary d-block">
-                                                        {{ $detail['billing_type'] === 'monthly_flat' ? 'za miesiąc' : 'za lekcję' }}
-                                                    </small>
                                                 </td>
                                                 <td>
-                                                    @if($detail['realized_lessons_count'] === 0)
+                                                    @if($item->realized_lessons_count === 0)
                                                         <span class="badge bg-secondary-lt">Brak odbytych lekcji</span>
                                                     @else
                                                         <span class="fw-bold text-dark fs-4 d-block">
-                                                            {{ $detail['realized_lessons_count'] }} {{ $detail['realized_lessons_count'] === 1 ? 'odbyta lekcja' : 'odbytych lekcji' }}
+                                                            {{ $item->realized_lessons_count }} {{ $item->realized_lessons_count === 1 ? 'odbyta lekcja' : 'odbytych lekcji' }}
                                                         </span>
                                                         <small class="text-secondary d-block">
-                                                            <span class="text-success fw-bold">{{ $detail['present_count'] }} obecności</span>
-                                                            @if($detail['excused_count'] > 0)
-                                                                , <span class="text-warning fw-bold">{{ $detail['excused_count'] }} usprawiedliwionych (0 zł)</span>
+                                                            <span class="text-success fw-bold">{{ $item->present_count }} obecności</span>
+                                                            @if($item->excused_count > 0)
+                                                                , <span class="text-warning fw-bold">{{ $item->excused_count }} usprawiedliwionych (0 zł)</span>
                                                             @endif
-                                                            @if($detail['absent_count'] > 0)
-                                                                , <span class="text-danger">{{ $detail['absent_count'] }} nieobecności</span>
+                                                            @if($item->absent_count > 0)
+                                                                , <span class="text-danger">{{ $item->absent_count }} nieobecności</span>
                                                             @endif
                                                         </small>
                                                     @endif
                                                 </td>
                                                 <td>
                                                     <small class="text-secondary bg-light px-2 py-1 rounded d-inline-block">
-                                                        {{ $detail['calculation_note'] }}
+                                                        {{ $item->notes ?: '-' }}
                                                     </small>
                                                 </td>
-                                                <td class="text-end">
+                                                <td>
                                                     <strong class="text-dark fs-2">
-                                                        {{ number_format($detail['due_amount'], 2, ',', ' ') }} zł
+                                                        {{ number_format((float) $item->amount, 2, ',', ' ') }} zł
                                                     </strong>
+                                                </td>
+                                                <td class="text-end">
+                                                    @if($item->isPaid())
+                                                        <span class="badge bg-success text-white px-3 py-2 fs-5">
+                                                            <i class="ti ti-check me-1"></i> OPŁACONE
+                                                        </span>
+                                                        @if($item->paid_at)
+                                                            <small class="text-muted d-block mt-1">
+                                                                {{ $item->paid_at->format('d.m.Y H:i') }}
+                                                            </small>
+                                                        @endif
+                                                    @else
+                                                        <span class="badge bg-danger text-white px-3 py-2 fs-5 mb-1">
+                                                            <i class="ti ti-clock me-1"></i> DO ZAPŁATY
+                                                        </span>
+                                                        <!-- Przycisk do przyszłych płatności online -->
+                                                        <div class="mt-1">
+                                                            <button type="button" class="btn btn-outline-primary btn-sm" disabled title="Płatności online (PayU / Przelewy24 / Stripe) będą dostępne po podłączeniu bramki">
+                                                                <i class="ti ti-credit-card me-1"></i> Zapłać online
+                                                            </button>
+                                                        </div>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -235,8 +256,8 @@
                                             <td colspan="5" class="text-end fw-bold text-secondary">
                                                 Podsumowanie dla {{ $child->name }}:
                                             </td>
-                                            <td class="text-end">
-                                                <strong class="text-success fs-2 fw-extrabold">
+                                            <td colspan="2" class="text-end">
+                                                <strong class="text-primary fs-2 fw-extrabold">
                                                     {{ number_format($childTotal, 2, ',', ' ') }} zł
                                                 </strong>
                                             </td>

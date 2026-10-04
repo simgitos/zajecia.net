@@ -21,6 +21,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::resource('/users', UserController::class)->names('user');
         Route::resource('/courses', \App\Http\Controllers\Admin\CourseController::class)->names('courses');
         Route::get('/children', [\App\Http\Controllers\Admin\ChildController::class, 'index'])->name('children.index');
+        Route::get('/billing', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('billing.index');
+        Route::post('/billing/{item}/mark-paid', [\App\Http\Controllers\Admin\BillingController::class, 'markPaid'])->name('billing.mark-paid');
+        Route::post('/billing/{item}/mark-unpaid', [\App\Http\Controllers\Admin\BillingController::class, 'markUnpaid'])->name('billing.mark-unpaid');
     });
 
 ////////////////////////////////////// Teacher / Nauczyciel

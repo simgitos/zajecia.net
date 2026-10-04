@@ -31,7 +31,7 @@ class LessonController extends Controller
     /**
      * Zapis realizacji lekcji wraz ze sprawdzoną listą obecności.
      */
-    public function store(Request $request, Course $course): RedirectResponse
+    public function store(Request $request, Course $course, \App\Services\BillingService $billingService): RedirectResponse
     {
         $this->authorizeTeacherCourse($course);
 
@@ -71,8 +71,12 @@ class LessonController extends Controller
             }
         });
 
+        // Automatyczna aktualizacja pozycji rozliczeniowych w nowej tabeli billing_items dla tego miesiąca
+        $yearMonth = \Carbon\Carbon::parse($request->input('realized_at'))->format('Y-m');
+        $billingService->syncCourseMonth($course, $yearMonth);
+
         return redirect()->route('teacher.courses.show', $course)
-            ->with('success', 'Lekcja została pomyślnie zrealizowana, a lista obecności zapisana.');
+            ->with('success', 'Lekcja została pomyślnie zrealizowana, a pozycje rozliczeniowe i lista obecności zaktualizowane.');
     }
 
     /**
