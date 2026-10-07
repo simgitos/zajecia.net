@@ -8,10 +8,11 @@ use App\Http\Controllers\Controller;
 use App\Models\BillingItem;
 use App\Models\Child;
 use App\Services\BillingService;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+
+use Illuminate\Support\Str;
 
 class PaymentController extends Controller
 {
@@ -19,87 +20,129 @@ class PaymentController extends Controller
      * Nazwy miesięcy w języku polskim.
      */
     private array $polishMonths = [
-        1 => 'Styczeń', 2 => 'Luty', 3 => 'Marzec', 4 => 'Kwiecień',
-        5 => 'Maj', 6 => 'Czerwiec', 7 => 'Lipiec', 8 => 'Sierpień',
-        9 => 'Wrzesień', 10 => 'Październik', 11 => 'Listopad', 12 => 'Grudzień'
+        1 => 'Styczeń',
+        2 => 'Luty',
+        3 => 'Marzec',
+        4 => 'Kwiecień',
+        5 => 'Maj',
+        6 => 'Czerwiec',
+        7 => 'Lipiec',
+        8 => 'Sierpień',
+        9 => 'Wrzesień',
+        10 => 'Październik',
+        11 => 'Listopad',
+        12 => 'Grudzień'
     ];
 
     /**
-     * Podsumowanie płatności dla rodzica na podstawie zapisanych pozycji rozliczeniowych.
+     * Podsumowanie płatności dla rodzica - rozliczenie skumulowane (bez podziału na miesiące).
      */
     public function index(Request $request, BillingService $billingService): View
     {
         $user = Auth::user();
 
-        // Określenie wybranego miesiąca (format YYYY-MM, domyślnie bieżący)
-        $month = $request->input('month', now()->format('Y-m'));
-        try {
-            $selectedDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
-        } catch (\Exception $e) {
-            $selectedDate = now()->startOfMonth();
-            $month = $selectedDate->format('Y-m');
-        }
+        // Synchronizujemy rozliczenia dla wszystkich dzieci rodzica od momentu dołączenia do zajęć
+        $billingService->syncParentAll($user);
 
-        // Synchronizujemy pozycje rozliczeniowe w bazie danych billing_items
-        $billingService->syncParentMonth($user, $month);
-
-        // Pobieramy zapisane w bazie pozycje rozliczeniowe dla tego rodzica i miesiąca
-        $billingItems = BillingItem::where('parent_id', $user->id)
+        // Pobieramy wszystkie pozycje z kwotą > 0 zł dla tego rodzica
+        $allBillingItems = BillingItem::where('parent_id', $user->id)
             ->where('school_id', $user->school_id)
-            ->where('year_month', $month)
+            ->where('amount', '>', 0)
             ->with(['child', 'course.instructor', 'course.room'])
+            ->latest('year_month')
             ->get();
 
-        // Pobranie wszystkich dzieci rodzica do grupowania w widoku
+        // Podział na pozycje nieopłacone oraz opłacone
+        $unpaidItems = $allBillingItems->where('status', 'unpaid');
+        $paidItems = $allBillingItems->where('status', 'paid');
+
+        $totalUnpaidAmount = (float) $unpaidItems->sum('amount');
+        $totalPaidAmount = (float) $paidItems->sum('amount');
+
+        // Pobranie wszystkich dzieci rodzica
         $children = Child::where('parent_id', $user->id)
             ->where('school_id', $user->school_id)
             ->get();
 
-        $totalAmount = 0.0;
-        $totalPaidAmount = 0.0;
-        $totalUnpaidAmount = 0.0;
-        $totalCoursesCount = $billingItems->count();
-        $childSummaries = [];
-
+        // Grupowanie nieopłaconych zajęć według dzieci
+        $childUnpaidSummaries = [];
         foreach ($children as $child) {
-            $childItems = $billingItems->where('child_id', $child->id);
-            $childTotal = (float) $childItems->sum('amount');
-            $childPaid = (float) $childItems->where('status', 'paid')->sum('amount');
-            $childUnpaid = (float) $childItems->where('status', 'unpaid')->sum('amount');
+            $childUnpaidItems = $unpaidItems->where('child_id', $child->id);
+            $childUnpaidTotal = (float) $childUnpaidItems->sum('amount');
 
-            $totalAmount += $childTotal;
-            $totalPaidAmount += $childPaid;
-            $totalUnpaidAmount += $childUnpaid;
-
-            $childSummaries[] = [
+            $childUnpaidSummaries[] = [
                 'child' => $child,
-                'child_total' => $childTotal,
-                'child_paid' => $childPaid,
-                'child_unpaid' => $childUnpaid,
-                'items' => $childItems,
+                'unpaid_total' => $childUnpaidTotal,
+                'items' => $childUnpaidItems,
             ];
         }
 
-        // Opcje wyboru miesiąca (ostatnie 12 miesięcy)
-        $monthOptions = [];
-        for ($i = 0; $i < 12; $i++) {
-            $d = now()->subMonths($i);
-            $key = $d->format('Y-m');
-            $label = ($this->polishMonths[$d->month] ?? $d->format('F')) . ' ' . $d->year;
-            $monthOptions[$key] = $label;
-        }
-
-        $selectedMonthName = ($this->polishMonths[$selectedDate->month] ?? '') . ' ' . $selectedDate->year;
-
         return view('user.payments.index', compact(
-            'childSummaries',
-            'totalAmount',
-            'totalPaidAmount',
+            'childUnpaidSummaries',
             'totalUnpaidAmount',
-            'totalCoursesCount',
-            'month',
-            'selectedMonthName',
-            'monthOptions'
+            'totalPaidAmount',
+            'paidItems',
+            'children'
         ));
     }
+
+    /**
+     * Realizuje opłacenie pojedynczej pozycji rozliczeniowej online.
+     */
+    public function payItem(BillingItem $item, BillingService $billingService)
+    {
+        $user = Auth::user();
+
+        if ($item->parent_id !== $user->id || $item->school_id !== $user->school_id) {
+            abort(403, 'Brak dostępu do tej pozycji rozliczeniowej.');
+        }
+
+        if ($item->status === 'paid') {
+            return redirect()->route('user.payments.index')
+                ->with('info', 'Ta pozycja została już wcześniej opłacona.');
+        }
+
+        $transactionId = 'PAY-ONL-' . strtoupper(Str::random(8));
+        $billingService->markAsPaid($item, 'online', $transactionId);
+
+        $courseTitle = $item->course?->title ?? 'Zajęcia';
+        $amountFormatted = number_format((float) $item->amount, 2, ',', ' ');
+
+        return redirect()->route('user.payments.index')
+            ->with('success', "Płatność online w kwocie {$amountFormatted} zł za zajęcia \"{$courseTitle}\" została zrealizowana pomyślnie!");
+    }
+
+    /**
+     * Realizuje opłacenie wszystkich zaległych pozycji rozliczeniowych rodzica online.
+     */
+    public function payAll(BillingService $billingService)
+    {
+        $user = Auth::user();
+
+        $unpaidItems = BillingItem::where('parent_id', $user->id)
+            ->where('school_id', $user->school_id)
+            ->where('status', 'unpaid')
+            ->where('amount', '>', 0)
+            ->get();
+
+        if ($unpaidItems->isEmpty()) {
+            return redirect()->route('user.payments.index')
+                ->with('info', 'Brak nieopłaconych zajęć do rozliczenia.');
+        }
+
+        $totalPaid = 0.0;
+        $count = $unpaidItems->count();
+        $transactionId = 'PAY-ONL-BULK-' . strtoupper(Str::random(8));
+        
+        foreach ($unpaidItems as $item) {
+
+            $billingService->markAsPaid($item, 'online', $transactionId);
+            $totalPaid += (float) $item->amount;
+        }
+
+        $totalFormatted = number_format($totalPaid, 2, ',', ' ');
+        return redirect()->route('user.payments.index')
+            ->with('success', "Płatność online na sumę {$totalFormatted} zł za wszystkie nieopłacone pozycje ({$count}) została zrealizowana pomyślnie!");
+    }
 }
+

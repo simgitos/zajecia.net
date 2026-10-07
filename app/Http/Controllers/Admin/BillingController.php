@@ -28,20 +28,32 @@ class BillingController extends Controller
     {
         $schoolId = Auth::user()->school_id;
 
+        // Domyślnie wybrany bieżący miesiąc, chyba że użytkownik wybierze konkretny miesiąc lub "all"
         $month = $request->input('month', now()->format('Y-m'));
-        try {
-            $selectedDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
-        } catch (\Exception $e) {
-            $selectedDate = now()->startOfMonth();
-            $month = $selectedDate->format('Y-m');
-        }
 
         $query = BillingItem::where('school_id', $schoolId)
-            ->where('year_month', $month)
+            ->where('amount', '>', 0)
             ->with(['child', 'parent', 'course']);
 
-        if ($request->filled('status') && in_array($request->status, ['paid', 'unpaid'])) {
-            $query->where('status', $request->status);
+        $statsQuery = BillingItem::where('school_id', $schoolId)->where('amount', '>', 0);
+
+        if ($month !== 'all' && $month !== '') {
+            $query->where('year_month', $month);
+            $statsQuery->where('year_month', $month);
+
+            try {
+                $selectedDate = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+                $selectedMonthName = ($this->polishMonths[$selectedDate->month] ?? '') . ' ' . $selectedDate->year;
+            } catch (\Exception $e) {
+                $selectedMonthName = $month;
+            }
+        } else {
+            $selectedMonthName = 'Wszystkie okresy';
+        }
+
+        $statusFilter = $request->input('status', '');
+        if (in_array($statusFilter, ['paid', 'unpaid'])) {
+            $query->where('status', $statusFilter);
         }
 
         if ($request->filled('search')) {
@@ -60,22 +72,21 @@ class BillingController extends Controller
 
         $billingItems = $query->latest()->paginate(20);
 
-        // Ogólne podsumowanie finansowe szkoły w danym miesiącu
-        $statsQuery = BillingItem::where('school_id', $schoolId)->where('year_month', $month);
+        // Ogólne podsumowanie finansowe szkoły dla wybranego filtru okresu
         $totalAmount = (float) (clone $statsQuery)->sum('amount');
         $totalPaid = (float) (clone $statsQuery)->where('status', 'paid')->sum('amount');
         $totalUnpaid = (float) (clone $statsQuery)->where('status', 'unpaid')->sum('amount');
 
-        // Generowanie listy miesięcy
-        $monthOptions = [];
+        // Opcje wyboru miesiąca (Wszystkie okresy + Ostatnie 12 miesięcy)
+        $monthOptions = [
+            'all' => 'Wszystkie okresy (Rozliczenia ogółem)',
+        ];
         for ($i = 0; $i < 12; $i++) {
             $d = now()->subMonths($i);
             $key = $d->format('Y-m');
             $label = ($this->polishMonths[$d->month] ?? $d->format('F')) . ' ' . $d->year;
             $monthOptions[$key] = $label;
         }
-
-        $selectedMonthName = ($this->polishMonths[$selectedDate->month] ?? '') . ' ' . $selectedDate->year;
 
         return view('admin.billing.index', compact(
             'billingItems',
@@ -84,7 +95,8 @@ class BillingController extends Controller
             'totalUnpaid',
             'month',
             'selectedMonthName',
-            'monthOptions'
+            'monthOptions',
+            'statusFilter'
         ));
     }
 

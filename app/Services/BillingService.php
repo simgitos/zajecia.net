@@ -14,14 +14,31 @@ class BillingService
 {
     /**
      * Oblicza i zapisuje/aktualizuje pozycję rozliczeniową (BillingItem) dla danego dziecka i kursu w miesiącu.
+     * Dolicza płatność jedynie od momentu zapisu i usuwa/nie tworzy pozycji o kwocie 0 zł.
      */
-    public function syncBillingItem(Child $child, Course $course, string $yearMonth): BillingItem
+    public function syncBillingItem(Child $child, Course $course, string $yearMonth): ?BillingItem
     {
         try {
             $selectedDate = Carbon::createFromFormat('Y-m', $yearMonth)->startOfMonth();
         } catch (\Exception $e) {
             $selectedDate = now()->startOfMonth();
             $yearMonth = $selectedDate->format('Y-m');
+        }
+
+        // Sprawdzamy datę dołączenia dziecka do zajęć (pivot child_course lub data rejestracji dziecka)
+        $enrollmentTimestamp = $course->pivot?->created_at ?? $child->created_at;
+        if ($enrollmentTimestamp) {
+            $enrollmentMonth = Carbon::parse($enrollmentTimestamp)->format('Y-m');
+            if ($yearMonth < $enrollmentMonth) {
+                // Jeżeli miesiąc jest wcześniejszy niż data dołączenia -> brak rozliczenia (usuwamy nieopłacony zerowy wpis jeśli istnieje)
+                BillingItem::where('child_id', $child->id)
+                    ->where('course_id', $course->id)
+                    ->where('year_month', $yearMonth)
+                    ->where('status', 'unpaid')
+                    ->delete();
+
+                return null;
+            }
         }
 
         $startDate = $selectedDate->copy()->startOfMonth();
@@ -97,6 +114,14 @@ class BillingService
             'year_month' => $yearMonth,
         ]);
 
+        // Jeżeli kwota wynosi 0 zł i pozycja nie jest jeszcze opłacona -> usuwamy nieopłacony wpis 0 zł
+        if ($amount <= 0.00 && $billingItem->status !== 'paid') {
+            if ($billingItem->exists) {
+                $billingItem->delete();
+            }
+            return null;
+        }
+
         $billingItem->school_id = $child->school_id;
         $billingItem->parent_id = $child->parent_id;
         $billingItem->billing_type = $course->billing_type;
@@ -129,18 +154,31 @@ class BillingService
     }
 
     /**
-     * Synchronizuje pozycje rozliczeniowe dla wszystkich dzieci danego rodzica w wybranym miesiącu.
+     * Synchronizuje pozycje rozliczeniowe dla wszystkich dzieci danego rodzica
+     * od momentu dołączenia do zajęć aż do bieżącego miesiąca.
      */
-    public function syncParentMonth(User $parent, string $yearMonth): void
+    public function syncParentAll(User $parent): void
     {
         $children = Child::where('parent_id', $parent->id)
             ->where('school_id', $parent->school_id)
-            ->with('courses')
+            ->with(['courses' => function ($query) {
+                $query->withPivot('created_at');
+            }])
             ->get();
+
+        $currentMonthDate = now()->startOfMonth();
 
         foreach ($children as $child) {
             foreach ($child->courses as $course) {
-                $this->syncBillingItem($child, $course, $yearMonth);
+                $enrollmentTimestamp = $course->pivot?->created_at ?? $child->created_at;
+                $startDate = $enrollmentTimestamp ? Carbon::parse($enrollmentTimestamp)->startOfMonth() : $currentMonthDate->copy();
+
+                $tempDate = $startDate->copy();
+                while ($tempDate->lte($currentMonthDate)) {
+                    $yearMonth = $tempDate->format('Y-m');
+                    $this->syncBillingItem($child, $course, $yearMonth);
+                    $tempDate->addMonth();
+                }
             }
         }
     }
