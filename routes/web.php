@@ -41,9 +41,7 @@ Route::middleware(['auth', 'verified', 'role:teacher'])
 ////////////////////////////////////// User / Rodzic
 Route::middleware(['auth', 'verified'])
     ->group(function () {
-        Route::get('/pulpit', function () {
-            return view('user.dashboard');
-        })->name('dashboard');
+        Route::get('/pulpit', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
         Route::get('/profil', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profil', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profil', [ProfileController::class, 'destroy'])->name('profile.destroy');
