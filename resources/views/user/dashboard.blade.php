@@ -4,13 +4,13 @@
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <div class="page-pretitle text-uppercase fw-bold text-secondary">
-                        <i class="ti ti-home me-1"></i> Strefa Rodzica / Opiekuna
+                        <i class="ti ti-home me-1"></i> Moja Strefa
                     </div>
                     <h2 class="page-title text-primary fw-extrabold fs-1">
-                        Pulpit Użytkownika
+                        Pulpit Opiekuna
                     </h2>
                     <div class="text-secondary mt-1 fs-4">
-                        Przegląd zapisanych dzieci, nadchodzących zajęć oraz stanu rozliczeń finansowych.
+                        Przegląd uczestników, nadchodzących zajęć oraz stanu rozliczeń.
                     </div>
                 </div>
                 <!-- Szybkie akcje rodzica -->
@@ -43,7 +43,7 @@
                                 </span>
                             </div>
                             <div class="h1 mb-1 fw-extrabold text-dark fs-1">{{ $children->count() }}</div>
-                            <div class="text-secondary small">Dzieci przypisane do Twojego konta</div>
+                            <div class="text-secondary small">Uczestnicy przypisani do Twojego konta</div>
                         </div>
                     </div>
                 </div>

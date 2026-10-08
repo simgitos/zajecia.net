@@ -3,7 +3,7 @@
         <span class="nav-link-icon">
             <i class="ti ti-mood-kid"></i>
         </span>
-        <span class="nav-link-title">Moje Dzieci</span>
+        <span class="nav-link-title">Uczestnicy</span>
     </a>
 </li>
 

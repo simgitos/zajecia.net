@@ -4,13 +4,13 @@
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <div class="page-pretitle text-uppercase fw-bold text-secondary">
-                        <i class="ti ti-user-check me-1"></i> Panel Nauczyciela & Instruktorów
+                        <i class="ti ti-user-check me-1"></i> Panel Prowadzącego
                     </div>
                     <h2 class="page-title text-success fw-extrabold fs-1">
-                        Pulpit Prowadzącego Zajęcia
+                        Mój Pulpit
                     </h2>
                     <div class="text-secondary mt-1 fs-4">
-                        Zarządzanie swoimi grupami, realizacja lekcji oraz rejestracja obecności dzieci.
+                        Zarządzanie swoimi grupami, rejestracja terminów oraz ewidencja obecności uczestników.
                     </div>
                 </div>
             </div>
@@ -26,13 +26,13 @@
                     <div class="card shadow-sm border-0 border-start border-success border-4 h-100">
                         <div class="card-body p-3 p-sm-4">
                             <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="subheader fw-bold text-uppercase fs-6">Moje Kursy</div>
+                                <div class="subheader fw-bold text-uppercase fs-6">Moje Zajęcia</div>
                                 <span class="avatar bg-green-subtle text-success rounded-circle fs-2">
                                     <i class="ti ti-school"></i>
                                 </span>
                             </div>
                             <div class="h1 mb-1 fw-extrabold text-dark fs-1">{{ $teacherCourses->count() }}</div>
-                            <div class="text-secondary small">Grupy przypisane do mojego profilu</div>
+                            <div class="text-secondary small">Grupy przypisane do prowadzącego</div>
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                     <div class="card shadow-sm border-0 border-start border-primary border-4 h-100">
                         <div class="card-body p-3 p-sm-4">
                             <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="subheader fw-bold text-uppercase fs-6">Przeprowadzone Lekcje</div>
+                                <div class="subheader fw-bold text-uppercase fs-6">Zrealizowane Terminy</div>
                                 <span class="avatar bg-blue-subtle text-primary rounded-circle fs-2">
                                     <i class="ti ti-calendar-event"></i>
                                 </span>
@@ -58,13 +58,13 @@
                     <div class="card shadow-sm border-0 border-start border-warning border-4 h-100">
                         <div class="card-body p-3 p-sm-4">
                             <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="subheader fw-bold text-uppercase fs-6">Moi Uczniowie</div>
+                                <div class="subheader fw-bold text-uppercase fs-6">Moi Uczestnicy</div>
                                 <span class="avatar bg-warning-subtle text-warning rounded-circle fs-2">
                                     <i class="ti ti-mood-kid"></i>
                                 </span>
                             </div>
                             <div class="h1 mb-1 fw-extrabold text-dark fs-1">{{ $assignedChildrenCount }}</div>
-                            <div class="text-secondary small">Liczba zapisanych dzieci w moich sekcjach</div>
+                            <div class="text-secondary small">Liczba zapisanych uczestników w moich grupach</div>
                         </div>
                     </div>
                 </div>
@@ -79,14 +79,14 @@
                                 <i class="ti ti-books me-2 text-success"></i> Przydzielone Zajęcia i Obłożenie
                             </h3>
                             <a href="{{ route('teacher.courses.index') }}" class="btn btn-sm btn-outline-success fw-bold">
-                                Zobacz wszystkie kursy
+                                Zobacz wszystkie zajęcia
                             </a>
                         </div>
                         <div class="card-body p-3">
                             @if($teacherCourses->isEmpty())
                                 <div class="text-center py-5 text-muted">
                                     <i class="ti ti-school-off fs-1 d-block mb-2 text-secondary"></i>
-                                    Nie masz obecnie przydzielonych kursów w tej placówce.
+                                    Nie masz obecnie przydzielonych zajęć w tej placówce.
                                 </div>
                             @else
                                 <div class="d-flex flex-column gap-3">
@@ -103,16 +103,16 @@
                                                     </div>
                                                     <div class="text-secondary small">
                                                         <i class="ti ti-door me-1"></i> Sala: <strong>{{ $course->room?->name ?? 'Główna' }}</strong> • 
-                                                        <i class="ti ti-users me-1"></i> Obłożenie: <span class="fw-bold text-primary">{{ $enrolled }} / {{ $max }}</span> dzieci
+                                                        <i class="ti ti-users me-1"></i> Uczestnicy: <span class="fw-bold text-primary">{{ $enrolled }} / {{ $max }}</span>
                                                     </div>
                                                 </div>
 
                                                 <div class="d-flex flex-wrap align-items-center gap-2 w-100 w-md-auto">
                                                     <a href="{{ route('teacher.courses.show', $course) }}" class="btn btn-outline-secondary btn-sm fw-bold">
-                                                        <i class="ti ti-users me-1"></i> Lista Dzieci
+                                                        <i class="ti ti-users me-1"></i> Lista Uczestników
                                                     </a>
                                                     <a href="{{ route('teacher.lessons.create', $course) }}" class="btn btn-success btn-sm fw-bold shadow-sm">
-                                                        <i class="ti ti-checkup-list me-1"></i> Przeprowadź Lekcję
+                                                        <i class="ti ti-checkup-list me-1"></i> Zarejestruj Termin
                                                     </a>
                                                 </div>
                                             </div>
@@ -129,13 +129,13 @@
                     <div class="card shadow-sm border-0">
                         <div class="card-header bg-surface border-bottom py-3">
                             <h3 class="card-title fw-bold text-dark mb-0">
-                                <i class="ti ti-history me-2 text-primary"></i> Moje Ostatnie Lekcje
+                                <i class="ti ti-history me-2 text-primary"></i> Ostatnie Terminy
                             </h3>
                         </div>
                         <div class="card-body p-0">
                             @if($recentLessons->isEmpty())
                                 <div class="p-4 text-center text-muted small">
-                                    Brak zrealizowanych lekcji w historii.
+                                    Brak zrealizowanych terminów w historii.
                                 </div>
                             @else
                                 <div class="list-group list-group-flush">

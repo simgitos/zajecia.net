@@ -3,15 +3,15 @@
         <span class="nav-link-icon">
             <i class="ti ti-books"></i>
         </span>
-        <span class="nav-link-title">Zajęcia (Kursy)</span>
+        <span class="nav-link-title">Zajęcia</span>
     </a>
 </li>
 <li class="nav-item {{ request()->routeIs('admin.children.*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('admin.children.index') }}">
         <span class="nav-link-icon">
-            <i class="ti ti-mood-kid"></i>
+            <i class="ti ti-users"></i>
         </span>
-        <span class="nav-link-title">Dzieci</span>
+        <span class="nav-link-title">Uczestnicy</span>
     </a>
 </li>
 <li class="nav-item {{ request()->routeIs('admin.billing.*') ? 'active' : '' }}">
@@ -27,6 +27,6 @@
         <span class="nav-link-icon">
             <i class="ti ti-users"></i>
         </span>
-        <span class="nav-link-title">Użytkownicy</span>
+        <span class="nav-link-title">Opiekunowie</span>
     </a>
 </li>

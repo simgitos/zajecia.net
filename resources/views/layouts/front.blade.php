@@ -7,19 +7,19 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Primary Meta Tags -->
-  <title>@yield('title', 'EduZajęcia.net - System Obsługi Zajęć Pozalekcyjnych, Szkół i Rozliczeń Online')</title>
-  <meta name="title" content="@yield('title', 'EduZajęcia.net - System Obsługi Zajęć Pozalekcyjnych, Szkół i Rozliczeń Online')">
-  <meta name="description" content="@yield('meta_description', 'Kompleksowa platforma SaaS do zarządzania zajęciami pozalekcyjnymi, szkołami językowymi i sportowymi. Automatyczne rozliczenia, listy obecności, obłożenie grup (5/15) oraz błyskawiczne płatności online dla rodziców.')">
-  <meta name="keywords" content="system obsługi zajęć, zarządzanie szkołą językową, rozliczenia zajęć pozalekcyjnych, płatności online za zajęcia, dziennik obecności, rejestracja dzieci na zajęcia, oprogramowanie MDK">
-  <meta name="author" content="EduZajęcia.net">
+  <title>@yield('title', 'Zajęciownia.pl - Miejsce dla Twoich Zajęć | Zarządzanie, Zapisy i Płatności Online')</title>
+  <meta name="title" content="@yield('title', 'Zajęciownia.pl - Miejsce dla Twoich Zajęć | Zarządzanie, Zapisy i Płatności Online')">
+  <meta name="description" content="@yield('meta_description', 'Kompleksowa platforma do zarządzania zajęciami: tancami, sportem, korepetytorow, sztuką i innymi. Automatyczne rozliczenia, listy obecności i błyskawiczne płatności online dla opiekunów.')">
+  <meta name="keywords" content="system obsługi zajęć, domy kultury, szkoły tańca, korepetycje, zajęcia sportowe, ewidencja obecności, płatności online za zajęcia, oprogramowanie MDK, zapis na zajęcia">
+  <meta name="author" content="Zajęciownia.pl">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="{{ url()->current() }}" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ url()->current() }}">
-  <meta property="og:title" content="@yield('title', 'EduZajęcia.net - System Obsługi Zajęć Pozalekcyjnych i Rozliczeń')">
-  <meta property="og:description" content="@yield('meta_description', 'Automatyzacja zapisów, dziennika lekcyjnego i płatności online w szkołach i placówkach edukacyjnych. Wypróbuj za darmo!')">
+  <meta property="og:title" content="@yield('title', 'Zajęciownia.pl - Miejsce dla Twoich Zajęć')">
+  <meta property="og:description" content="@yield('meta_description', 'Automatyzacja zapisów, ewidencji obecności i płatności online w placówkach. Wypróbuj za darmo!')">
   <meta property="og:image" content="{{ asset('images/hero-mockup.jpg') }}">
 
   <!-- Twitter Card -->
@@ -282,10 +282,10 @@
     <div class="container-xl">
       <!-- Logo & Brand Name -->
       <a class="navbar-brand d-flex align-items-center me-4" href="{{ url('/') }}">
-        <img src="{{ asset('images/logo.jpg') }}" alt="EduZajęcia.net Logo" class="brand-logo-img me-2">
+        <img src="{{ asset('images/logo.jpg') }}" alt="Zajęciownia.pl Logo" class="brand-logo-img me-2">
         <div>
-          <span class="brand-title d-block">EduZajęcia.net</span>
-          <small class="text-secondary fw-semibold fs-6 d-none d-sm-block">System Obsługi Zajęć & Szkół</small>
+          <span class="brand-title d-block">Zajęciownia.pl</span>
+          <small class="text-secondary fw-semibold fs-6 d-none d-sm-block">Miejsce dla Twoich Zajęć</small>
         </div>
       </a>
 
@@ -314,7 +314,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link {{ request()->is('schools*') ? 'active' : '' }}" href="{{ route('schools.index') }}">
-              <i class="ti ti-school me-1"></i> Katalog Szkół
+              <i class="ti ti-building-community me-1"></i> Katalog Placówek
             </a>
           </li>
           <li class="nav-item">
@@ -394,11 +394,11 @@
         <!-- O Nas & Logo -->
         <div class="col-lg-4">
           <div class="d-flex align-items-center mb-3">
-            <img src="{{ asset('images/logo.jpg') }}" alt="EduZajęcia.net" class="brand-logo-img me-2">
-            <span class="fs-2 fw-extrabold text-white">EduZajęcia.net</span>
+            <img src="{{ asset('images/logo.jpg') }}" alt="Zajęciownia.pl" class="brand-logo-img me-2">
+            <span class="fs-2 fw-extrabold text-white">Zajęciownia.pl</span>
           </div>
           <p class="text-secondary leading-relaxed mb-4">
-            Kompleksowe oprogramowanie w modelu SaaS dla szkół językowych, kółek zainteresowań, szkół sportowych i MDK. Zapisy online, rozliczenia zajęć, dziennik lekcyjny i płatności 1-click.
+          Platforma do obsługi zajęć dowolnego rodzaju: taniec, sport, sztuka, korepetycje, MDK i inne. Zapisy, ewidencja obecności i płatności online w jednym miejscu.
           </p>
           <div class="d-flex gap-2 flex-wrap">
             <span class="badge bg-blue-subtle text-primary p-2 rounded-2"><i class="ti ti-shield-check me-1"></i> Certyfikat SSL 256-bit</span>
@@ -413,7 +413,7 @@
             <li><a href="{{ url('/') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Strona Główna</a></li>
             <li><a href="{{ url('/#funkcje') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Funkcjonalności</a></li>
             <li><a href="{{ url('/#dla-kogo') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Dla Kogo</a></li>
-            <li><a href="{{ route('schools.index') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Katalog Szkół</a></li>
+            <li><a href="{{ route('schools.index') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Katalog Placówek</a></li>
             <li><a href="{{ url('/#cennik') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Cennik</a></li>
             <li><a href="{{ url('/#faq') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Pytania i Odpowiedzi</a></li>
           </ul>
@@ -423,10 +423,10 @@
         <div class="col-6 col-lg-3">
           <h5 class="text-white fw-bold mb-3">Moduły Platformy</h5>
           <ul class="list-unstyled d-flex flex-column gap-2 mb-0">
-            <li><a href="{{ route('login') }}"><i class="ti ti-device-laptop me-1"></i> Panel Dyrektora / Admina</a></li>
-            <li><a href="{{ route('login') }}"><i class="ti ti-user-check me-1"></i> Panel Nauczyciela & Obecności</a></li>
-            <li><a href="{{ route('login') }}"><i class="ti ti-wallet me-1"></i> Portal Rodzica & Płatności Online</a></li>
-            <li><a href="{{ route('register') }}"><i class="ti ti-plus me-1"></i> Rejestracja nowej placówki</a></li>
+            <li><a href="{{ route('login') }}"><i class="ti ti-device-laptop me-1"></i> Panel Administratora</a></li>
+            <li><a href="{{ route('login') }}"><i class="ti ti-user-check me-1"></i> Panel Prowadzącego</a></li>
+            <li><a href="{{ route('login') }}"><i class="ti ti-wallet me-1"></i> Portal Opiekuna & Płatności</a></li>
+            <li><a href="{{ route('register') }}"><i class="ti ti-plus me-1"></i> Zarejestruj placówkę</a></li>
           </ul>
         </div>
 
@@ -434,9 +434,9 @@
         <div class="col-lg-3">
           <h5 class="text-white fw-bold mb-3">Kontakt & Wsparcie</h5>
           <ul class="list-unstyled d-flex flex-column gap-2 mb-3 text-secondary">
-            <li><i class="ti ti-mail me-2 text-primary"></i> pomoc@eduzajecia.net</li>
-            <li><i class="ti ti-phone me-2 text-success"></i> +48 22 123 45 67 (Pn-Pt 8:00 - 18:00)</li>
-            <li><i class="ti ti-map-pin me-2 text-warning"></i> ul. Edukacyjna 12, Warszawa</li>
+            <li><i class="ti ti-mail me-2 text-primary"></i> pomoc@zajeciownia.pl</li>
+            <li><i class="ti ti-phone me-2 text-success"></i> +48 22 123 45 67 (Pn-Pt 9:00 - 17:00)</li>
+            <li><i class="ti ti-map-pin me-2 text-warning"></i> ul. Aktywności 1, Warszawa</li>
           </ul>
           <div class="d-flex gap-2">
             <a href="#" class="btn btn-icon btn-dark text-white rounded-circle"><i class="ti ti-brand-facebook fs-2"></i></a>
@@ -448,7 +448,7 @@
 
       <div class="border-top border-slate-800 pt-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
         <div class="text-secondary small mb-0">
-          &copy; {{ date('Y') }} EduZajęcia.net. Wszelkie prawa zastrzeżone. Projekt przygotowany w oparciu o najwyższe standardy UX, SEO & AI Search.
+          &copy; {{ date('Y') }} Zajęciownia.pl. Wszelkie prawa zastrzeżone. Platforma dla domów kultury, szkół tańca, sportów, korepetycji i innych zajęć.
         </div>
         <div class="d-flex gap-3 small">
           <a href="#">Polityka prywatności</a>

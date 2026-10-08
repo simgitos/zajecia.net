@@ -17,7 +17,7 @@
                 <div class="col-auto ms-auto d-print-none">
                     <div class="d-flex gap-2">
                         <a href="{{ route('admin.courses.create') }}" class="btn btn-primary fw-bold shadow-sm">
-                            <i class="ti ti-plus me-1 fs-3"></i> Dodaj Kurs
+                            <i class="ti ti-plus me-1 fs-3"></i> Dodaj Zajęcia
                         </a>
                         <a href="{{ route('admin.billing.index') }}" class="btn btn-outline-primary fw-bold">
                             <i class="ti ti-receipt-2 me-1 fs-3"></i> Rozliczenia
@@ -37,7 +37,7 @@
                     <div class="card shadow-sm border-0 border-start border-primary border-4 h-100">
                         <div class="card-body p-3 p-sm-4">
                             <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="subheader fw-bold text-uppercase fs-6">Aktywne Kursy</div>
+                                <div class="subheader fw-bold text-uppercase fs-6">Aktywne Zajęcia</div>
                                 <span class="avatar bg-blue-subtle text-primary rounded-circle fs-2">
                                     <i class="ti ti-school"></i>
                                 </span>
@@ -59,7 +59,7 @@
                                 </span>
                             </div>
                             <div class="h1 mb-1 fw-extrabold text-dark fs-1">{{ $totalChildrenCount }}</div>
-                            <div class="text-secondary small">Aktywne dzieci w placówce</div>
+                            <div class="text-secondary small">Aktywni uczestnicy w placówce</div>
                         </div>
                     </div>
                 </div>
@@ -69,13 +69,13 @@
                     <div class="card shadow-sm border-0 border-start border-info border-4 h-100">
                         <div class="card-body p-3 p-sm-4">
                             <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="subheader fw-bold text-uppercase fs-6">Nauczyciele / Rodzice</div>
+                                <div class="subheader fw-bold text-uppercase fs-6">Prowadzący / Opiekunowie</div>
                                 <span class="avatar bg-purple-subtle text-purple rounded-circle fs-2">
                                     <i class="ti ti-users"></i>
                                 </span>
                             </div>
                             <div class="h1 mb-1 fw-extrabold text-dark fs-1">{{ $totalTeachersCount }} / {{ $totalParentsCount }}</div>
-                            <div class="text-secondary small">Instruktorzy i konta rodziców</div>
+                            <div class="text-secondary small">Prowadzący i konta opiekunów</div>
                         </div>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
                             <table class="table table-vcenter card-table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Nazwa kursu</th>
+                                        <th>Nazwa zajęć</th>
                                         <th>Instruktor</th>
                                         <th>Sala</th>
                                         <th class="text-center">Obłożenie</th>
@@ -132,7 +132,7 @@
                                             <td>
                                                 <strong class="text-dark fs-3 d-block">{{ $course->title }}</strong>
                                                 <small class="text-muted">
-                                                    Typ: {{ $course->billing_type === 'monthly_flat' ? 'Ryczałt' : ($course->billing_type === 'per_lesson_monthly' ? 'Za lekcję' : 'Pojedyncze') }}
+                                                    Typ: {{ $course->billing_type === 'monthly_flat' ? 'Ryczałt' : ($course->billing_type === 'per_lesson_monthly' ? 'Za termin' : 'Pojedyncze') }}
                                                 </small>
                                             </td>
                                             <td>
@@ -174,7 +174,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="5" class="text-center py-4 text-muted">
-                                                Brak utwożonych kursów w placówce.
+                                                Brak utworzonych zajęć w placówce.
                                             </td>
                                         </tr>
                                     @endforelse
@@ -195,13 +195,13 @@
                         </div>
                         <div class="card-body p-3 d-flex flex-column gap-2">
                             <a href="{{ route('admin.courses.index') }}" class="btn btn-outline-primary justify-content-start py-2.5 fw-bold">
-                                <i class="ti ti-school me-2 fs-2 text-primary"></i> Zarządzanie Kursami
+                                <i class="ti ti-school me-2 fs-2 text-primary"></i> Zarządzanie Zajęciami
                             </a>
                             <a href="{{ route('admin.user.index') }}" class="btn btn-outline-secondary justify-content-start py-2.5 fw-bold">
-                                <i class="ti ti-users me-2 fs-2 text-secondary"></i> Baza Użytkowników
+                                <i class="ti ti-users me-2 fs-2 text-secondary"></i> Baza Opiekunów
                             </a>
                             <a href="{{ route('admin.children.index') }}" class="btn btn-outline-info justify-content-start py-2.5 fw-bold">
-                                <i class="ti ti-mood-kid me-2 fs-2 text-info"></i> Lista Zapisanych Dzieci
+                                <i class="ti ti-users me-2 fs-2 text-info"></i> Lista Uczestników
                             </a>
                             <a href="{{ route('admin.billing.index') }}" class="btn btn-outline-success justify-content-start py-2.5 fw-bold">
                                 <i class="ti ti-receipt-2 me-2 fs-2 text-success"></i> Raporty i Rozliczenia
@@ -213,7 +213,7 @@
                     <div class="card shadow-sm border-0 mb-4">
                         <div class="card-header bg-surface border-bottom py-3">
                             <h3 class="card-title fw-bold text-dark mb-0">
-                                <i class="ti ti-history me-2 text-warning"></i> Ostatnio Zrealizowane Lekcje
+                                <i class="ti ti-history me-2 text-warning"></i> Ostatnio Zrealizowane Terminy
                             </h3>
                         </div>
                         <div class="card-body p-0">
