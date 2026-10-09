@@ -282,7 +282,7 @@
     <div class="container-xl">
       <!-- Logo & Brand Name -->
       <a class="navbar-brand d-flex align-items-center me-4" href="{{ url('/') }}">
-        <img src="{{ asset('images/logo.jpg') }}" alt="Zajęciownia.pl Logo" class="brand-logo-img me-2">
+        <img src="{{ asset('images/log.jpg') }}" alt="Zajęciownia.pl Logo" class="brand-logo-img me-2">
         <div>
           <span class="brand-title d-block">Zajęciownia.pl</span>
           <small class="text-secondary fw-semibold fs-6 d-none d-sm-block">Miejsce dla Twoich Zajęć</small>
@@ -394,7 +394,7 @@
         <!-- O Nas & Logo -->
         <div class="col-lg-4">
           <div class="d-flex align-items-center mb-3">
-            <img src="{{ asset('images/logo.jpg') }}" alt="Zajęciownia.pl" class="brand-logo-img me-2">
+            <img src="{{ asset('images/log.jpg') }}" alt="Zajęciownia.pl" class="brand-logo-img me-2">
             <span class="fs-2 fw-extrabold text-white">Zajęciownia.pl</span>
           </div>
           <p class="text-secondary leading-relaxed mb-4">
@@ -435,8 +435,8 @@
           <h5 class="text-white fw-bold mb-3">Kontakt & Wsparcie</h5>
           <ul class="list-unstyled d-flex flex-column gap-2 mb-3 text-secondary">
             <li><i class="ti ti-mail me-2 text-primary"></i> pomoc@zajeciownia.pl</li>
-            <li><i class="ti ti-phone me-2 text-success"></i> +48 22 123 45 67 (Pn-Pt 9:00 - 17:00)</li>
-            <li><i class="ti ti-map-pin me-2 text-warning"></i> ul. Aktywności 1, Warszawa</li>
+            <li><i class="ti ti-phone me-2 text-success"></i> +48 692 343 999 (Pn-Pt 9:00 - 17:00)</li>
+            <li><i class="ti ti-map-pin me-2 text-warning"></i> ul. Rynek 18, 27-640 Klimontów</li>
           </ul>
           <div class="d-flex gap-2">
             <a href="#" class="btn btn-icon btn-dark text-white rounded-circle"><i class="ti ti-brand-facebook fs-2"></i></a>

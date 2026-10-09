@@ -1,7 +1,7 @@
 @extends('layouts.front')
 
-@section('title', 'EduZajęcia.net - System Obsługi Zajęć Pozalekcyjnych, Szkół i Rozliczeń Online')
-@section('meta_description', 'Kompleksowa platforma SaaS do zarządzania zajęciami pozalekcyjnymi, szkołami językowymi i MDK. Zapisy online, listy obecności, obłożenie grup (5/15) i rozliczenia dla rodziców.')
+@section('title', 'Zajęciownia.pl - System Obsługi Zajęć Pozalekcyjnych i Rozliczeń Online')
+@section('meta_description', 'Kompleksowa platforma do zarządzania zajęciami pozalekcyjnymi, organizacjami i placówkami edukacyjnymi. Zapisy online, listy obecności, obłożenie grup i rozliczenia online dla rodziców.')
 
 @section('content')
 
@@ -12,7 +12,7 @@
   "@graph": [
     {
       "@type": "SoftwareApplication",
-      "name": "EduZajęcia.net",
+      "name": "Zajęciownia.pl",
       "operatingSystem": "Web, iOS, Android",
       "applicationCategory": "EducationalApplication",
       "offers": {
@@ -31,7 +31,7 @@
       "logo": "{{ asset('images/logo.jpg') }}",
       "contactPoint": {
         "@type": "ContactPoint",
-        "telephone": "+48 22 123 45 67",
+        "telephone": "+48 692 343 999",
         "contactType": "customer service"
       }
     },
@@ -88,7 +88,7 @@
           Kompleksowa Platforma do Zarządzania <span class="text-gradient">Zajęciami Pozalekcyjnymi</span>
         </h1>
         <p class="fs-2 text-secondary mb-4 leading-relaxed">
-          Jedno narzędzie dla <strong>Dyrektorów Szkół, Nauczycieli i Rodziców</strong>. Automatyczne rozliczenia od momentu zapisu, listy obecności oraz płatności online 1-Click.
+          Jedno narzędzie dla <strong>Domów Kultury, Klubów Sportowych, Korepetytorów, Instruktorów i Rodziców</strong>. Automatyczne rozliczenia od momentu zapisu, listy obecności oraz płatności online.
         </p>
 
         <div class="d-flex flex-column flex-sm-row gap-3 mb-4">
@@ -150,7 +150,7 @@
       <div class="col-6 col-md-3">
         <div class="p-3">
           <div class="h1 fw-extrabold text-info mb-1">1-Click</div>
-          <div class="text-secondary fw-semibold">Szybkie płatności BLIK</div>
+          <div class="text-secondary fw-semibold">Szybkie płatności BLIK i online</div>
         </div>
       </div>
     </div>
@@ -163,7 +163,7 @@
     <div class="text-center max-w-2xl mx-auto mb-5">
       <span class="badge bg-blue-subtle text-primary fw-bold px-3 py-2 rounded-pill mb-2">DEDYKOWANE PANELE</span>
       <h2 class="display-6 fw-extrabold text-dark">Dostosowane do Potrzeb Każdego Użytkownika</h2>
-      <p class="text-secondary fs-3">Poznaj dedykowane funkcjonalności stworzone specjalnie dla administratorów szkół, kadry nauczycielskiej oraz rodziców.</p>
+      <p class="text-secondary fs-3">Poznaj dedykowane funkcjonalności stworzone specjalnie dla organizatorów zajęć, instruktorów oraz rodziców.</p>
     </div>
 
     <div class="row g-4">
@@ -174,7 +174,7 @@
             <i class="ti ti-building-community"></i>
           </div>
           <h3 class="fw-bold text-dark fs-2 mb-2">Dla Administratorów</h3>
-          <p class="text-secondary mb-4">Pełna kontrola nad placówką, harmonogramem zajęć, salami oraz budżetem szkoły.</p>
+          <p class="text-secondary mb-4">Pełna kontrola nad placówką, harmonogramem zajęć, salami oraz budżetem placówki.</p>
           <ul class="list-unstyled d-flex flex-column gap-2 mb-4">
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-primary me-2 fs-3"></i> <span><strong>Obłożenie grup (np. 5/15):</strong> Alerty o limitach miejsc.</span></li>
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-primary me-2 fs-3"></i> <span><strong>3 typy rozliczeń:</strong> Ryczałt, za lekcję, indywidualne.</span></li>
@@ -191,13 +191,13 @@
           <div class="feature-icon-wrapper bg-success-subtle text-success">
             <i class="ti ti-user-check"></i>
           </div>
-          <h3 class="fw-bold text-dark fs-2 mb-2">Dla Nauczycieli</h3>
+          <h3 class="fw-bold text-dark fs-2 mb-2">Dla Prowadzących zajęcia</h3>
           <p class="text-secondary mb-4">Wygodny mobilny dziennik lekcyjny dostępny na dowolnym telefonie i tablecie.</p>
           <ul class="list-unstyled d-flex flex-column gap-2 mb-4">
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-success me-2 fs-3"></i> <span><strong>Realizacja lekcji:</strong> Wybór daty i tematu zajęć.</span></li>
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-success me-2 fs-3"></i> <span><strong>Sprawdzanie obecności:</strong> Obecny, Nieobecny, Usprawiedliwiony.</span></li>
-            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-success me-2 fs-3"></i> <span><strong>Lista dzieci:</strong> Szybki wgląd do bazy grupy.</span></li>
-            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-success me-2 fs-3"></i> <span><strong>Plan lekcji:</strong> Porządek tygodniowych zajęć.</span></li>
+            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-success me-2 fs-3"></i> <span><strong>Lista uczestników:</strong> Szybki wgląd do bazy grupy.</span></li>
+            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-success me-2 fs-3"></i> <span><strong>Plan zajęć:</strong> Porządek tygodniowych zajęć.</span></li>
           </ul>
           <a href="{{ route('login') }}" class="btn btn-outline-success w-100 fw-bold mt-auto">Przejdź do dziennika &rarr;</a>
         </div>
@@ -210,10 +210,10 @@
             <i class="ti ti-wallet"></i>
           </div>
           <h3 class="fw-bold text-dark fs-2 mb-2">Dla Rodziców</h3>
-          <p class="text-secondary mb-4">Przejrzysty portal do zapisów na zajęcia oraz rozliczeń opłat za wszystkie dzieci.</p>
+          <p class="text-secondary mb-4">Przejrzysty portal do zapisów na zajęcia oraz rozliczeń opłat za wszystkich uczestników zajęć.</p>
           <ul class="list-unstyled d-flex flex-column gap-2 mb-4">
-            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-warning me-2 fs-3"></i> <span><strong>Accordion dzieci:</strong> Podsumowanie kosztów na dziecko.</span></li>
-            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-warning me-2 fs-3"></i> <span><strong>Płatności Online:</strong> 1-Click za całość lub 1 pozycję.</span></li>
+            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-warning me-2 fs-3"></i> <span><strong>Pełna kontrola:</strong> Podsumowanie kosztów dla każdego dodanego uczestnika.</span></li>
+            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-warning me-2 fs-3"></i> <span><strong>Płatności Online:</strong> Wszystkie zaległości lub poszczególne zajęcia.</span></li>
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-warning me-2 fs-3"></i> <span><strong>Rozliczenie od zapisu:</strong> Brak starych opłat.</span></li>
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-warning me-2 fs-3"></i> <span><strong>Zwolnienia z opłat:</strong> Odliczanie usprawiedliwionych.</span></li>
           </ul>
@@ -229,7 +229,7 @@
   <div class="container-xl">
     <div class="row align-items-center g-5">
       <div class="col-lg-6">
-        <img src="{{ asset('images/features-overview.jpg') }}" alt="Moduły EduZajęcia.net" class="img-fluid rounded-4 shadow-lg border">
+        <img src="{{ asset('images/features-overview.jpg') }}" alt="Moduły Zajęciownia.pl" class="img-fluid rounded-4 shadow-lg border">
       </div>
       <div class="col-lg-6">
         <span class="badge bg-green-subtle text-success fw-bold px-3 py-2 rounded-pill mb-2">INNOWACYJNA ARCHITEKTURA</span>
@@ -282,7 +282,7 @@
         <span class="badge bg-blue-subtle text-primary fw-bold px-3 py-2 rounded-pill mb-2">DOŁĄCZ DO NAS</span>
         <h2 class="display-6 fw-extrabold text-dark mb-0">Wybrane Placówki i Szkoły w Systemie</h2>
       </div>
-      <a href="{{ route('schools.index') }}" class="btn btn-primary fw-bold">
+      <a href="#" class="btn btn-primary fw-bold">
         <i class="ti ti-building-store me-1"></i> Zobacz pełny katalog szkół &rarr;
       </a>
     </div>
@@ -296,7 +296,7 @@
             <p class="text-secondary small mb-3">Szkoła artystyczna, muzyczna oraz kółka zainteresowań dla dzieci i młodzieży.</p>
             <div class="d-flex justify-content-between align-items-center">
               <span class="badge bg-green-lt"><i class="ti ti-check me-1"></i> Rekrutacja otwarta</span>
-              <a href="{{ route('schools.index') }}" class="btn btn-sm btn-outline-primary">Zobacz kursy</a>
+              <a href="#" class="btn btn-sm btn-outline-primary">Zobacz kursy</a>
             </div>
           </div>
         </div>
@@ -310,7 +310,7 @@
             <p class="text-secondary small mb-3">Zajęcia z języka angielskiego, hiszpańskiego oraz niemieckiego w małych grupach.</p>
             <div class="d-flex justify-content-between align-items-center">
               <span class="badge bg-green-lt"><i class="ti ti-check me-1"></i> Płatności online</span>
-              <a href="{{ route('schools.index') }}" class="btn btn-sm btn-outline-primary">Zobacz kursy</a>
+              <a href="#" class="btn btn-sm btn-outline-primary">Zobacz kursy</a>
             </div>
           </div>
         </div>
@@ -324,7 +324,7 @@
             <p class="text-secondary small mb-3">Sekcje gimnastyczne, treningi piłki nożnej oraz taniec nowoczesny dla dzieci.</p>
             <div class="d-flex justify-content-between align-items-center">
               <span class="badge bg-green-lt"><i class="ti ti-check me-1"></i> Wolne miejsca</span>
-              <a href="{{ route('schools.index') }}" class="btn btn-sm btn-outline-primary">Zobacz kursy</a>
+              <a href="#" class="btn btn-sm btn-outline-primary">Zobacz kursy</a>
             </div>
           </div>
         </div>
@@ -347,14 +347,14 @@
       <div class="col-lg-4">
         <div class="pricing-card shadow-sm">
           <h3 class="fw-bold text-dark fs-2 mb-1">Plan Start</h3>
-          <p class="text-secondary small mb-4">Dla małych kółek zainteresowań i samodzielnych instruktorów.</p>
+          <p class="text-secondary small mb-4">Dla małych jednostek, korepetytorów...</p>
           <div class="mb-4">
-            <span class="display-5 fw-extrabold text-dark">49 zł</span>
+            <span class="display-5 fw-extrabold text-dark"> zł</span>
             <span class="text-secondary">/ miesiąc</span>
           </div>
           <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary">
             <li><i class="ti ti-check text-success me-2"></i> Do 50 uczniów</li>
-            <li><i class="ti ti-check text-success me-2"></i> Zarządzanie kursami i salami</li>
+            <li><i class="ti ti-check text-success me-2"></i> Zarządzanie grupami</li>
             <li><i class="ti ti-check text-success me-2"></i> Dziennik obecności na telefonie</li>
             <li><i class="ti ti-check text-success me-2"></i> Podstawowe rozliczenia opłat</li>
           </ul>
@@ -367,16 +367,17 @@
         <div class="pricing-card featured shadow">
           <span class="pricing-badge">Najchętniej wybierany</span>
           <h3 class="fw-bold text-primary fs-2 mb-1">Plan Pro</h3>
-          <p class="text-secondary small mb-4">Dla szkół językowych, muzycznych, sportowych i MDK-ów.</p>
+          <p class="text-secondary small mb-4">Dla domów kultury, placówek i szkół językowych, muzycznych, sportowych i MDK-ów.</p>
           <div class="mb-4">
-            <span class="display-5 fw-extrabold text-primary">149 zł</span>
+            <span class="display-5 fw-extrabold text-primary"> zł</span>
             <span class="text-secondary">/ miesiąc</span>
           </div>
           <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary">
-            <li><i class="ti ti-check text-success me-2"></i> <strong>Nielimitowana liczba dzieci</strong></li>
+            <li><i class="ti ti-check text-success me-2"></i> <strong>Do 200 uczestników</strong></li>
+            <li><i class="ti ti-check text-success me-2"></i> Powiadomienia na e-mail i w aplikacji</li>
             <li><i class="ti ti-check text-success me-2"></i> Płatności online BLIK i kartą dla rodziców</li>
             <li><i class="ti ti-check text-success me-2"></i> Wskaźnik obłożenia grup (np. 5/15)</li>
-            <li><i class="ti ti-check text-success me-2"></i> Portal Rodzica z widokiem Accordion</li>
+            <li><i class="ti ti-check text-success me-2"></i> Portal dla Opiekuna</li>
             <li><i class="ti ti-check text-success me-2"></i> Automatyczne rozliczenia od zapisu</li>
           </ul>
           <a href="{{ route('register') }}" class="btn btn-primary w-100 fw-bold mt-auto py-2 shadow-sm">Rozpocznij 14 dni za darmo</a>
@@ -389,10 +390,11 @@
           <h3 class="fw-bold text-dark fs-2 mb-1">Plan Enterprise</h3>
           <p class="text-secondary small mb-4">Dla sieci szkół, dużych placówek oraz jednostek samorządowych.</p>
           <div class="mb-4">
-            <span class="display-5 fw-extrabold text-dark">399 zł</span>
+            <span class="display-5 fw-extrabold text-dark"> zł</span>
             <span class="text-secondary">/ miesiąc</span>
           </div>
           <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary">
+            <li><i class="ti ti-check text-success me-2"></i> <strong>Nielimitowana liczba uczestników</strong></li>
             <li><i class="ti ti-check text-success me-2"></i> Obsługa wielu placówek i szkół</li>
             <li><i class="ti ti-check text-success me-2"></i> Dedykowany opiekun konta</li>
             <li><i class="ti ti-check text-success me-2"></i> Dedykowane integracje płatności</li>
@@ -411,7 +413,7 @@
     <div class="text-center mb-5">
       <span class="badge bg-blue-subtle text-primary fw-bold px-3 py-2 rounded-pill mb-2">ODPOWIEDZI NA PYTANIA</span>
       <h2 class="display-6 fw-extrabold text-dark">Najczęściej Zadawane Pytania (FAQ)</h2>
-      <p class="text-secondary fs-3">Wszystko, co musisz wiedzieć o wdrożeniu i codziennym korzystaniu z EduZajęcia.net.</p>
+      <p class="text-secondary fs-3">Wszystko, co musisz wiedzieć o wdrożeniu i codziennym korzystaniu z Zajęciownia.pl.</p>
     </div>
 
     <div class="accordion shadow-sm" id="accordion-faq">
@@ -424,7 +426,7 @@
         </h2>
         <div id="faq-1" class="accordion-collapse collapse show" aria-labelledby="heading-faq-1" data-bs-parent="#accordion-faq">
           <div class="accordion-body text-secondary fs-4 leading-relaxed">
-            System EduZajęcia.net wspiera 3 elastyczne typy billingowe: stały ryczałt miesięczny (<code>monthly_flat</code>), stawkę za zrealizowaną lekcję (<code>per_lesson_monthly</code>) oraz opłaty jednorazowe. Ponadto rozliczenie dziecka jest naliczane precyzyjnie od momentu jego dołączenia do grupy, bez wstecznych zaległości.
+            System Zajęciownia.pl wspiera 3 elastyczne typy billingowe: stały ryczałt miesięczny, stawkę za zrealizowaną lekcję oraz opłaty jednorazowe. Ponadto rozliczenie dziecka jest naliczane precyzyjnie od momentu jego dołączenia do grupy, bez wstecznych zaległości.
           </div>
         </div>
       </div>
@@ -438,7 +440,7 @@
         </h2>
         <div id="faq-2" class="accordion-collapse collapse" aria-labelledby="heading-faq-2" data-bs-parent="#accordion-faq">
           <div class="accordion-body text-secondary fs-4 leading-relaxed">
-            Tak! Rodzic w swoim panelu widzi przejrzystą listę nieopłaconych zajęć z rozbiciem na poszczególne dzieci (accordion). Może użyć przycisku głównego <strong>„Zapłać online”</strong>, aby uregulować całą zaległość naraz, lub kliknąć mały przycisk <strong>„Zapłać”</strong> przy konkretnym kursie.
+            Tak! Użytkownik w swoim panelu widzi przejrzystą listę nieopłaconych zajęć z rozbiciem na dodanych uczestników. Może użyć przycisku głównego <strong>„Zapłać online”</strong>, aby uregulować całą zaległość naraz, lub kliknąć mały przycisk <strong>„Zapłać”</strong> przy konkretnych zajęciach.
           </div>
         </div>
       </div>
@@ -492,16 +494,16 @@
 <section class="py-6 bg-white">
   <div class="container-xl">
     <div class="cta-banner text-center">
-      <h2 class="display-5 fw-extrabold mb-3">Gotowy na Automatyzację Twojej Szkoły?</h2>
+      <h2 class="display-5 fw-extrabold mb-3">Gotowy na Automatyzację Twojej Pracy?</h2>
       <p class="fs-2 text-blue-100 max-w-2xl mx-auto mb-4">
-        Dołącz do nowoczesnych placówek edukacyjnych. Zarejestruj się w 2 minuty i przetestuj pełne możliwości platformy przez 14 dni bez zobowiązań.
+        Dołącz do nowoczesnych placówek edukacyjnych. Zarejestruj się w 2 minuty i przetestuj pełne możliwości platformy przez 14 dni bez żadnych zobowiązań.
       </p>
       <div class="d-flex justify-content-center gap-3 flex-wrap">
         <a href="{{ route('register') }}" class="btn btn-success btn-lg fw-bold px-5 py-3 shadow">
           <i class="ti ti-user-plus me-2 fs-2"></i> Załóż konto placówki
         </a>
-        <a href="{{ route('schools.index') }}" class="btn btn-outline-light btn-lg fw-semibold px-4 py-3">
-          <i class="ti ti-building me-2 fs-2"></i> Przeglądaj katalog szkół
+        <a href="#" class="btn btn-outline-light btn-lg fw-semibold px-4 py-3">
+          <i class="ti ti-building me-2 fs-2"></i> Umów się na prezentację
         </a>
       </div>
     </div>
