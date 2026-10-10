@@ -19,13 +19,23 @@ class LessonController extends Controller
     /**
      * Formularz przeprowadzania / realizacji nowej lekcji.
      */
-    public function create(Course $course): View
+    public function create(Request $request, Course $course): View
     {
         $this->authorizeTeacherCourse($course);
 
         $course->load('children');
 
-        return view('teacher.lessons.create', compact('course'));
+        $selectedChildId = null;
+        if ($course->isIndividual()) {
+            $requestedChildId = $request->query('child_id') ? (int) $request->query('child_id') : null;
+            if ($requestedChildId && $course->children->contains('id', $requestedChildId)) {
+                $selectedChildId = $requestedChildId;
+            } elseif ($course->children->isNotEmpty()) {
+                $selectedChildId = $course->children->first()->id;
+            }
+        }
+
+        return view('teacher.lessons.create', compact('course', 'selectedChildId'));
     }
 
     /**
@@ -35,20 +45,34 @@ class LessonController extends Controller
     {
         $this->authorizeTeacherCourse($course);
 
-        $request->validate([
+        $validationRules = [
             'realized_at' => ['required', 'date'],
             'topic' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:1000'],
             'attendance' => ['required', 'array'],
             'attendance.*.status' => ['required', 'in:present,absent,excused'],
             'attendance.*.notes' => ['nullable', 'string', 'max:255'],
-        ], [
-            'realized_at.required' => 'Wybór daty przeprowadzenia lekcji jest wymagany.',
+        ];
+
+        if ($course->isIndividual()) {
+            $validationRules['child_id'] = ['required', 'exists:children,id'];
+        }
+
+        $request->validate($validationRules, [
+            'realized_at.required' => 'Wybór daty przeprowadzenia zajęć jest wymagany.',
             'realized_at.date' => 'Wprowadź poprawną datę.',
-            'attendance.required' => 'Lista obecności dzieci jest wymagana.',
+            'child_id.required' => 'Dla zajęć indywidualnych wybór uczestnika jest wymagany.',
+            'attendance.required' => 'Lista obecności jest wymagana.',
         ]);
 
-        DB::transaction(function () use ($request, $course) {
+        $isIndividual = $course->isIndividual();
+        $targetChildId = $isIndividual ? (int) $request->input('child_id') : null;
+
+        if ($isIndividual && !$course->children()->where('children.id', $targetChildId)->exists()) {
+            return back()->withErrors(['child_id' => 'Wybrany uczestnik nie jest zapisany na te zajęcia.'])->withInput();
+        }
+
+        DB::transaction(function () use ($request, $course, $isIndividual, $targetChildId) {
             $user = Auth::user();
 
             $lesson = Lesson::create([
@@ -61,22 +85,34 @@ class LessonController extends Controller
             ]);
 
             $attendances = $request->input('attendance', []);
-            foreach ($attendances as $childId => $data) {
+
+            if ($isIndividual) {
+                // Dla zajęć indywidualnych zapisujemy na liście obecności TYLKO JEDNĄ OSOBĘ
+                $data = $attendances[$targetChildId] ?? reset($attendances);
                 LessonAttendance::create([
                     'lesson_id' => $lesson->id,
-                    'child_id' => $childId,
+                    'child_id' => $targetChildId,
                     'status' => $data['status'] ?? 'present',
                     'notes' => $data['notes'] ?? null,
                 ]);
+            } else {
+                foreach ($attendances as $childId => $data) {
+                    LessonAttendance::create([
+                        'lesson_id' => $lesson->id,
+                        'child_id' => $childId,
+                        'status' => $data['status'] ?? 'present',
+                        'notes' => $data['notes'] ?? null,
+                    ]);
+                }
             }
         });
 
-        // Automatyczna aktualizacja pozycji rozliczeniowych w nowej tabeli billing_items dla tego miesiąca
+        // Automatyczna aktualizacja pozycji rozliczeniowych
         $yearMonth = \Carbon\Carbon::parse($request->input('realized_at'))->format('Y-m');
         $billingService->syncCourseMonth($course, $yearMonth);
 
         return redirect()->route('teacher.courses.show', $course)
-            ->with('success', 'Lekcja została pomyślnie zrealizowana, a pozycje rozliczeniowe i lista obecności zaktualizowane.');
+            ->with('success', 'Zajęcia zostały pomyślnie zrealizowane, a obecność i pozycje rozliczeniowe zaktualizowane.');
     }
 
     /**

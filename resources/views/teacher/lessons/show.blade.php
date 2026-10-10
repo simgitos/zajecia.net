@@ -38,18 +38,25 @@
                             <strong class="fs-4 text-dark">{{ $lesson->topic ?: 'Brak zdefiniowanego tematu' }}</strong>
                         </div>
                         <div class="col-md-4">
-                            <span class="text-secondary d-block fs-5">Statystyka obecności</span>
-                            @php
-                                $presentCount = $lesson->attendances->where('status', 'present')->count();
-                                $totalCount = $lesson->attendances->count();
-                            @endphp
-                            <span class="badge bg-success-lt fs-3 fw-bold">
-                                Obecnych: {{ $presentCount }} / {{ $totalCount }}
-                            </span>
+                            <span class="text-secondary d-block fs-5">Frekwencja</span>
+                            @if($lesson->course->isIndividual())
+                                @php $firstAtt = $lesson->attendances->first(); @endphp
+                                <span class="badge bg-azure-lt fs-3 fw-bold">
+                                    <i class="ti ti-user me-1"></i> Sesja indywidualna: {{ $firstAtt?->child?->name ?? '1 uczestnik' }}
+                                </span>
+                            @else
+                                @php
+                                    $presentCount = $lesson->attendances->where('status', 'present')->count();
+                                    $totalCount = $lesson->attendances->count();
+                                @endphp
+                                <span class="badge bg-success-lt fs-3 fw-bold">
+                                    Obecnych: {{ $presentCount }} / {{ $totalCount }}
+                                </span>
+                            @endif
                         </div>
                         @if($lesson->notes)
                             <div class="col-12 mt-2">
-                                <span class="text-secondary d-block fs-5">Uwagi / Notatka</span>
+                                <span class="text-secondary d-block fs-5">Uwagi / Notatka prowadzącego</span>
                                 <p class="text-dark mb-0 fs-4">{{ $lesson->notes }}</p>
                             </div>
                         @endif
@@ -59,14 +66,20 @@
 
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-surface border-bottom">
-                    <h3 class="card-title fw-bold">Sprawdzona lista obecności</h3>
+                    <h3 class="card-title fw-bold">
+                        @if($lesson->course->isIndividual())
+                            <i class="ti ti-user me-2 text-primary"></i> Uczestnik zajęć indywidualnych
+                        @else
+                            <i class="ti ti-users me-2 text-primary"></i> Sprawdzona lista obecności
+                        @endif
+                    </h3>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-vcenter card-table table-hover">
                         <thead>
                             <tr>
                                 <th class="w-1">#</th>
-                                <th>Imię i nazwisko dziecka</th>
+                                <th>Imię i nazwisko uczestnika</th>
                                 <th>Status obecności</th>
                                 <th>Uwaga</th>
                             </tr>

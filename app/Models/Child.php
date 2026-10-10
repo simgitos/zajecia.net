@@ -61,7 +61,7 @@ class Child extends Model
      */
     public function courses(): BelongsToMany
     {
-        return $this->belongsToMany(Course::class, 'child_course')->withTimestamps();
+        return $this->belongsToMany(Course::class, 'child_course')->withPivot('sort_order')->withTimestamps();
     }
 
     /**

@@ -47,7 +47,15 @@ class Course extends Model
 
     public function children(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Child::class, 'child_course')->withTimestamps();
+        return $this->belongsToMany(Child::class, 'child_course')
+            ->withPivot('sort_order')
+            ->withTimestamps()
+            ->orderByPivot('sort_order', 'asc');
+    }
+
+    public function isIndividual(): bool
+    {
+        return $this->type === 'individual';
     }
 
     public function isFull(): bool
@@ -65,3 +73,4 @@ class Course extends Model
         return $this->hasMany(Lesson::class);
     }
 }
+

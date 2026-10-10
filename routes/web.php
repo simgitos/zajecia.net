@@ -20,6 +20,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])
     ->group(function () {
         Route::resource('/users', UserController::class)->names('user');
         Route::resource('/courses', \App\Http\Controllers\Admin\CourseController::class)->names('courses');
+        Route::post('/courses/{course}/reorder-children', [\App\Http\Controllers\Admin\CourseController::class, 'reorderChildren'])->name('courses.reorder-children');
+        Route::post('/courses/{course}/enroll-children', [\App\Http\Controllers\Admin\CourseController::class, 'enrollChildren'])->name('courses.enroll-children');
+        Route::delete('/courses/{course}/unenroll-child/{child}', [\App\Http\Controllers\Admin\CourseController::class, 'unenrollChild'])->name('courses.unenroll-child');
         Route::get('/children', [\App\Http\Controllers\Admin\ChildController::class, 'index'])->name('children.index');
         Route::get('/billing', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('billing.index');
         Route::post('/billing/{item}/mark-paid', [\App\Http\Controllers\Admin\BillingController::class, 'markPaid'])->name('billing.mark-paid');
@@ -33,6 +36,9 @@ Route::middleware(['auth', 'verified', 'role:teacher'])
     ->group(function () {
         Route::get('/courses', [\App\Http\Controllers\Teacher\CourseController::class, 'index'])->name('courses.index');
         Route::get('/courses/{course}', [\App\Http\Controllers\Teacher\CourseController::class, 'show'])->name('courses.show');
+        Route::post('/courses/{course}/reorder-children', [\App\Http\Controllers\Teacher\CourseController::class, 'reorderChildren'])->name('courses.reorder-children');
+        Route::post('/courses/{course}/enroll-children', [\App\Http\Controllers\Teacher\CourseController::class, 'enrollChildren'])->name('courses.enroll-children');
+        Route::delete('/courses/{course}/unenroll-child/{child}', [\App\Http\Controllers\Teacher\CourseController::class, 'unenrollChild'])->name('courses.unenroll-child');
         Route::get('/courses/{course}/lessons/create', [\App\Http\Controllers\Teacher\LessonController::class, 'create'])->name('lessons.create');
         Route::post('/courses/{course}/lessons', [\App\Http\Controllers\Teacher\LessonController::class, 'store'])->name('lessons.store');
         Route::get('/lessons/{lesson}', [\App\Http\Controllers\Teacher\LessonController::class, 'show'])->name('lessons.show');
