@@ -108,9 +108,9 @@
                                                 <i class="ti ti-checkup-list me-1"></i> Przeprowadź lekcję
                                             </button>
                                         @else
-                                            <button class="btn btn-success w-100"  title="Brak przypisanych uczestników">
+                                            <a href="{{ route('teacher.lessons.create', ['course' => $course->id]) }}" class="btn btn-success w-100"  title="Przeprowadź lekcję">
                                                 <i class="ti ti-checkup-list me-1"></i> Przeprowadź lekcję
-                                            </button>
+                                            </a>
                                         @endif
                                         
                                     @endif

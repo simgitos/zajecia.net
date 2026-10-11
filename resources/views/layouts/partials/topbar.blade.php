@@ -1,12 +1,12 @@
-<header class="navbar navbar-expand-md d-print-none sticky-top bg-surface shadow-xs">
+<header class="navbar navbar-expand-md d-print-none  bg-surface shadow-xs">
     <div class="container-xl">
         {{-- Lewa strona: Hamburger + Logo --}}
         <div class="d-flex align-items-center me-2">
-            <button class="navbar-toggler me-2 p-1 border-0" type="button" data-bs-toggle="collapse"
+            <!-- <button class="navbar-toggler me-2 p-1 border-0" type="button" data-bs-toggle="collapse"
                 data-bs-target="#sidebar-folded" aria-controls="sidebar-folded" aria-expanded="false"
                 aria-label="Menu nawigacji">
                 <span class="navbar-toggler-icon"></span>
-            </button>
+            </button> -->
 
         </div>
 
