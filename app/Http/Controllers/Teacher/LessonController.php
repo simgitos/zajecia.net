@@ -17,6 +17,28 @@ use Illuminate\View\View;
 class LessonController extends Controller
 {
     /**
+     * Lista przeprowadzonych lekcji nauczyciela z filtrowaniem po miesiącu.
+     */
+    public function index(Request $request): View
+    {
+        $user = Auth::user();
+
+        $filterMonth = (int) $request->get('month', now()->month);
+        $filterYear  = (int) $request->get('year', now()->year);
+
+        $recentLessons = Lesson::where('teacher_id', $user->id)
+            ->where('school_id', $user->school_id)
+            ->whereYear('realized_at', $filterYear)
+            ->whereMonth('realized_at', $filterMonth)
+            ->with(['course'])
+            ->withCount('attendances')
+            ->latest('realized_at')
+            ->get();
+
+        return view('teacher.lessons.index', compact('recentLessons', 'filterMonth', 'filterYear'));
+    }
+
+    /**
      * Formularz przeprowadzania / realizacji nowej lekcji.
      */
     public function create(Request $request, Course $course): View

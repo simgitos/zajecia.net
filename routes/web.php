@@ -39,6 +39,8 @@ Route::middleware(['auth', 'verified', 'role:teacher'])
         Route::post('/courses/{course}/reorder-children', [\App\Http\Controllers\Teacher\CourseController::class, 'reorderChildren'])->name('courses.reorder-children');
         Route::post('/courses/{course}/enroll-children', [\App\Http\Controllers\Teacher\CourseController::class, 'enrollChildren'])->name('courses.enroll-children');
         Route::delete('/courses/{course}/unenroll-child/{child}', [\App\Http\Controllers\Teacher\CourseController::class, 'unenrollChild'])->name('courses.unenroll-child');
+        Route::get('/children', [\App\Http\Controllers\Teacher\CourseController::class, 'childrenIndex'])->name('children.index');
+        Route::get('/lessons', [\App\Http\Controllers\Teacher\LessonController::class, 'index'])->name('lessons.index');
         Route::get('/courses/{course}/lessons/create', [\App\Http\Controllers\Teacher\LessonController::class, 'create'])->name('lessons.create');
         Route::post('/courses/{course}/lessons', [\App\Http\Controllers\Teacher\LessonController::class, 'store'])->name('lessons.store');
         Route::get('/lessons/{lesson}', [\App\Http\Controllers\Teacher\LessonController::class, 'show'])->name('lessons.show');

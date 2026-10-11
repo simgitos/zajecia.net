@@ -5,12 +5,55 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, theme-value" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>{{ config('app.name', 'Panel Admina') }}</title>
+  <title>{{ config('app.name', 'Zajęciownia.pl') }}</title>
 
   <!-- CSS Tablera (Bootstrap 5) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.6.0/dist/css/tabler.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.48.0/dist/tabler-icons.min.css" />
   @livewireStyles
+
+  <style>
+    /* Optymalizacja UX na urządzeniach mobilnych */
+    @media (max-width: 767.98px) {
+      .page-header {
+        margin-bottom: 0.75rem !important;
+      }
+      .page-pretitle {
+        font-size: 0.7rem !important;
+        margin-bottom: 0.2rem !important;
+      }
+      .page-title {
+        font-size: 1.3rem !important;
+      }
+      .card {
+        margin-bottom: 0.75rem !important;
+      }
+      .card-body {
+        padding: 0.85rem !important;
+      }
+      .card-header {
+        padding: 0.75rem 0.85rem !important;
+      }
+      .h1, .h2 {
+        font-size: 1.4rem !important;
+      }
+      .subheader {
+        font-size: 0.7rem !important;
+        letter-spacing: 0.05em;
+      }
+      .avatar-lg {
+        width: 3rem;
+        height: 3rem;
+      }
+      .btn-group .btn {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.825rem;
+      }
+      .table-responsive {
+        font-size: 0.875rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -30,8 +73,6 @@
           {{ $slot ?? '' }}
           @yield('content')
         </div>
-
-
       </main>
     </div>
   </div>

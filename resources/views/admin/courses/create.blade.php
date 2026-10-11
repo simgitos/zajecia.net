@@ -132,6 +132,20 @@
                             @enderror
                         </div>
 
+                        <!-- Harmonogram zajęć -->
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">
+                                <i class="ti ti-calendar-time me-1 text-primary"></i> Harmonogram zajęć
+                            </label>
+                            <input type="text" name="schedule_info" class="form-control @error('schedule_info') is-invalid @enderror"
+                                   value="{{ old('schedule_info') }}"
+                                   placeholder="np. Wtorek 15:00, Czwartek 16:30 lub Codziennie 9:00–10:00">
+                            <small class="form-hint">Wpisz terminy zajęć w tygodniu — będą widoczne w katalogu dla rodziców/opiekunów.</small>
+                            @error('schedule_info')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <!-- Opis zajęć -->
                         <div class="col-md-12 mb-3">
                             <label class="form-label">Opis zajęć</label>

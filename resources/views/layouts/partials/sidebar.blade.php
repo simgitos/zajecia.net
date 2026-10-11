@@ -1,10 +1,14 @@
 <!-- Pasek boczny (Sidebar) -->
-<aside class="navbar navbar-vertical navbar-expand-lg navbar-folded-hover">
+<aside class="navbar navbar-vertical navbar-expand-lg navbar-folded-hove">
     <div class="container-fluid">
         <h1 class="navbar-brand navbar-brand-autodark">
             <a href="/">
-                <i class="ti ti-school fs-1 me-2"></i>
-                <span class="d-none d-lg-inline">Zajęciownia.pl</span>
+
+           
+                <img src="/images/logo.jpg" alt="Logo" class="rounded-2 me-2 shadow-xs" style="height: 30px;  object-fit: cover;" onerror="this.style.display='none'">
+                
+           
+                
             </a>
         </h1>
         <div class="collapse navbar-collapse" id="sidebar-folded">

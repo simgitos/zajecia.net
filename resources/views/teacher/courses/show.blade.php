@@ -13,12 +13,12 @@
                     </h2>
                 </div>
                 <div class="col-auto ms-auto d-print-none d-flex gap-2">
-                    <a href="{{ route('teacher.lessons.create', $course->id) }}" class="btn btn-success">
+                    <!-- <a href="{{ route('teacher.lessons.create', $course->id) }}" class="btn btn-success">
                         <i class="ti ti-checkup-list me-1"></i> Przeprowadź zajęcia
-                    </a>
-                    <button type="button" onclick="window.print();" class="btn btn-outline-secondary">
+                    </a> -->
+                    <!-- <button type="button" onclick="window.print();" class="btn btn-outline-secondary">
                         <i class="ti ti-printer me-1"></i> Drukuj listę
-                    </button>
+                    </button> -->
                 </div>
             </div>
         </div>
@@ -189,9 +189,9 @@
                     <h3 class="card-title fw-bold">
                         <i class="ti ti-history me-2 text-primary"></i> Lista zrealizowanych terminów ({{ $course->lessons->count() }})
                     </h3>
-                    <a href="{{ route('teacher.lessons.create', $course->id) }}" class="btn btn-success btn-sm">
+                    <!-- <a href="{{ route('teacher.lessons.create', $course->id) }}" class="btn btn-success btn-sm">
                         <i class="ti ti-plus me-1"></i> Przeprowadź nowy termin
-                    </a>
+                    </a> -->
                 </div>
                 <div class="table-responsive">
                     <table class="table table-vcenter card-table table-hover">

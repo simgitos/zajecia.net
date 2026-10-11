@@ -47,38 +47,37 @@
             @endif
 
             <!-- 2 Kafelki podsumowujące (dostosowane pod mobile) -->
-            <div class="row row-cards mb-4">
+            <div class="row row-cards mb-3 mb-md-4">
                 <!-- Kafelek 1: Do zapłaty -->
-                <div class="col-md-5">
+                <div class="col-12 col-md-6">
                     <div class="card shadow-sm border-0 border-start border-danger border-4 h-100">
-                        <div class="card-body d-flex flex-column justify-content-between p-3 p-sm-4">
+                        <div class="card-body d-flex flex-column justify-content-between p-2.5 p-sm-3">
                             <div>
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <div class="subheader fw-bold text-uppercase fs-5">Bieżąca suma do zapłaty
-                                        <div class="h1 mb-1 fw-extrabold text-danger fs-1">
-                                            {{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł
-                                        </div>
-                                    </div>
-                                    <span class="avatar bg-danger text-white rounded-circle fs-2">
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <div class="subheader fw-bold text-uppercase fs-6">Bieżąca suma do zapłaty</div>
+                                    <span class="avatar avatar-sm bg-danger text-white rounded-circle fs-3">
                                         <i class="ti ti-clock"></i>
                                     </span>
                                 </div>
+                                <div class="h2 mb-1 fw-extrabold text-danger fs-1 text-truncate">
+                                    {{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł
+                                </div>
                             </div>
 
-                            <div class="d-flex flex-column gap-2 mt-2">
+                            <div class="d-flex flex-column flex-sm-row gap-1.5 mt-2">
                                 @if($totalUnpaidAmount > 0)
-                                    <form action="{{ route('user.payments.pay-all') }}" method="POST" onsubmit="return confirm('Czy na pewno chcesz opłacić online wszystkie nieopłacone zajęcia ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł)?');">
+                                    <form action="{{ route('user.payments.pay-all') }}" method="POST" class="w-100" onsubmit="return confirm('Czy na pewno chcesz opłacić online wszystkie nieopłacone zajęcia ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł)?');">
                                         @csrf
-                                        <button type="submit" class="btn btn-danger w-100 py-2 fw-bold shadow-sm">
+                                        <button type="submit" class="btn btn-danger w-100 py-1.5 fw-bold shadow-sm">
                                             <i class="ti ti-credit-card me-1 fs-3"></i> Zapłać online ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł)
                                         </button>
                                     </form>
                                 @else
-                                    <button type="button" class="btn btn-secondary w-100 py-2 fw-bold" disabled>
+                                    <button type="button" class="btn btn-secondary w-100 py-1.5 fw-bold" disabled>
                                         <i class="ti ti-check me-1 fs-3"></i> Wszystkie zajęcia opłacone
                                     </button>
                                 @endif
-                                <button type="button" class="btn btn-outline-secondary w-100 py-2 fw-bold" data-bs-toggle="modal" data-bs-target="#modal-payment-history">
+                                <button type="button" class="btn btn-outline-secondary w-100 py-1.5 fw-bold" data-bs-toggle="modal" data-bs-target="#modal-payment-history">
                                     <i class="ti ti-history me-1 fs-3"></i> Historia wpłat ({{ $paidItems->count() }})
                                 </button>
                             </div>

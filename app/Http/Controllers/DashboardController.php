@@ -79,6 +79,10 @@ class DashboardController extends Controller
         if ($user->hasRole('teacher')) {
             $schoolId = $user->school_id;
 
+            // Miesiąc filtrowania (domyślnie bieżący)
+            $filterMonth = (int) $request->get('month', now()->month);
+            $filterYear  = (int) $request->get('year', now()->year);
+
             // Kursy gdzie dany nauczyciel jest instruktorem
             $teacherCourses = Course::where('instructor_id', $user->id)
                 ->where('school_id', $schoolId)
@@ -89,29 +93,40 @@ class DashboardController extends Controller
             $courseIds = $teacherCourses->pluck('id');
 
             // Liczba przydzielonych dzieci w kursach nauczyciela
-            $assignedChildrenCount = Child::whereHas('courses', function ($query) use ($courseIds) {
+            $assignedChildrenCount = \App\Models\Child::whereHas('courses', function ($query) use ($courseIds) {
                 $query->whereIn('courses.id', $courseIds);
             })->count();
 
+            // Pełna lista uczestników instruktora (bez duplikatów)
+            $assignedChildren = \App\Models\Child::whereHas('courses', function ($query) use ($courseIds) {
+                $query->whereIn('courses.id', $courseIds);
+            })->with(['courses' => function ($q) use ($courseIds) {
+                $q->whereIn('courses.id', $courseIds);
+            }])->orderBy('name')->get();
+
             // Przeprowadzone lekcje w tym miesiącu
             $currentMonthLessonsCount = Lesson::where('teacher_id', $user->id)
-                ->whereYear('realized_at', now()->year)
-                ->whereMonth('realized_at', now()->month)
+                ->whereYear('realized_at', $filterYear)
+                ->whereMonth('realized_at', $filterMonth)
                 ->count();
 
-            // Ostatnio przeprowadzone lekcje przez tego nauczyciela
+            // Zrealizowane lekcje (filtrowane)
             $recentLessons = Lesson::where('teacher_id', $user->id)
+                ->whereYear('realized_at', $filterYear)
+                ->whereMonth('realized_at', $filterMonth)
                 ->with(['course'])
                 ->withCount('attendances')
                 ->latest('realized_at')
-                ->take(5)
                 ->get();
 
             return view('teacher.dashboard', compact(
                 'teacherCourses',
                 'assignedChildrenCount',
+                'assignedChildren',
                 'currentMonthLessonsCount',
-                'recentLessons'
+                'recentLessons',
+                'filterMonth',
+                'filterYear'
             ));
         }
 

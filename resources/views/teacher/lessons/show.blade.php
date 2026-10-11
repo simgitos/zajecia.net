@@ -12,11 +12,11 @@
                         <i class="ti ti-checkup-list me-2"></i> Zrealizowana Lekcja: {{ $lesson->realized_at->format('d.m.Y') }}
                     </h2>
                 </div>
-                <div class="col-auto ms-auto d-print-none">
+                <!-- <div class="col-auto ms-auto d-print-none">
                     <button type="button" onclick="window.print();" class="btn btn-outline-secondary">
                         <i class="ti ti-printer me-1"></i> Drukuj listę
                     </button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

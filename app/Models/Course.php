@@ -19,6 +19,7 @@ class Course extends Model
         'min_age',
         'max_age',
         'description',
+        'schedule_info',
         'is_active',
     ];
 

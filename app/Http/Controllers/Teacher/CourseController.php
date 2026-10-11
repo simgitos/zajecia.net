@@ -21,11 +21,31 @@ class CourseController extends Controller
         $courses = Course::where('school_id', $user->school_id)
             ->where('instructor_id', $user->id)
             ->withCount('children')
-            ->with(['room'])
+            ->with(['room', 'children'])
             ->latest()
             ->get();
 
         return view('teacher.courses.index', compact('courses'));
+    }
+
+    /**
+     * Lista uczestników zapisanych na zajęcia prowadzone przez danego nauczyciela.
+     */
+    public function childrenIndex(): View
+    {
+        $user = Auth::user();
+
+        $courseIds = Course::where('school_id', $user->school_id)
+            ->where('instructor_id', $user->id)
+            ->pluck('id');
+
+        $assignedChildren = \App\Models\Child::whereHas('courses', function ($query) use ($courseIds) {
+            $query->whereIn('courses.id', $courseIds);
+        })->with(['courses' => function ($q) use ($courseIds) {
+            $q->whereIn('courses.id', $courseIds);
+        }, 'parent'])->orderBy('name')->get();
+
+        return view('teacher.children.index', compact('assignedChildren'));
     }
 
     /**

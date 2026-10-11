@@ -87,6 +87,7 @@ class CourseController extends Controller
             'max_participants' => ['required', 'integer', 'min:1'],
             'min_age' => ['nullable', 'integer', 'min:0'],
             'max_age' => ['nullable', 'integer', 'min:0'],
+            'schedule_info' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'child_ids' => ['nullable', 'array'],
             'child_ids.*' => ['integer', 'exists:children,id'],
@@ -124,6 +125,7 @@ class CourseController extends Controller
                     'max_participants' => 1,
                     'min_age' => $request->min_age,
                     'max_age' => $request->max_age,
+                    'schedule_info' => $request->schedule_info,
                     'description' => $request->description,
                     'is_active' => $request->has('is_active'),
                 ]);
@@ -150,6 +152,7 @@ class CourseController extends Controller
             'max_participants' => $request->max_participants,
             'min_age' => $request->min_age,
             'max_age' => $request->max_age,
+            'schedule_info' => $request->schedule_info,
             'description' => $request->description,
             'is_active' => $request->has('is_active'),
         ]);
@@ -211,6 +214,7 @@ class CourseController extends Controller
             'max_participants' => ['required', 'integer', 'min:1'],
             'min_age' => ['nullable', 'integer', 'min:0'],
             'max_age' => ['nullable', 'integer', 'min:0'],
+            'schedule_info' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
         ]);
 
@@ -234,6 +238,7 @@ class CourseController extends Controller
             'max_participants' => $request->max_participants,
             'min_age' => $request->min_age,
             'max_age' => $request->max_age,
+            'schedule_info' => $request->schedule_info,
             'description' => $request->description,
             'is_active' => $request->has('is_active'),
         ]);
