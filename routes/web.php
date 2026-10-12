@@ -66,7 +66,12 @@ Route::middleware(['auth', 'verified', 'role:user'])
         Route::get('/platnosci', [\App\Http\Controllers\User\PaymentController::class, 'index'])->name('payments.index');
         Route::post('/platnosci/pay-all', [\App\Http\Controllers\User\PaymentController::class, 'payAll'])->name('payments.pay-all');
         Route::post('/platnosci/{item}/pay', [\App\Http\Controllers\User\PaymentController::class, 'payItem'])->name('payments.pay-item');
+        Route::get('/platnosci/sukces', [\App\Http\Controllers\User\PaymentController::class, 'success'])->name('payments.success');
+        Route::get('/platnosci/blad', [\App\Http\Controllers\User\PaymentController::class, 'error'])->name('payments.error');
     });
+
+// Tpay Webhook
+Route::post('/tpay/webhook', \App\Http\Controllers\TpayWebhookController::class)->name('tpay.webhook');
 
 require __DIR__ . '/auth.php';
 

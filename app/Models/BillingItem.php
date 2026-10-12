@@ -65,6 +65,11 @@ class BillingItem extends Model
         return $this->belongsTo(Course::class);
     }
 
+    public function payments(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Payment::class, 'billing_item_payment');
+    }
+
     public function isPaid(): bool
     {
         return $this->status === 'paid';

@@ -17,7 +17,70 @@ class School extends Model
         'subscription_plan',
         'cancellation_cutoff_hours',
         'status',
+        'tpay_client_id',
+        'tpay_client_secret',
+        'tpay_merchant_secret',
+        'tpay_production_mode',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'tpay_production_mode' => 'boolean',
+        ];
+    }
+
+    /**
+     * Odszyfrowuje tpay_client_secret lub zwraca wartość bezpośrednio, jeśli została wpisana jako plaintext.
+     */
+    public function getTpayClientSecretAttribute(?string $value): ?string
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        try {
+            return \Illuminate\Support\Facades\Crypt::decryptString($value);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException) {
+            return $value;
+        }
+    }
+
+    /**
+     * Zawsze szyfruje tpay_client_secret przed zapisem do bazy.
+     */
+    public function setTpayClientSecretAttribute(?string $value): void
+    {
+        $this->attributes['tpay_client_secret'] = !empty($value)
+            ? \Illuminate\Support\Facades\Crypt::encryptString($value)
+            : null;
+    }
+
+    /**
+     * Odszyfrowuje tpay_merchant_secret lub zwraca wartość bezpośrednio, jeśli została wpisana jako plaintext.
+     */
+    public function getTpayMerchantSecretAttribute(?string $value): ?string
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        try {
+            return \Illuminate\Support\Facades\Crypt::decryptString($value);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException) {
+            return $value;
+        }
+    }
+
+    /**
+     * Zawsze szyfruje tpay_merchant_secret przed zapisem do bazy.
+     */
+    public function setTpayMerchantSecretAttribute(?string $value): void
+    {
+        $this->attributes['tpay_merchant_secret'] = !empty($value)
+            ? \Illuminate\Support\Facades\Crypt::encryptString($value)
+            : null;
+    }
 
     public function users(): HasMany
     {

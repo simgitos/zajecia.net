@@ -66,12 +66,18 @@
 
                             <div class="d-flex flex-column flex-sm-row gap-1.5 mt-2">
                                 @if($totalUnpaidAmount > 0)
-                                    <form action="{{ route('user.payments.pay-all') }}" method="POST" class="w-100" onsubmit="return confirm('Czy na pewno chcesz opłacić online wszystkie nieopłacone zajęcia ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł)?');">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger w-100 py-1.5 fw-bold shadow-sm" disabled>
-                                            <i class="ti ti-credit-card me-1 fs-3"></i> Zapłać online ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł)
+                                    @if($isTpayConfigured)
+                                        <form action="{{ route('user.payments.pay-all') }}" method="POST" class="w-100" onsubmit="return confirm('Czy na pewno chcesz opłacić online wszystkie nieopłacone zajęcia ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł)?');">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger w-100 py-1.5 fw-bold shadow-sm">
+                                                <i class="ti ti-credit-card me-1 fs-3"></i> Zapłać online ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł)
+                                            </button>
+                                        </form>
+                                    @else
+                                        <button type="button" class="btn btn-secondary w-100 py-1.5 fw-bold" disabled title="Płatności online nie są jeszcze aktywne dla tej placówki">
+                                            <i class="ti ti-credit-card-off me-1 fs-3"></i> Płatności online niedostępne
                                         </button>
-                                    </form>
+                                    @endif
                                 @else
                                     <button type="button" class="btn btn-secondary w-100 py-1.5 fw-bold" disabled>
                                         <i class="ti ti-check me-1 fs-3"></i> Wszystkie zajęcia opłacone
@@ -196,12 +202,14 @@
                                                                 <span class="fw-extrabold text-danger fs-2 me-2">
                                                                     {{ number_format((float) $item->amount, 2, ',', ' ') }} zł
                                                                 </span>
-                                                                <form action="{{ route('user.payments.pay-item', $item) }}" method="POST" class="d-inline" onsubmit="return confirm('Czy na pewno chcesz opłacić online zajęcia &quot;{{ $course?->title }}&quot; ({{ number_format((float) $item->amount, 2, ',', ' ') }} zł)?');">
-                                                                    @csrf
-                                                                    <button type="submit" class="btn btn-sm btn-success fw-bold px-2 py-1 shadow-sm" disabled>
-                                                                        <i class="ti ti-credit-card me-1"></i> Zapłać
-                                                                    </button>
-                                                                </form>
+                                                                @if($isTpayConfigured)
+                                                                    <form action="{{ route('user.payments.pay-item', $item) }}" method="POST" class="d-inline" onsubmit="return confirm('Czy na pewno chcesz opłacić online zajęcia &quot;{{ $course?->title }}&quot; ({{ number_format((float) $item->amount, 2, ',', ' ') }} zł)?');">
+                                                                        @csrf
+                                                                        <button type="submit" class="btn btn-sm btn-success fw-bold px-2 py-1 shadow-sm">
+                                                                            <i class="ti ti-credit-card me-1"></i> Zapłać
+                                                                        </button>
+                                                                    </form>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>

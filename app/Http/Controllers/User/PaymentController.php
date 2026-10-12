@@ -77,19 +77,22 @@ class PaymentController extends Controller
             ];
         }
 
+        $isTpayConfigured = app(\App\Services\TpayPaymentService::class)->isSchoolConfigured($user->school);
+
         return view('user.payments.index', compact(
             'childUnpaidSummaries',
             'totalUnpaidAmount',
             'totalPaidAmount',
             'paidItems',
-            'children'
+            'children',
+            'isTpayConfigured'
         ));
     }
 
     /**
-     * Realizuje opłacenie pojedynczej pozycji rozliczeniowej online.
+     * Realizuje opłacenie pojedynczej pozycji rozliczeniowej online (Tpay).
      */
-    public function payItem(BillingItem $item, BillingService $billingService)
+    public function payItem(BillingItem $item, \App\Services\TpayPaymentService $tpayService)
     {
         $user = Auth::user();
 
@@ -102,20 +105,25 @@ class PaymentController extends Controller
                 ->with('info', 'Ta pozycja została już wcześniej opłacona.');
         }
 
-        $transactionId = 'PAY-ONL-' . strtoupper(Str::random(8));
-        $billingService->markAsPaid($item, 'online', $transactionId);
+        try {
+            $payment = $tpayService->createPaymentForBillingItems($user, $item);
 
-        $courseTitle = $item->course?->title ?? 'Zajęcia';
-        $amountFormatted = number_format((float) $item->amount, 2, ',', ' ');
+            if ($payment->payment_url) {
+                return redirect()->away($payment->payment_url);
+            }
 
-        return redirect()->route('user.payments.index')
-            ->with('success', "Płatność online w kwocie {$amountFormatted} zł za zajęcia \"{$courseTitle}\" została zrealizowana pomyślnie!");
+            return redirect()->route('user.payments.index')
+                ->with('error', 'Nie udało się uzyskać linku do płatności Tpay.');
+        } catch (\Throwable $e) {
+            return redirect()->route('user.payments.index')
+                ->with('error', 'Wystąpił błąd podczas inicjalizacji płatności Tpay: ' . $e->getMessage());
+        }
     }
 
     /**
-     * Realizuje opłacenie wszystkich zaległych pozycji rozliczeniowych rodzica online.
+     * Realizuje opłacenie wszystkich zaległych pozycji rozliczeniowych rodzica online (Tpay).
      */
-    public function payAll(BillingService $billingService)
+    public function payAll(\App\Services\TpayPaymentService $tpayService)
     {
         $user = Auth::user();
 
@@ -130,19 +138,49 @@ class PaymentController extends Controller
                 ->with('info', 'Brak nieopłaconych zajęć do rozliczenia.');
         }
 
-        $totalPaid = 0.0;
-        $count = $unpaidItems->count();
-        $transactionId = 'PAY-ONL-BULK-' . strtoupper(Str::random(8));
-        
-        foreach ($unpaidItems as $item) {
+        try {
+            $payment = $tpayService->createPaymentForBillingItems($user, $unpaidItems);
 
-            $billingService->markAsPaid($item, 'online', $transactionId);
-            $totalPaid += (float) $item->amount;
+            if ($payment->payment_url) {
+                return redirect()->away($payment->payment_url);
+            }
+
+            return redirect()->route('user.payments.index')
+                ->with('error', 'Nie udało się uzyskać linku do płatności Tpay.');
+        } catch (\Throwable $e) {
+            return redirect()->route('user.payments.index')
+                ->with('error', 'Wystąpił błąd podczas inicjalizacji płatności Tpay: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Powrót po udanej płatności z Tpay.
+     */
+    public function success(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $session = $request->query('session');
+        if ($session) {
+            $payment = \App\Models\Payment::where('session_id', $session)
+                ->where('user_id', Auth::id())
+                ->first();
+
+            if ($payment) {
+                return redirect()->route('user.payments.index')
+                    ->with('success', 'Dziękujemy! Płatność została przekazana do realizacji. Trwa księgowanie wpłaty.');
+            }
         }
 
-        $totalFormatted = number_format($totalPaid, 2, ',', ' ');
         return redirect()->route('user.payments.index')
-            ->with('success', "Płatność online na sumę {$totalFormatted} zł za wszystkie nieopłacone pozycje ({$count}) została zrealizowana pomyślnie!");
+            ->with('success', 'Płatność została zakończona. Po otrzymaniu potwierdzenia od operatora status zajęć zostanie zaktualizowany.');
+    }
+
+    /**
+     * Powrót w przypadku anulowania lub błędu płatności w Tpay.
+     */
+    public function error(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        return redirect()->route('user.payments.index')
+            ->with('error', 'Płatność online została anulowana lub wystąpił błąd podczas przetwarzania transakcji.');
     }
 }
 
