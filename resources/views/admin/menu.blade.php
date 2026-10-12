@@ -30,3 +30,11 @@
         <span class="nav-link-title">Opiekunowie</span>
     </a>
 </li>
+<li class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('admin.settings.edit') }}">
+        <span class="nav-link-icon">
+            <i class="ti ti-settings"></i>
+        </span>
+        <span class="nav-link-title">Ustawienia</span>
+    </a>
+</li>

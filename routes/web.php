@@ -27,6 +27,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::get('/billing', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('billing.index');
         Route::post('/billing/{item}/mark-paid', [\App\Http\Controllers\Admin\BillingController::class, 'markPaid'])->name('billing.mark-paid');
         Route::post('/billing/{item}/mark-unpaid', [\App\Http\Controllers\Admin\BillingController::class, 'markUnpaid'])->name('billing.mark-unpaid');
+        Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'edit'])->name('settings.edit');
+        Route::put('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
     });
 
 ////////////////////////////////////// Teacher / Nauczyciel
