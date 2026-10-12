@@ -46,12 +46,12 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-unstyled space-y-2 mb-0 fs-3">
-                        @if($school->email)
+                        <!-- @if($school->email)
                             <li class="d-flex align-items-center mb-2">
                                 <i class="ti ti-mail text-primary me-2 fs-2"></i>
                                 <span>{{ $school->email }}</span>
                             </li>
-                        @endif
+                        @endif -->
                         @if($school->phone)
                             <li class="d-flex align-items-center mb-2">
                                 <i class="ti ti-phone text-primary me-2 fs-2"></i>
@@ -60,7 +60,7 @@
                         @endif
                         <li class="d-flex align-items-center">
                             <i class="ti ti-link text-primary me-2 fs-2"></i>
-                            <span class="text-muted">Slug: <code>{{ $school->slug }}</code></span>
+                            <span class="text-muted">Adres: <code>zajeciownia.pl/{{ $school->slug }}</code></span>
                         </li>
                     </ul>
                 </div>

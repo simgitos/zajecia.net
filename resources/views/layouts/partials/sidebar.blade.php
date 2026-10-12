@@ -9,7 +9,7 @@
 
 
         <div class="navbar-brand navbar-brand-autodark">
-            <a href="/"><img src="/images/logo.jpg" alt="Logo" class="rounded-2 me-2 shadow-xs"
+            <a href="/"><img src="/images/logo.png" alt="Logo" class="rounded-2 me-2 shadow-xs"
                     style="height: 30px;  object-fit: cover;" onerror="this.style.display='none'"></a>
 
             <button type="button" class="btn btn-action btn-sm d-none d-lg-inline-flex" data-bs-toggle="sidebar-folded"

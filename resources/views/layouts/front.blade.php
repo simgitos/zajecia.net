@@ -282,7 +282,7 @@
     <div class="container-xl">
       <!-- Logo & Brand Name -->
       <a class="navbar-brand d-flex align-items-center me-4" href="{{ url('/') }}">
-        <img src="{{ asset('images/log.jpg') }}" alt="Zajęciownia.pl Logo" class="brand-logo-img me-2">
+        <img src="{{ asset('images/logo.png') }}" alt="Zajęciownia.pl Logo" class="navbar-brand me-1" style="width: 40px">
         <div>
           <span class="brand-title d-block">Zajęciownia.pl</span>
           <small class="text-secondary fw-semibold fs-6 d-none d-sm-block">Miejsce dla Twoich Zajęć</small>
@@ -313,7 +313,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {{ request()->is('schools*') ? 'active' : '' }}" href="{{ route('schools.index') }}">
+            <a class="nav-link {{ request()->is('schools*') ? 'active' : '' }}" href="#">
               <i class="ti ti-building-community me-1"></i> Katalog Placówek
             </a>
           </li>
@@ -373,9 +373,9 @@
             <a href="{{ route('login') }}" class="btn btn-ghost-primary fw-semibold d-inline-flex align-items-center">
               <i class="ti ti-login me-1 fs-3"></i> Zaloguj się
             </a>
-            <a href="{{ route('register') }}" class="btn btn-primary fw-bold shadow-sm d-inline-flex align-items-center">
+            <!-- <a href="{{ route('register') }}" class="btn btn-primary fw-bold shadow-sm d-inline-flex align-items-center">
               <i class="ti ti-user-plus me-1 fs-3"></i> Zarejestruj się
-            </a>
+            </a> -->
           @endauth
         </div>
       </div>
@@ -394,7 +394,7 @@
         <!-- O Nas & Logo -->
         <div class="col-lg-4">
           <div class="d-flex align-items-center mb-3">
-            <img src="{{ asset('images/log.jpg') }}" alt="Zajęciownia.pl" class="brand-logo-img me-2">
+            <img src="{{ asset('images/logo.png') }}" alt="Zajęciownia.pl" class="brand-logo-img me-2">
             <span class="fs-2 fw-extrabold text-white">Zajęciownia.pl</span>
           </div>
           <p class="text-secondary leading-relaxed mb-4">

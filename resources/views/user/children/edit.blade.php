@@ -60,13 +60,13 @@
                                     @enderror
                                 </div>
 
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <label class="form-label">Numer PESEL <span class="text-secondary">(Opcjonalnie, bezpiecznie szyfrowany w bazie)</span></label>
                                     <input type="text" name="pesel" class="form-control @error('pesel') is-invalid @enderror" maxlength="11" value="{{ old('pesel', $child->pesel) }}" placeholder="11 cyfr">
                                     @error('pesel')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                </div>
+                                </div> -->
 
                                 <div class="mb-3">
                                     <label class="form-label">Uwagi / Komentarz dla organizatora</label>

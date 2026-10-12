@@ -68,7 +68,7 @@
                                 @if($totalUnpaidAmount > 0)
                                     <form action="{{ route('user.payments.pay-all') }}" method="POST" class="w-100" onsubmit="return confirm('Czy na pewno chcesz opłacić online wszystkie nieopłacone zajęcia ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł)?');">
                                         @csrf
-                                        <button type="submit" class="btn btn-danger w-100 py-1.5 fw-bold shadow-sm">
+                                        <button type="submit" class="btn btn-danger w-100 py-1.5 fw-bold shadow-sm" disabled>
                                             <i class="ti ti-credit-card me-1 fs-3"></i> Zapłać online ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł)
                                         </button>
                                     </form>
@@ -198,7 +198,7 @@
                                                                 </span>
                                                                 <form action="{{ route('user.payments.pay-item', $item) }}" method="POST" class="d-inline" onsubmit="return confirm('Czy na pewno chcesz opłacić online zajęcia &quot;{{ $course?->title }}&quot; ({{ number_format((float) $item->amount, 2, ',', ' ') }} zł)?');">
                                                                     @csrf
-                                                                    <button type="submit" class="btn btn-sm btn-success fw-bold px-2 py-1 shadow-sm">
+                                                                    <button type="submit" class="btn btn-sm btn-success fw-bold px-2 py-1 shadow-sm" disabled>
                                                                         <i class="ti ti-credit-card me-1"></i> Zapłać
                                                                     </button>
                                                                 </form>

@@ -5,7 +5,7 @@
                 <div class="col">
                    
                     <h2 class="page-title text-primary fw-extrabold fs-1">
-                        <i class="ti ti-mood-kid me-2"></i> Moi Uczestnicy Zajęć
+                        <i class="ti ti-mood-kid me-2"></i> Uczestnicy Zajęć
                     </h2>
                     <div class="text-secondary mt-1 fs-5 d-sm-block">
                         Zarządzaj danymi swoich uczestników i zapisuj ich na dostępne zajęcia.
@@ -214,10 +214,10 @@
                             <label class="form-label required fw-bold">Data urodzenia</label>
                             <input type="date" name="birth_date" class="form-control" value="{{ old('birth_date') }}" required>
                         </div>
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label class="form-label fw-bold">Numer PESEL <span class="text-secondary font-normal">(Opcjonalnie, szyfrowany)</span></label>
                             <input type="text" name="pesel" class="form-control" placeholder="11 cyfr" maxlength="11" value="{{ old('pesel') }}">
-                        </div>
+                        </div> -->
                         <div class="mb-3">
                             <label class="form-label fw-bold">Uwagi / Informacje zdrowotne dla prowadzącego</label>
                             <textarea name="parent_comment" class="form-control" rows="3" placeholder="np. alergie, przeciwwskazania, informacje dodatkowe">{{ old('parent_comment') }}</textarea>
