@@ -59,6 +59,34 @@ class User extends Authenticatable implements MustVerifyEmail
         );
     }
 
+    /**
+     * Zwraca aktualnie wybraną aktywną rolę z sesji lub domyślną o najwyższym priorytecie.
+     */
+    public function activeRole(): ?UserRole
+    {
+        if (!$this->roles || $this->roles->isEmpty()) {
+            return null;
+        }
+
+        $sessionRole = session('active_role');
+        if ($sessionRole) {
+            $enumRole = $sessionRole instanceof UserRole ? $sessionRole : UserRole::tryFrom((string) $sessionRole);
+            if ($enumRole && $this->hasRole($enumRole)) {
+                return $enumRole;
+            }
+        }
+
+        return $this->roles->sortByDesc(fn (UserRole $role) => $role->priority())->first();
+    }
+
+    /**
+     * Sprawdza czy użytkownik ma przypisanych więcej niż jedną rolę.
+     */
+    public function hasMultipleRoles(): bool
+    {
+        return $this->roles !== null && $this->roles->count() > 1;
+    }
+
     public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(School::class);

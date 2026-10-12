@@ -33,8 +33,8 @@
                         <td>
                             @if($user->roles && $user->roles->count())
                                 @foreach($user->roles as $role)
-                                    <span class="badge {{ $role->value === 'admin' ? 'bg-danger-lt' : ($role->value === 'teacher' ? 'bg-warning-lt' : 'bg-secondary-lt') }}">
-                                        {{ $role->label() }} {{ $role->value === 'teacher' ? '(Instruktor)' : '' }}
+                                    <span class="badge bg-{{ $role->color() }}-lt me-1">
+                                        <i class="ti {{ $role->icon() }} me-1"></i>{{ $role->label() }}
                                     </span>
                                 @endforeach
                             @else

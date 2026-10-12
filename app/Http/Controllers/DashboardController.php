@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use App\Models\BillingItem;
 use App\Models\Child;
 use App\Models\Course;
@@ -17,15 +18,16 @@ use Illuminate\View\View;
 class DashboardController extends Controller
 {
     /**
-     * Główny pulpit (Dashboard) dostosowany dynamicznie do roli zalogowanego użytkownika:
+     * Główny pulpit (Dashboard) dostosowany dynamicznie do aktywnej roli zalogowanego użytkownika:
      * Admin, Nauczyciel/Instruktor oraz Rodzic/User.
      */
     public function index(Request $request, BillingService $billingService): View
     {
         $user = Auth::user();
+        $activeRole = $user?->activeRole();
 
         // 1. DLA ADMINISTRATORA
-        if ($user->hasRole('admin')) {
+        if ($activeRole === UserRole::ADMIN) {
             $schoolId = $user->school_id;
 
             $totalCoursesCount = Course::where('school_id', $schoolId)->count();
@@ -76,7 +78,7 @@ class DashboardController extends Controller
         }
 
         // 2. DLA NAUCZYCIELA / INSTRUKTORA
-        if ($user->hasRole('teacher')) {
+        if ($activeRole === UserRole::TEACHER) {
             $schoolId = $user->school_id;
 
             // Miesiąc filtrowania (domyślnie bieżący)

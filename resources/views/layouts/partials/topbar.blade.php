@@ -89,13 +89,7 @@
                         <div class="d-none d-md-block ps-2">
                             <div class="fw-medium">{{ Auth::user()->name }}</div>
                             <div class="mt-1 small text-secondary">
-                                @if(Auth::user()->hasRole('admin'))
-                                    Administrator
-                                @elseif(Auth::user()->hasRole('teacher'))
-                                    Instruktor
-                                @else
-                                    Opiekun
-                                @endif
+                                {{ Auth::user()->activeRole()?->label() ?? 'Użytkownik' }}
                             </div>
                         </div>
                     </a>
@@ -106,6 +100,24 @@
                         <a href="{{ route('profile.edit') }}" class="dropdown-item">
                             <i class="ti ti-user me-2"></i>Mój profil
                         </a>
+                        @if(Auth::user()->hasMultipleRoles())
+                            <div class="dropdown-divider"></div>
+                            <span class="dropdown-header">Przełącz rolę</span>
+                            @foreach(Auth::user()->roles as $userRole)
+                                <form action="{{ route('role.switch') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="role" value="{{ $userRole->value }}">
+                                    <button type="submit" class="dropdown-item d-flex align-items-center justify-content-between {{ Auth::user()->activeRole()?->value === $userRole->value ? 'active' : '' }}">
+                                        <span>
+                                            <i class="ti {{ $userRole->icon() }} me-2 text-{{ $userRole->color() }}"></i>{{ $userRole->label() }}
+                                        </span>
+                                        @if(Auth::user()->activeRole()?->value === $userRole->value)
+                                            <i class="ti ti-check text-success"></i>
+                                        @endif
+                                    </button>
+                                </form>
+                            @endforeach
+                        @endif
                         <div class="dropdown-divider"></div>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

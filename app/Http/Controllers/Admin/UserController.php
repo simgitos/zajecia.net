@@ -3,17 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserRole;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UpdateUserRequest;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
     /**
      * Wyświetla listę użytkowników.
      */
-    public function index()
+    public function index(): View
     {
         $users = User::latest()->paginate(10);
         return view('admin.users.index', compact('users'));
@@ -22,7 +23,7 @@ class UserController extends Controller
     /**
      * Formularz edycji użytkownika.
      */
-    public function edit(User $user)
+    public function edit(User $user): View
     {
         $roles = UserRole::cases();
         return view('admin.users.edit', compact('user', 'roles'));
@@ -31,18 +32,12 @@ class UserController extends Controller
     /**
      * Aktualizacja danych użytkownika.
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'role' => ['required', Rule::enum(UserRole::class)],
-        ]);
-
         $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'roles' => [$request->role],
+            'name' => $request->validated('name'),
+            'email' => $request->validated('email'),
+            'roles' => $request->validated('roles'),
         ]);
 
         return redirect()->route('admin.user.index')->with('success', 'Użytkownik został pomyślnie zaktualizowany.');

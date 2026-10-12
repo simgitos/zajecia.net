@@ -33,19 +33,45 @@
                         @enderror
                     </div>
 
-                    <!-- Rola użytkownika -->
+                    <!-- Role użytkownika -->
                     <div class="mb-3">
-                        <label class="form-label required">Rola w systemie</label>
-                        <select name="role" class="form-select @error('role') is-invalid @enderror" required>
+                        <label class="form-label required">Role w systemie</label>
+                        <div class="row g-2">
                             @foreach($roles as $role)
-                                <option value="{{ $role->value }}" {{ old('role', $user->roles?->first()?->value ?? 'user') === $role->value ? 'selected' : '' }}>
-                                    {{ $role->label() }} {{ $role->value === 'teacher' ? '(Instruktor)' : '' }}
-                                </option>
+                                @php
+                                    $userRoleValues = $user->roles?->map(fn($r) => $r->value)->toArray() ?? [];
+                                    $isChecked = in_array($role->value, old('roles', $userRoleValues), true);
+                                @endphp
+                                <div class="col-md-4">
+                                    <label class="form-selectgroup-item flex-fill">
+                                        <input type="checkbox" name="roles[]" value="{{ $role->value }}" class="form-selectgroup-input" {{ $isChecked ? 'checked' : '' }}>
+                                        <span class="form-selectgroup-label d-flex align-items-center p-3 text-start">
+                                            <span class="me-3">
+                                                <i class="ti {{ $role->icon() }} fs-1 text-{{ $role->color() }}"></i>
+                                            </span>
+                                            <span class="form-selectgroup-title strong d-block">
+                                                {{ $role->label() }}
+                                                <span class="d-block text-secondary small fw-normal mt-1">
+                                                    @if($role->value === 'admin')
+                                                        Dostęp do całego panelu szkoły
+                                                    @elseif($role->value === 'teacher')
+                                                        Prowadzenie kursów i frekwencja
+                                                    @else
+                                                        Strefa rodzica i zgłoszenia dzieci
+                                                    @endif
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </label>
+                                </div>
                             @endforeach
-                        </select>
-                        <small class="form-hint">Wybierz "Nauczyciel" (Instruktor), aby nadać uprawnienia instruktorskie.</small>
-                        @error('role')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                        </div>
+                        <small class="form-hint mt-2">Możesz zaznaczyć jedną lub więcej ról. Użytkownik posiadający kilka ról będzie mógł przełączać swój widok z poziomu menu.</small>
+                        @error('roles')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                        @error('roles.*')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
                         @enderror
                     </div>
 

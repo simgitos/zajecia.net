@@ -16,6 +16,34 @@ enum UserRole: string
             self::USER => 'Opiekun',
         };
     }
+
+    public function icon(): string
+    {
+        return match($this) {
+            self::ADMIN => 'ti-shield-lock',
+            self::TEACHER => 'ti-chalkboard',
+            self::USER => 'ti-user',
+        };
+    }
+
+    public function color(): string
+    {
+        return match($this) {
+            self::ADMIN => 'danger',
+            self::TEACHER => 'warning',
+            self::USER => 'primary',
+        };
+    }
+
+    /**
+     * Priorytet roli (wyższy = ważniejsza). Używany do ustalania domyślnej aktywnej roli.
+     */
+    public function priority(): int
+    {
+        return match($this) {
+            self::ADMIN => 3,
+            self::TEACHER => 2,
+            self::USER => 1,
+        };
+    }
 }
-
-

@@ -26,5 +26,24 @@ class AppServiceProvider extends ServiceProvider
         Blade::if('role', function (UserRole|string|array $role) {
             return auth()->check() && auth()->user()->hasRole($role);
         });
+
+        // 3. Dyrektywa Blade @activeRole(...) / @endactiveRole
+        Blade::if('activeRole', function (UserRole|string|array $role) {
+            if (!auth()->check()) {
+                return false;
+            }
+            $activeRole = auth()->user()->activeRole();
+            if (!$activeRole) {
+                return false;
+            }
+            $rolesArray = is_array($role) ? $role : [$role];
+            foreach ($rolesArray as $r) {
+                $val = $r instanceof UserRole ? $r->value : (string) $r;
+                if ($activeRole->value === $val) {
+                    return true;
+                }
+            }
+            return false;
+        });
     }
 }
