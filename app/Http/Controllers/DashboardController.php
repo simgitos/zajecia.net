@@ -95,25 +95,29 @@ class DashboardController extends Controller
             $courseIds = $teacherCourses->pluck('id');
 
             // Liczba przydzielonych dzieci w kursach nauczyciela
-            $assignedChildrenCount = \App\Models\Child::whereHas('courses', function ($query) use ($courseIds) {
-                $query->whereIn('courses.id', $courseIds);
-            })->count();
+            $assignedChildrenCount = \App\Models\Child::where('school_id', $schoolId)
+                ->whereHas('courses', function ($query) use ($courseIds) {
+                    $query->whereIn('courses.id', $courseIds);
+                })->count();
 
             // Pełna lista uczestników instruktora (bez duplikatów)
-            $assignedChildren = \App\Models\Child::whereHas('courses', function ($query) use ($courseIds) {
-                $query->whereIn('courses.id', $courseIds);
-            })->with(['courses' => function ($q) use ($courseIds) {
-                $q->whereIn('courses.id', $courseIds);
-            }])->orderBy('name')->get();
+            $assignedChildren = \App\Models\Child::where('school_id', $schoolId)
+                ->whereHas('courses', function ($query) use ($courseIds) {
+                    $query->whereIn('courses.id', $courseIds);
+                })->with(['courses' => function ($q) use ($courseIds) {
+                    $q->whereIn('courses.id', $courseIds);
+                }])->orderBy('name')->get();
 
             // Przeprowadzone lekcje w tym miesiącu
             $currentMonthLessonsCount = Lesson::where('teacher_id', $user->id)
+                ->where('school_id', $schoolId)
                 ->whereYear('realized_at', $filterYear)
                 ->whereMonth('realized_at', $filterMonth)
                 ->count();
 
             // Zrealizowane lekcje (filtrowane)
             $recentLessons = Lesson::where('teacher_id', $user->id)
+                ->where('school_id', $schoolId)
                 ->whereYear('realized_at', $filterYear)
                 ->whereMonth('realized_at', $filterMonth)
                 ->with(['course'])

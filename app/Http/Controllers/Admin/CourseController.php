@@ -9,6 +9,7 @@ use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class CourseController extends Controller
 {
@@ -78,8 +79,8 @@ class CourseController extends Controller
 
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'instructor_id' => ['required', 'exists:users,id'],
-            'room_id' => ['nullable', 'exists:rooms,id'],
+            'instructor_id' => ['required', Rule::exists('users', 'id')->where('school_id', $schoolId)],
+            'room_id' => ['nullable', Rule::exists('rooms', 'id')->where('school_id', $schoolId)],
             'new_room_name' => ['required_if:room_id,NEW', 'nullable', 'string', 'max:255'],
             'type' => ['required', 'in:group,individual'],
             'billing_type' => ['required', 'in:monthly_flat,per_lesson_monthly,per_lesson_single'],
@@ -112,6 +113,9 @@ class CourseController extends Controller
             // Tworzenie osobnych zajęć indywidualnych dla każdego zaznaczonego uczestnika jednocześnie
             foreach ($selectedChildIds as $childId) {
                 $child = \App\Models\Child::where('school_id', $schoolId)->find($childId);
+                if (!$child) {
+                    continue;
+                }
                 $title = $child ? $request->title . ' - ' . $child->name : $request->title;
 
                 $newCourse = Course::create([
@@ -160,6 +164,10 @@ class CourseController extends Controller
         if (!empty($selectedChildIds)) {
             $order = 1;
             foreach ($selectedChildIds as $childId) {
+                $child = \App\Models\Child::where('school_id', $schoolId)->find($childId);
+                if (!$child) {
+                    continue;
+                }
                 $course->children()->attach($childId, [
                     'sort_order' => $order++,
                     'created_at' => now(),
@@ -205,8 +213,8 @@ class CourseController extends Controller
 
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'instructor_id' => ['required', 'exists:users,id'],
-            'room_id' => ['nullable', 'exists:rooms,id'],
+            'instructor_id' => ['required', Rule::exists('users', 'id')->where('school_id', $schoolId)],
+            'room_id' => ['nullable', Rule::exists('rooms', 'id')->where('school_id', $schoolId)],
             'new_room_name' => ['required_if:room_id,NEW', 'nullable', 'string', 'max:255'],
             'type' => ['required', 'in:group,individual'],
             'billing_type' => ['required', 'in:monthly_flat,per_lesson_monthly,per_lesson_single'],

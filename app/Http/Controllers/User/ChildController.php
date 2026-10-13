@@ -101,6 +101,7 @@ class ChildController extends Controller
         $user = auth()->user();
         $child = Child::where('id', $request->input('child_id'))
             ->where('parent_id', $user->id)
+            ->where('school_id', $user->school_id)
             ->firstOrFail();
 
         $course = Course::where('id', $request->input('course_id'))

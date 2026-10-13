@@ -39,11 +39,12 @@ class CourseController extends Controller
             ->where('instructor_id', $user->id)
             ->pluck('id');
 
-        $assignedChildren = \App\Models\Child::whereHas('courses', function ($query) use ($courseIds) {
-            $query->whereIn('courses.id', $courseIds);
-        })->with(['courses' => function ($q) use ($courseIds) {
-            $q->whereIn('courses.id', $courseIds);
-        }, 'parent'])->orderBy('name')->get();
+        $assignedChildren = \App\Models\Child::where('school_id', $user->school_id)
+            ->whereHas('courses', function ($query) use ($courseIds) {
+                $query->whereIn('courses.id', $courseIds);
+            })->with(['courses' => function ($q) use ($courseIds) {
+                $q->whereIn('courses.id', $courseIds);
+            }, 'parent'])->orderBy('name')->get();
 
         return view('teacher.children.index', compact('assignedChildren'));
     }
