@@ -434,7 +434,7 @@
         <div class="col-lg-3">
           <h5 class="text-white fw-bold mb-3">Kontakt & Wsparcie</h5>
           <ul class="list-unstyled d-flex flex-column gap-2 mb-3 text-secondary">
-            <li><i class="ti ti-mail me-2 text-primary"></i> pomoc@zajeciownia.pl</li>
+            <li><i class="ti ti-mail me-2 text-primary"></i> info@zajeciownia.pl</li>
             <li><i class="ti ti-phone me-2 text-success"></i> +48 692 343 999 (Pn-Pt 9:00 - 17:00)</li>
             <li><i class="ti ti-map-pin me-2 text-warning"></i> ul. Rynek 18, 27-640 Klimontów</li>
           </ul>
@@ -451,9 +451,9 @@
           &copy; {{ date('Y') }} Zajęciownia.pl. Wszelkie prawa zastrzeżone. Platforma dla domów kultury, szkół tańca, sportów, korepetycji i innych zajęć.
         </div>
         <div class="d-flex gap-3 small">
-          <a href="#">Polityka prywatności</a>
-          <a href="#">Regulamin serwisu</a>
-          <a href="#">RODO</a>
+          <a href="{{asset('docs/polityka-prywatnosci.pdf')}}" target="_blank">Polityka prywatności</a>
+          <a href="{{asset('docs/regulamin.pdf')}}" target="_blank">Regulamin serwisu</a>
+          <!-- <a href="#" target="_blank">RODO</a> -->
         </div>
       </div>
     </div>

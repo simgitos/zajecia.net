@@ -16,14 +16,14 @@
             <div class="alert alert-info d-flex align-items-center mb-3">
                 <i class="ti ti-school fs-2 me-2"></i>
                 <div>
-                    Rejestrujesz się w placówce <strong>{{ $selectedSchool->name }}</strong> jako użytkownik.
+                    Rejestrujesz się w placówce <strong>{{ $selectedSchool->name }}</strong> jako użytkownik. <br>Po zalogowaniu będziesz mógł zapisać siebie lub podopiecznych na organizowane przez placówkę zajęcia.
                 </div>
             </div>
         @else
             <div class="alert alert-primary d-flex align-items-center mb-3">
                 <i class="ti ti-building-plus fs-2 me-2"></i>
                 <div>
-                    Tworzysz nową jednostkę/szkołę. Zostaniesz automatycznie jej administratorem.
+                    Tworzysz nową placówkę/szkołę. <br>Zostaniesz automatycznie jej administratorem.
                 </div>
             </div>
         @endif
@@ -42,7 +42,7 @@
           @else
               <!-- Nazwa nowej jednostki (zwykła rejestracja /register) -->
               <div class="mb-3">
-                  <label class="form-label">Nazwa jednostki / szkoły <span class="text-danger">*</span></label>
+                  <label class="form-label">Nazwa placówki / szkoły <span class="text-danger">*</span></label>
                   <input type="text" name="new_school_name" class="form-control @error('new_school_name') is-invalid @enderror" value="{{ old('new_school_name') }}" required autofocus placeholder="np. Szkoła Podstawowa nr 1">
                   @error('new_school_name')
                       <div class="invalid-feedback">{{ $message }}</div>
@@ -52,7 +52,7 @@
 
           <!-- Imię i Nazwisko -->
           <div class="mb-3">
-            <label class="form-label">Imię i Nazwisko</label>
+            <label class="form-label">Imię i Nazwisko </label>
             <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required placeholder="np. Jan Kowalski" @if(isset($selectedSchool)) autofocus @endif>
             @error('name') 
               <div class="invalid-feedback">{{ $message }}</div> 
@@ -85,7 +85,7 @@
           <div class="mb-3">
             <label class="form-check">
               <input type="checkbox" name="terms_and_conditions" class="form-check-input @error('terms_and_conditions') is-invalid @enderror" required>
-              Akceptuję regulamin i politykę prywatności
+              Akceptuję <a href="{{asset('docs/regulamin.pdf')}}" target="_blank">regulamin</a> i <a href="{{asset('docs/polityka-prywatnosci.pdf')}}" target="_blank">politykę prywatności</a> serwisu.
             </label>
             @error('terms_and_conditions')
               <div class="invalid-feedback">{{ $message }}</div>
@@ -95,7 +95,7 @@
           <div class="form-footer">
             <button type="submit" class="btn btn-primary w-full">
                 @if(isset($selectedSchool))
-                    Dołącz do szkoły
+                    Dołącz do placówki
                 @else
                     Utwórz placówkę i konto
                 @endif
