@@ -2,11 +2,35 @@
 
 @section('content')
 <div class="card shadow-sm border-0">
-    <div class="card-header bg-surface d-flex justify-content-between align-items-center">
-        <h3 class="card-title fw-bold"><i class="ti ti-books me-2 text-primary"></i> Zarządzanie zajęciami (Kursy)</h3>
-        <a href="{{ route('admin.courses.create') }}" class="btn btn-primary">
-            <i class="ti ti-plus me-1"></i> Dodaj nowe zajęcia
-        </a>
+    <div class="card-header bg-surface d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div>
+            <h3 class="card-title fw-bold mb-1"><i class="ti ti-books me-2 text-primary"></i> Zarządzanie zajęciami (Kursy)</h3>
+            <div class="small text-muted">
+                @if($activeSeason)
+                    Bieżący sezon: <span class="badge bg-success-lt fw-semibold">{{ $activeSeason->name }}</span>
+                @else
+                    <span class="text-warning">Brak aktywnego sezonu</span>
+                @endif
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            @if(isset($seasons) && $seasons->count() > 1)
+                <form method="GET" action="{{ route('admin.courses.index') }}" class="d-flex align-items-center gap-1">
+                    <label class="form-label text-nowrap small text-muted mb-0 me-1">Sezon:</label>
+                    <select name="season_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="all" {{ ($selectedSeasonId ?? null) === null ? 'selected' : '' }}>Wszystkie sezony</option>
+                        @foreach($seasons as $s)
+                            <option value="{{ $s->id }}" {{ ($selectedSeasonId ?? null) === $s->id ? 'selected' : '' }}>
+                                {{ $s->name }} {{ $s->is_active ? '(Aktywny)' : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+            @endif
+            <a href="{{ route('admin.courses.create') }}" class="btn btn-primary text-nowrap">
+                <i class="ti ti-plus me-1"></i> Dodaj nowe zajęcia
+            </a>
+        </div>
     </div>
 
     @if (session('success'))
@@ -21,6 +45,7 @@
             <thead>
                 <tr>
                     <th>Nazwa zajęć</th>
+                    <th>Sezon</th>
                     <th>Instruktor</th>
                     <th>Sala</th>
                     <th>Typ</th>
@@ -41,6 +66,15 @@
                             </a>
                             @if($course->description)
                                 <small class="text-muted text-truncate d-inline-block" style="max-width: 220px;">{{ $course->description }}</small>
+                            @endif
+                        </td>
+                        <td>
+                            @if($course->season)
+                                <span class="badge bg-{{ $course->season->statusBadgeColor() }}-lt text-truncate" style="max-width: 140px;" title="{{ $course->season->name }}">
+                                    <i class="ti ti-calendar me-1"></i>{{ $course->season->name }}
+                                </span>
+                            @else
+                                <span class="text-muted small">Brak</span>
                             @endif
                         </td>
                         <td>{{ $course->instructor?->name ?? 'Brak' }}</td>

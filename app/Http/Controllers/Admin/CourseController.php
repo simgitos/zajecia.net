@@ -14,18 +14,31 @@ use Illuminate\Validation\Rule;
 class CourseController extends Controller
 {
     /**
-     * Wyświetla listę zajęć/kursów dla szkoły administratora.
+     * Wyświetla listę zajęć/kursów dla szkoły administratora (z filtrowaniem po sezonie).
      */
-    public function index()
+    public function index(Request $request)
     {
         $schoolId = Auth::user()->school_id;
-        $courses = Course::with(['instructor', 'room'])
-            ->withCount('children')
-            ->where('school_id', $schoolId)
-            ->latest()
-            ->paginate(15);
+        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
 
-        return view('admin.courses.index', compact('courses'));
+        $seasons = \App\Models\Season::where('school_id', $schoolId)->orderByDesc('start_date')->get();
+        $activeSeason = $school?->activeSeason();
+
+        $selectedSeasonId = $request->has('season_id')
+            ? ($request->input('season_id') === 'all' ? null : (int) $request->input('season_id'))
+            : $activeSeason?->id;
+
+        $coursesQuery = Course::with(['instructor', 'room', 'season'])
+            ->withCount('children')
+            ->where('school_id', $schoolId);
+
+        if ($selectedSeasonId) {
+            $coursesQuery->where('season_id', $selectedSeasonId);
+        }
+
+        $courses = $coursesQuery->latest()->paginate(15)->withQueryString();
+
+        return view('admin.courses.index', compact('courses', 'seasons', 'activeSeason', 'selectedSeasonId'));
     }
 
     /**
@@ -38,7 +51,7 @@ class CourseController extends Controller
             abort(403);
         }
 
-        $course->load(['instructor', 'room', 'children.parent', 'lessons.attendances', 'lessons.attendances.child', 'lessons.teacher'])
+        $course->load(['instructor', 'room', 'season', 'children.parent', 'lessons.attendances', 'lessons.attendances.child', 'lessons.teacher'])
             ->loadCount(['children', 'lessons']);
 
         $availableChildren = \App\Models\Child::where('school_id', $schoolId)
@@ -55,6 +68,10 @@ class CourseController extends Controller
     public function create()
     {
         $schoolId = Auth::user()->school_id;
+        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
+        $seasons = \App\Models\Season::where('school_id', $schoolId)->orderByDesc('start_date')->get();
+        $activeSeason = $school?->activeSeason();
+
         $rooms = Room::where('school_id', $schoolId)->orderBy('name')->get();
         $instructors = User::where('school_id', $schoolId)
             ->whereJsonContains('roles', UserRole::TEACHER->value)
@@ -63,7 +80,7 @@ class CourseController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('admin.courses.create', compact('rooms', 'instructors', 'children'));
+        return view('admin.courses.create', compact('rooms', 'instructors', 'children', 'seasons', 'activeSeason'));
     }
 
     /**
@@ -79,6 +96,7 @@ class CourseController extends Controller
 
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'season_id' => ['nullable', Rule::exists('seasons', 'id')->where('school_id', $schoolId)],
             'instructor_id' => ['required', Rule::exists('users', 'id')->where('school_id', $schoolId)],
             'room_id' => ['nullable', Rule::exists('rooms', 'id')->where('school_id', $schoolId)],
             'new_room_name' => ['required_if:room_id,NEW', 'nullable', 'string', 'max:255'],
@@ -106,6 +124,8 @@ class CourseController extends Controller
             $roomId = $room->id;
         }
 
+        $seasonId = $request->input('season_id') ?: Auth::user()->activeSchool()?->activeSeason()?->id;
+
         $selectedChildIds = $request->input('child_ids', []);
         $separateForEach = $request->boolean('create_separate_for_each') && $request->type === 'individual' && !empty($selectedChildIds);
 
@@ -120,6 +140,7 @@ class CourseController extends Controller
 
                 $newCourse = Course::create([
                     'school_id' => $schoolId,
+                    'season_id' => $seasonId,
                     'instructor_id' => $request->instructor_id,
                     'room_id' => $roomId,
                     'title' => $title,
@@ -147,6 +168,7 @@ class CourseController extends Controller
 
         $course = Course::create([
             'school_id' => $schoolId,
+            'season_id' => $seasonId,
             'instructor_id' => $request->instructor_id,
             'room_id' => $roomId,
             'title' => $request->title,
@@ -189,12 +211,13 @@ class CourseController extends Controller
             abort(403);
         }
 
+        $seasons = \App\Models\Season::where('school_id', $schoolId)->orderByDesc('start_date')->get();
         $rooms = Room::where('school_id', $schoolId)->orderBy('name')->get();
         $instructors = User::where('school_id', $schoolId)
             ->whereJsonContains('roles', UserRole::TEACHER->value)
             ->orderBy('name')->get();
 
-        return view('admin.courses.edit', compact('course', 'rooms', 'instructors'));
+        return view('admin.courses.edit', compact('course', 'rooms', 'instructors', 'seasons'));
     }
 
     /**
@@ -213,6 +236,7 @@ class CourseController extends Controller
 
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'season_id' => ['nullable', Rule::exists('seasons', 'id')->where('school_id', $schoolId)],
             'instructor_id' => ['required', Rule::exists('users', 'id')->where('school_id', $schoolId)],
             'room_id' => ['nullable', Rule::exists('rooms', 'id')->where('school_id', $schoolId)],
             'new_room_name' => ['required_if:room_id,NEW', 'nullable', 'string', 'max:255'],
@@ -237,6 +261,7 @@ class CourseController extends Controller
         }
 
         $course->update([
+            'season_id' => $request->input('season_id') ?: $course->season_id,
             'instructor_id' => $request->instructor_id,
             'room_id' => $roomId,
             'title' => $request->title,

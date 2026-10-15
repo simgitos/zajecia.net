@@ -88,4 +88,18 @@ class School extends Model
             ->withPivot('terms_accepted_at', 'roles')
             ->withTimestamps();
     }
+
+    public function seasons(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Season::class);
+    }
+
+    /**
+     * Zwraca aktualnie aktywny sezon szkoły.
+     */
+    public function activeSeason(): ?Season
+    {
+        return $this->seasons()->where('is_active', true)->first()
+            ?? $this->seasons()->latest('id')->first();
+    }
 }

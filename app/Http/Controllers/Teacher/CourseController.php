@@ -6,26 +6,38 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class CourseController extends Controller
 {
     /**
-     * Lista zajęć przypisanych do zalogowanego nauczyciela.
+     * Lista zajęć przypisanych do zalogowanego nauczyciela (z podziałem na sezony).
      */
-    public function index(): View
+    public function index(Request $request): View
     {
         $user = Auth::user();
+        $school = $user->activeSchool() ?? $user->school;
+        $seasons = \App\Models\Season::where('school_id', $user->school_id)->orderByDesc('start_date')->get();
+        $activeSeason = $school?->activeSeason();
 
-        $courses = Course::where('school_id', $user->school_id)
+        $selectedSeasonId = $request->has('season_id')
+            ? ($request->input('season_id') === 'all' ? null : (int) $request->input('season_id'))
+            : $activeSeason?->id;
+
+        $coursesQuery = Course::where('school_id', $user->school_id)
             ->where('instructor_id', $user->id)
             ->withCount('children')
-            ->with(['room', 'children'])
-            ->latest()
-            ->get();
+            ->with(['room', 'children', 'season']);
 
-        return view('teacher.courses.index', compact('courses'));
+        if ($selectedSeasonId) {
+            $coursesQuery->where('season_id', $selectedSeasonId);
+        }
+
+        $courses = $coursesQuery->latest()->get();
+
+        return view('teacher.courses.index', compact('courses', 'seasons', 'activeSeason', 'selectedSeasonId'));
     }
 
     /**

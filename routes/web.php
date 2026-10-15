@@ -19,6 +19,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])
     ->name('admin.')
     ->group(function () {
         Route::resource('/users', UserController::class)->names('user');
+        Route::resource('/seasons', \App\Http\Controllers\Admin\SeasonController::class)->names('seasons');
+        Route::post('/seasons/{season}/activate', [\App\Http\Controllers\Admin\SeasonController::class, 'activate'])->name('seasons.activate');
         Route::resource('/courses', \App\Http\Controllers\Admin\CourseController::class)->names('courses');
         Route::post('/courses/{course}/reorder-children', [\App\Http\Controllers\Admin\CourseController::class, 'reorderChildren'])->name('courses.reorder-children');
         Route::post('/courses/{course}/enroll-children', [\App\Http\Controllers\Admin\CourseController::class, 'enrollChildren'])->name('courses.enroll-children');

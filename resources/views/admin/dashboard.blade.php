@@ -8,6 +8,11 @@
                     </div>
                     <h2 class="page-title text-primary fw-extrabold fs-1">
                         Pulpit Zarządzania Placówką
+                        @if(isset($activeSeason) && $activeSeason)
+                            <a href="{{ route('admin.seasons.index') }}" class="badge bg-primary-lt fs-6 ms-2 align-middle text-decoration-none" title="Zarządzaj sezonami">
+                                <i class="ti ti-calendar me-1"></i> Sezon: {{ $activeSeason->name }}
+                            </a>
+                        @endif
                     </h2>
                     <div class="text-secondary mt-1 fs-4">
                         Przegląd kluczowych wskaźników, obłożenia sal oraz finansów szkoły.

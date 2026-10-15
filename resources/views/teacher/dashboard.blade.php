@@ -131,6 +131,11 @@
                     </div>
                     <h2 class="page-title fw-bold mb-0">
                         Witaj, {{ Auth::user()->name }} 👋
+                        @if(isset($activeSeason) && $activeSeason)
+                            <span class="badge bg-primary-lt fs-6 ms-2 align-middle">
+                                <i class="ti ti-calendar me-1"></i> {{ $activeSeason->name }}
+                            </span>
+                        @endif
                     </h2>
                     <div class="text-secondary mt-1" style="font-size:0.85rem;">
                         Zarządzaj swoimi grupami, realizuj zajęcia i dbaj o ewidencję obecności.

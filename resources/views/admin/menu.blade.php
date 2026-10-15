@@ -1,3 +1,11 @@
+<li class="nav-item {{ request()->routeIs('admin.seasons.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('admin.seasons.index') }}">
+        <span class="nav-link-icon">
+            <i class="ti ti-calendar-event"></i>
+        </span>
+        <span class="nav-link-title">Sezony / Semestry</span>
+    </a>
+</li>
 <li class="nav-item {{ request()->routeIs('admin.courses.*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('admin.courses.index') }}">
         <span class="nav-link-icon">

@@ -7,6 +7,11 @@
                     
                     <h2 class="page-title text-primary fw-extrabold fs-1">
                       <i class="ti ti-home me-1 text-primary"></i> Witaj {{ Auth::user()->name }}!
+                      @if(isset($activeSeason) && $activeSeason)
+                          <span class="badge bg-primary-lt fs-6 ms-2 align-middle">
+                              <i class="ti ti-calendar me-1"></i> {{ $activeSeason->name }}
+                          </span>
+                      @endif
                     </h2>
                 </div>
             </div>

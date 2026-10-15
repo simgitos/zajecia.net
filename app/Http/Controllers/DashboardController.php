@@ -29,8 +29,12 @@ class DashboardController extends Controller
         // 1. DLA ADMINISTRATORA
         if ($activeRole === UserRole::ADMIN) {
             $schoolId = $user->school_id;
+            $school = $user->activeSchool() ?? $user->school;
+            $activeSeason = $school?->activeSeason();
 
-            $totalCoursesCount = Course::where('school_id', $schoolId)->count();
+            $totalCoursesCount = Course::where('school_id', $schoolId)
+                ->when($activeSeason, fn ($q) => $q->where('season_id', $activeSeason->id))
+                ->count();
             $totalChildrenCount = Child::where('school_id', $schoolId)->count();
             $totalParentsCount = User::where('school_id', $schoolId)
                 ->whereJsonContains('roles', 'user')
@@ -39,9 +43,10 @@ class DashboardController extends Controller
                 ->whereJsonContains('roles', 'teacher')
                 ->count();
 
-            // Obłożenie kursów
+            // Obłożenie kursów dla aktywnego sezonu
             $courses = Course::where('school_id', $schoolId)
-                ->with(['instructor', 'room'])
+                ->when($activeSeason, fn ($q) => $q->where('season_id', $activeSeason->id))
+                ->with(['instructor', 'room', 'season'])
                 ->withCount('children')
                 ->get();
 
@@ -73,22 +78,26 @@ class DashboardController extends Controller
                 'occupancyPercentage',
                 'unpaidAmount',
                 'paidAmount',
-                'recentLessons'
+                'recentLessons',
+                'activeSeason'
             ));
         }
 
         // 2. DLA NAUCZYCIELA / INSTRUKTORA
         if ($activeRole === UserRole::TEACHER) {
             $schoolId = $user->school_id;
+            $school = $user->activeSchool() ?? $user->school;
+            $activeSeason = $school?->activeSeason();
 
             // Miesiąc filtrowania (domyślnie bieżący)
             $filterMonth = (int) $request->get('month', now()->month);
             $filterYear  = (int) $request->get('year', now()->year);
 
-            // Kursy gdzie dany nauczyciel jest instruktorem
+            // Kursy gdzie dany nauczyciel jest instruktorem w bieżącym sezonie
             $teacherCourses = Course::where('instructor_id', $user->id)
                 ->where('school_id', $schoolId)
-                ->with(['room'])
+                ->when($activeSeason, fn ($q) => $q->where('season_id', $activeSeason->id))
+                ->with(['room', 'season'])
                 ->withCount('children')
                 ->get();
 
@@ -132,16 +141,24 @@ class DashboardController extends Controller
                 'currentMonthLessonsCount',
                 'recentLessons',
                 'filterMonth',
-                'filterYear'
+                'filterYear',
+                'activeSeason'
             ));
         }
 
         // 3. DLA RODZICA / UŻYTKOWNIKA
         $billingService->syncParentAll($user);
+        $school = $user->activeSchool() ?? $user->school;
+        $activeSeason = $school?->activeSeason();
 
         $children = Child::where('parent_id', $user->id)
             ->where('school_id', $user->school_id)
-            ->with(['courses.instructor', 'courses.room'])
+            ->with(['courses' => function ($q) use ($activeSeason) {
+                if ($activeSeason) {
+                    $q->where('courses.season_id', $activeSeason->id);
+                }
+                $q->with(['instructor', 'room', 'season']);
+            }])
             ->get();
 
         $unpaidItems = BillingItem::where('parent_id', $user->id)
@@ -163,7 +180,8 @@ class DashboardController extends Controller
             'unpaidItems',
             'paidItems',
             'totalUnpaidAmount',
-            'totalPaidAmount'
+            'totalPaidAmount',
+            'activeSeason'
         ));
     }
 }

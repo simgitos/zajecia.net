@@ -9,6 +9,7 @@ class Course extends Model
 {
     protected $fillable = [
         'school_id',
+        'season_id',
         'instructor_id',
         'room_id',
         'title',
@@ -34,6 +35,11 @@ class Course extends Model
     public function school(): BelongsTo
     {
         return $this->belongsTo(School::class);
+    }
+
+    public function season(): BelongsTo
+    {
+        return $this->belongsTo(Season::class);
     }
 
     public function instructor(): BelongsTo

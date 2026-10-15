@@ -23,21 +23,33 @@ class ChildController extends Controller
     public function index(): View
     {
         $user = auth()->user();
+        $school = $user->activeSchool() ?? $user->school;
+        $activeSeason = $school?->activeSeason();
 
         $children = Child::where('parent_id', $user->id)
             ->where('school_id', $user->school_id)
-            ->with(['courses.instructor', 'courses.room'])
+            ->with(['courses' => function ($q) use ($activeSeason) {
+                if ($activeSeason) {
+                    $q->where('courses.season_id', $activeSeason->id);
+                }
+                $q->with(['instructor', 'room', 'season']);
+            }])
             ->latest()
             ->get();
 
-        $courses = Course::where('school_id', $user->school_id)
+        $coursesQuery = Course::where('school_id', $user->school_id)
             ->where('is_active', true)
             ->withCount('children')
-            ->with(['instructor', 'room'])
-            ->orderBy('title')
-            ->get();
+            ->with(['instructor', 'room', 'season'])
+            ->orderBy('title');
 
-        return view('user.children.index', compact('children', 'courses'));
+        if ($activeSeason) {
+            $coursesQuery->where('season_id', $activeSeason->id);
+        }
+
+        $courses = $coursesQuery->get();
+
+        return view('user.children.index', compact('children', 'courses', 'activeSeason'));
     }
 
     /**
@@ -133,19 +145,26 @@ class ChildController extends Controller
     public function coursesCatalog(): View
     {
         $user = auth()->user();
+        $school = $user->activeSchool() ?? $user->school;
+        $activeSeason = $school?->activeSeason();
 
         $children = Child::where('parent_id', $user->id)
             ->where('school_id', $user->school_id)
             ->get();
 
-        $courses = Course::where('school_id', $user->school_id)
+        $coursesQuery = Course::where('school_id', $user->school_id)
             ->where('is_active', true)
             ->withCount('children')
-            ->with(['instructor', 'room', 'children'])
-            ->orderBy('title')
-            ->get();
+            ->with(['instructor', 'room', 'children', 'season'])
+            ->orderBy('title');
 
-        return view('user.courses.index', compact('courses', 'children'));
+        if ($activeSeason) {
+            $coursesQuery->where('season_id', $activeSeason->id);
+        }
+
+        $courses = $coursesQuery->get();
+
+        return view('user.courses.index', compact('courses', 'children', 'activeSeason'));
     }
 
     /**

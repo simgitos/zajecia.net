@@ -107,9 +107,18 @@
                 <div class="col">
                     <h2 class="page-title fw-bold">
                         <i class="ti ti-list-search me-2 text-primary"></i> Katalog zajęć
+                        @if(isset($activeSeason) && $activeSeason)
+                            <span class="badge bg-primary-lt fs-6 ms-2">
+                                <i class="ti ti-calendar me-1"></i> {{ $activeSeason->name }}
+                            </span>
+                        @endif
                     </h2>
                     <div class="text-secondary mt-1 fs-5">
-                        Przeglądaj ofertę i zapisuj uczestników na zajęcia
+                        @if(isset($activeSeason) && $activeSeason)
+                            Oferta zajęć na okres: <strong>{{ $activeSeason->dateRangeFormatted() }}</strong>
+                        @else
+                            Przeglądaj ofertę i zapisuj uczestników na zajęcia
+                        @endif
                     </div>
                 </div>
             </div>

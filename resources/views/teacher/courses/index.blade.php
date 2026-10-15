@@ -5,11 +5,31 @@
                 <div class="col">
                     <h2 class="page-title text-primary fw-bold">
                         <i class="ti ti-school me-2"></i> Moje Zajęcia (Prowadzone Kursy)
+                        @if(isset($activeSeason) && $activeSeason)
+                            <span class="badge bg-primary-lt fs-6 ms-2 align-middle">
+                                <i class="ti ti-calendar me-1"></i> {{ $activeSeason->name }}
+                            </span>
+                        @endif
                     </h2>
                     <div class="text-secondary mt-1">
                         Lista zajęć, w których jesteś przypisanym nauczycielem/instruktorem.
                     </div>
                 </div>
+                @if(isset($seasons) && $seasons->count() > 1)
+                    <div class="col-auto">
+                        <form method="GET" action="{{ route('teacher.courses.index') }}" class="d-flex align-items-center gap-1">
+                            <label class="form-label text-nowrap small text-muted mb-0 me-1">Sezon:</label>
+                            <select name="season_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="all" {{ ($selectedSeasonId ?? null) === null ? 'selected' : '' }}>Wszystkie sezony</option>
+                                @foreach($seasons as $s)
+                                    <option value="{{ $s->id }}" {{ ($selectedSeasonId ?? null) === $s->id ? 'selected' : '' }}>
+                                        {{ $s->name }} {{ $s->is_active ? '(Bieżący)' : '' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </form>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

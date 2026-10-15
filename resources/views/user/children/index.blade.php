@@ -6,9 +6,14 @@
                    
                     <h2 class="page-title text-primary fw-extrabold fs-1">
                         <i class="ti ti-mood-kid me-2"></i> Uczestnicy Zajęć
+                        @if(isset($activeSeason) && $activeSeason)
+                            <span class="badge bg-primary-lt fs-6 ms-2 align-middle">
+                                <i class="ti ti-calendar me-1"></i> {{ $activeSeason->name }}
+                            </span>
+                        @endif
                     </h2>
                     <div class="text-secondary mt-1 fs-5 d-sm-block">
-                        Zarządzaj danymi swoich uczestników i zapisuj ich na dostępne zajęcia.
+                        Zarządzaj danymi swoich uczestników i zapisuj ich na dostępne zajęcia w bieżącym sezonie.
                     </div>
                 </div>
                 <div class="col-auto ms-auto d-print-none">

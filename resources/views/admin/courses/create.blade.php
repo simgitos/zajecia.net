@@ -16,10 +16,25 @@
 
                     <div class="row">
                         <!-- Tytuł zajęć -->
-                        <div class="col-md-8 mb-3">
+                        <div class="col-md-5 mb-3">
                             <label class="form-label required">Tytuł / Nazwa zajęć</label>
                             <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" value="{{ old('title') }}" required placeholder="np. Lekcje gry na pianinie (indywidualne) lub Język Angielski A1">
                             @error('title')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Sezon / Semestr -->
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label required">Sezon / Semestr</label>
+                            <select name="season_id" class="form-select @error('season_id') is-invalid @enderror" required>
+                                @foreach($seasons as $season)
+                                    <option value="{{ $season->id }}" {{ old('season_id', $activeSeason?->id) == $season->id ? 'selected' : '' }}>
+                                        {{ $season->name }} {{ $season->is_active ? '(Bieżący)' : '' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('season_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
