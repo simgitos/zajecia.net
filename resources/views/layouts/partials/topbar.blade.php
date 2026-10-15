@@ -79,6 +79,19 @@
             <div class="vr d-none d-md-block mx-2 opacity-25"></div>
 
             @auth
+                @php
+                    $topbarSchool = Auth::user()->activeSchool();
+                    $topbarSchools = Auth::user()->schools;
+                @endphp
+
+                @if($topbarSchool)
+                    <div class="nav-item d-none d-sm-flex align-items-center me-2">
+                        <span class="badge bg-primary-lt text-primary px-2.5 py-1.5 fs-4 fw-semibold border border-primary-subtle rounded-pill">
+                            <i class="ti ti-school me-1 fs-3"></i> {{ $topbarSchool->name }}
+                        </span>
+                    </div>
+                @endif
+
                 {{-- User dropdown --}}
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link d-flex lh-1 text-reset p-0 px-1 px-md-2" data-bs-toggle="dropdown"
@@ -103,7 +116,7 @@
                         @if(Auth::user()->hasMultipleRoles())
                             <div class="dropdown-divider"></div>
                             <span class="dropdown-header">Przełącz rolę</span>
-                            @foreach(Auth::user()->roles as $userRole)
+                            @foreach(Auth::user()->rolesForActiveSchool() as $userRole)
                                 <form action="{{ route('role.switch') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="role" value="{{ $userRole->value }}">
@@ -118,6 +131,28 @@
                                 </form>
                             @endforeach
                         @endif
+                        @if($topbarSchools->count() > 1)
+                            <div class="dropdown-divider"></div>
+                            <span class="dropdown-header">Przełącz placówkę</span>
+                            @foreach($topbarSchools as $s)
+                                <form action="{{ route('school.switch') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="school_id" value="{{ $s->id }}">
+                                    <button type="submit" class="dropdown-item d-flex align-items-center justify-content-between {{ $topbarSchool?->id === $s->id ? 'active' : '' }}">
+                                        <span class="text-truncate me-2">
+                                            <i class="ti ti-school me-2 text-primary"></i>{{ $s->name }}
+                                        </span>
+                                        @if($topbarSchool?->id === $s->id)
+                                            <i class="ti ti-check text-success"></i>
+                                        @endif
+                                    </button>
+                                </form>
+                            @endforeach
+                        @endif
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ route('schools.index') }}" class="dropdown-item">
+                            <i class="ti ti-search me-2 text-secondary"></i>Katalog placówek
+                        </a>
                         <div class="dropdown-divider"></div>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

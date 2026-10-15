@@ -11,9 +11,24 @@
             <h1 class="display-6 fw-bold mb-2">{{ $school->name }}</h1>
             <p class="text-secondary fs-3 mb-4">Witaj na stronie rekrutacji i zapisów do placówki!</p>
             
-            <a href="{{ route('schools.register', $school->slug) }}" class="btn btn-primary btn-lg px-4 shadow">
-                <i class="ti ti-user-plus me-2 fs-2"></i> Zarejestruj się w tej szkole
-            </a>
+            @auth
+                @php
+                    $isMemberOfThisSchool = Auth::user()->schools->contains('id', $school->id);
+                @endphp
+                @if($isMemberOfThisSchool)
+                    <a href="{{ route('schools.register', $school->slug) }}" class="btn btn-success btn-lg px-4 shadow">
+                        <i class="ti ti-circle-check me-2 fs-2"></i> Twoja placówka (Przejdź do pulpitu)
+                    </a>
+                @else
+                    <a href="{{ route('schools.register', $school->slug) }}" class="btn btn-primary btn-lg px-4 shadow">
+                        <i class="ti ti-plus me-2 fs-2"></i> Dołącz do tej placówki
+                    </a>
+                @endif
+            @else
+                <a href="{{ route('schools.register', $school->slug) }}" class="btn btn-primary btn-lg px-4 shadow">
+                    <i class="ti ti-user-plus me-2 fs-2"></i> Zarejestruj się w tej szkole
+                </a>
+            @endauth
         </div>
     </div>
 
@@ -29,11 +44,27 @@
                         Dołączając do nas zyskujesz dostęp do planu zajęć, zapisów oraz informacji organizacyjnych.
                     </p>
                     <div class="mt-4 p-3 bg-body-tertiary rounded">
-                        <h4>Gotowy aby dołączyć?</h4>
-                        <p class="text-secondary mb-3">Załóż bezpłatne konto rodzica/użytkownika w zaledwie kilka sekund.</p>
-                        <a href="{{ route('schools.register', $school->slug) }}" class="btn btn-success">
-                            <i class="ti ti-arrow-right me-1"></i> Przejdź do formularza rejestracji
-                        </a>
+                        @auth
+                            @if($isMemberOfThisSchool)
+                                <h4>Jesteś już uczestnikiem tej placówki!</h4>
+                                <p class="text-secondary mb-3">Przejdź bezpośrednio do pulpitu i sprawdź swoje zajęcia oraz zapisy.</p>
+                                <a href="{{ route('schools.register', $school->slug) }}" class="btn btn-success">
+                                    <i class="ti ti-layout-dashboard me-1"></i> Otwórz panel placówki
+                                </a>
+                            @else
+                                <h4>Chcesz dołączyć do tej placówki?</h4>
+                                <p class="text-secondary mb-3">Jednym kliknięciem przypisz placówkę do swojego konta.</p>
+                                <a href="{{ route('schools.register', $school->slug) }}" class="btn btn-primary">
+                                    <i class="ti ti-plus me-1"></i> Dołącz do {{ $school->name }}
+                                </a>
+                            @endif
+                        @else
+                            <h4>Gotowy aby dołączyć?</h4>
+                            <p class="text-secondary mb-3">Załóż bezpłatne konto rodzica/użytkownika w zaledwie kilka sekund.</p>
+                            <a href="{{ route('schools.register', $school->slug) }}" class="btn btn-success">
+                                <i class="ti ti-arrow-right me-1"></i> Przejdź do formularza rejestracji
+                            </a>
+                        @endauth
                     </div>
                 </div>
             </div>

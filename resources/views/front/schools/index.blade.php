@@ -61,9 +61,24 @@
                                 <a href="{{ route('schools.show', $school->slug) }}" class="btn btn-outline-primary w-50 fw-semibold">
                                     <i class="ti ti-eye me-1"></i> Szczegóły
                                 </a>
-                                <a href="{{ route('schools.register', $school->slug) }}" class="btn btn-primary w-50 fw-bold">
-                                    <i class="ti ti-user-plus me-1"></i> Zarejestruj się
-                                </a>
+                                @auth
+                                    @php
+                                        $isUserSchool = Auth::user()->schools->contains('id', $school->id);
+                                    @endphp
+                                    @if($isUserSchool)
+                                        <a href="{{ route('schools.register', $school->slug) }}" class="btn btn-outline-success w-50 fw-bold" title="Przejdź do panelu tej placówki">
+                                            <i class="ti ti-circle-check me-1"></i> Twoja placówka
+                                        </a>
+                                    @else
+                                        <a href="{{ route('schools.register', $school->slug) }}" class="btn btn-success w-50 fw-bold" title="Dołącz do tej placówki">
+                                            <i class="ti ti-plus me-1"></i> Dołącz
+                                        </a>
+                                    @endif
+                                @else
+                                    <a href="{{ route('schools.register', $school->slug) }}" class="btn btn-primary w-50 fw-bold">
+                                        <i class="ti ti-user-plus me-1"></i> Zarejestruj się
+                                    </a>
+                                @endauth
                             </div>
                         </div>
                     </div>

@@ -29,10 +29,34 @@ class RegisteredUserController extends Controller
     }
 
     /**
-     * Widok rejestracji dedykowany dla konkretnej szkoły (/{slug}/register) - Zwykły użytkownik.
+     * Widok rejestracji dedykowany dla konkretnej szkoły (/{slug}/register).
+     * Jeśli użytkownik jest już zalogowany, natychmiast przypisuje go do szkoły (pivot) i przełącza widok.
      */
-    public function createForSchool(School $school): View
+    public function createForSchool(School $school): View|RedirectResponse
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            if (!$user->schools()->where('schools.id', $school->id)->exists()) {
+                $user->schools()->attach($school->id, [
+                    'terms_accepted_at' => null,
+                    'roles' => json_encode(['user']),
+                ]);
+            }
+
+            session(['active_school_id' => $school->id]);
+            session(['active_role' => 'user']);
+            $user->update([
+                'school_id' => $school->id,
+                'roles' => [UserRole::USER],
+            ]);
+
+            return redirect()->route('dashboard')->with(
+                'success',
+                "Placówka \"{$school->name}\" została przypisana do Twojego konta. Prosimy o zaakceptowanie regulaminu na pulpicie."
+            );
+        }
+
         return view('auth.register', [
             'selectedSchool' => $school,
         ]);
@@ -58,8 +82,9 @@ class RegisteredUserController extends Controller
 
         if ($isSchoolRegistration) {
             // Rejestracja zwykłego użytkownika z dedykowanego adresu szkoły
-            $schoolId = $request->input('school_id');
+            $schoolId = (int) $request->input('school_id');
             $userRoles = [UserRole::USER];
+            $termsAcceptedAt = null; // Wymóg akceptacji regulaminu placówki w dashboardzie
         } else {
             // Standardowa rejestracja bez sluga -> Utworzenie nowej szkoły (Admin)
             $schoolName = trim($request->input('new_school_name'));
@@ -78,6 +103,7 @@ class RegisteredUserController extends Controller
 
             $schoolId = $school->id;
             $userRoles = [UserRole::ADMIN];
+            $termsAcceptedAt = now();
         }
 
         $user = User::create([
@@ -87,6 +113,16 @@ class RegisteredUserController extends Controller
             'school_id' => $schoolId,
             'roles' => $userRoles,
         ]);
+
+        // Dodanie wpisu do pivota school_user
+        $rolesArray = array_map(fn ($r) => $r instanceof UserRole ? $r->value : (string) $r, $userRoles);
+        $user->schools()->attach($schoolId, [
+            'terms_accepted_at' => $termsAcceptedAt,
+            'roles' => json_encode($rolesArray),
+        ]);
+
+        session(['active_school_id' => $schoolId]);
+        session(['active_role' => $userRoles[0]->value]);
 
         event(new Registered($user));
 

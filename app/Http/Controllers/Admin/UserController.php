@@ -18,7 +18,11 @@ class UserController extends Controller
     public function index(): View
     {
         $schoolId = Auth::user()->school_id;
-        $users = User::where('school_id', $schoolId)->latest()->paginate(10);
+        $users = User::where(function ($query) use ($schoolId) {
+            $query->where('school_id', $schoolId)
+                ->orWhereHas('schools', fn ($q) => $q->where('schools.id', $schoolId));
+        })->distinct()->latest()->paginate(10);
+
         return view('admin.users.index', compact('users'));
     }
 
@@ -27,12 +31,15 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        if ($user->school_id !== Auth::user()->school_id) {
+        $adminSchoolId = Auth::user()->school_id;
+        $isMember = $user->school_id === $adminSchoolId || $user->schools()->where('schools.id', $adminSchoolId)->exists();
+        if (!$isMember) {
             abort(403);
         }
 
         $roles = UserRole::cases();
-        return view('admin.users.edit', compact('user', 'roles'));
+        $userSchoolRoles = $user->rolesForSchool($adminSchoolId);
+        return view('admin.users.edit', compact('user', 'roles', 'userSchoolRoles'));
     }
 
     /**
@@ -40,25 +47,51 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        if ($user->school_id !== Auth::user()->school_id) {
+        $adminSchoolId = Auth::user()->school_id;
+        $isMember = $user->school_id === $adminSchoolId || $user->schools()->where('schools.id', $adminSchoolId)->exists();
+        if (!$isMember) {
             abort(403);
         }
 
-        $user->update([
-            'name' => $request->validated('name'),
-            'email' => $request->validated('email'),
-            'roles' => $request->validated('roles'),
-        ]);
+        $newRoles = $request->validated('roles');
+
+        // Zaktualizuj lub dodaj wpis w tabeli pivot school_user dla tej szkoły
+        if ($user->schools()->where('schools.id', $adminSchoolId)->exists()) {
+            $user->schools()->updateExistingPivot($adminSchoolId, [
+                'roles' => json_encode($newRoles),
+            ]);
+        } else {
+            $user->schools()->attach($adminSchoolId, [
+                'terms_accepted_at' => now(),
+                'roles' => json_encode($newRoles),
+            ]);
+        }
+
+        // Jeśli edytowany użytkownik ma tę szkołę jako aktywną, zaktualizuj też jego cache roles
+        if ($user->school_id === $adminSchoolId) {
+            $user->update([
+                'name' => $request->validated('name'),
+                'email' => $request->validated('email'),
+                'roles' => $newRoles,
+            ]);
+        } else {
+            $user->update([
+                'name' => $request->validated('name'),
+                'email' => $request->validated('email'),
+            ]);
+        }
 
         return redirect()->route('admin.user.index')->with('success', 'Użytkownik został pomyślnie zaktualizowany.');
     }
 
     /**
-     * Usuwanie użytkownika.
+     * Usuwanie użytkownika z placówki.
      */
     public function destroy(User $user)
     {
-        if ($user->school_id !== Auth::user()->school_id) {
+        $adminSchoolId = Auth::user()->school_id;
+        $isMember = $user->school_id === $adminSchoolId || $user->schools()->where('schools.id', $adminSchoolId)->exists();
+        if (!$isMember) {
             abort(403);
         }
 
@@ -66,7 +99,22 @@ class UserController extends Controller
             return redirect()->route('admin.user.index')->with('error', 'Nie możesz usunąć własnego konta administratora.');
         }
 
-        $user->delete();
-        return redirect()->route('admin.user.index')->with('success', 'Użytkownik został usunięty.');
+        // Odłącz użytkownika z tej placówki
+        $user->schools()->detach($adminSchoolId);
+
+        // Jeśli to była jedyna placówka użytkownika, usuń konto
+        if ($user->schools()->count() === 0) {
+            $user->delete();
+        } elseif ($user->school_id === $adminSchoolId) {
+            // Przepnij na inną dostępną placówkę
+            $nextSchool = $user->schools()->first();
+            $nextRoles = $nextSchool ? $user->rolesForSchool($nextSchool->id)->map(fn ($r) => $r->value)->toArray() : ['user'];
+            $user->update([
+                'school_id' => $nextSchool?->id,
+                'roles' => $nextRoles,
+            ]);
+        }
+
+        return redirect()->route('admin.user.index')->with('success', 'Użytkownik został odłączony od placówki.');
     }
 }

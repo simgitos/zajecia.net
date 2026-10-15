@@ -30,6 +30,7 @@
       <!-- Główna zawartość strony -->
       <main class="page-body">
         <div class="container-xl">
+          @include('partials.terms-alert')
           {{ $slot ?? '' }}
           @yield('content')
         </div>

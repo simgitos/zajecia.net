@@ -82,8 +82,10 @@ class School extends Model
             : null;
     }
 
-    public function users(): HasMany
+    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class, 'school_user')
+            ->withPivot('terms_accepted_at', 'roles')
+            ->withTimestamps();
     }
 }

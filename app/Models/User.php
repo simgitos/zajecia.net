@@ -38,13 +38,55 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Sprawdza czy użytkownik posiada wybraną rolę (lub przynajmniej jedną z podanych).
+     * Zwraca role użytkownika w danej szkole (z pivota school_user).
+     */
+    public function rolesForSchool(School|int $school): Collection
+    {
+        $schoolId = $school instanceof School ? $school->id : (int) $school;
+        $membership = $this->schools()->where('schools.id', $schoolId)->first();
+
+        if ($membership && $membership->pivot && $membership->pivot->roles) {
+            $rawRoles = is_array($membership->pivot->roles)
+                ? $membership->pivot->roles
+                : json_decode((string) $membership->pivot->roles, true);
+
+            if (is_array($rawRoles)) {
+                return collect($rawRoles)->map(
+                    fn ($r) => $r instanceof UserRole ? $r : UserRole::tryFrom((string) $r)
+                )->filter()->values();
+            }
+        }
+
+        // Fallback: jeśli rekord w pivot nie ma zdefiniowanych ról, sprawdź $this->roles lub domyślnie 'user'
+        if ($this->school_id === $schoolId && $this->roles && $this->roles->isNotEmpty()) {
+            return $this->roles;
+        }
+
+        return collect([UserRole::USER]);
+    }
+
+    /**
+     * Zwraca role użytkownika w aktualnie aktywnej szkole.
+     */
+    public function rolesForActiveSchool(): Collection
+    {
+        $activeSchool = $this->activeSchool();
+        if ($activeSchool) {
+            return $this->rolesForSchool($activeSchool);
+        }
+
+        return $this->roles ?? collect([UserRole::USER]);
+    }
+
+    /**
+     * Sprawdza czy użytkownik posiada wybraną rolę w aktualnie aktywnej szkole (lub przynajmniej jedną z podanych).
      *
      * @param UserRole|string|array<UserRole|string> $roles
      */
     public function hasRole(UserRole|string|array $roles): bool
     {
-        if (!$this->roles) {
+        $currentRoles = $this->rolesForActiveSchool();
+        if ($currentRoles->isEmpty()) {
             return false;
         }
 
@@ -54,17 +96,18 @@ class User extends Authenticatable implements MustVerifyEmail
             $rolesArray
         ));
 
-        return $this->roles->contains(
+        return $currentRoles->contains(
             fn (UserRole $role) => in_array($role, $enumRoles, true)
         );
     }
 
     /**
-     * Zwraca aktualnie wybraną aktywną rolę z sesji lub domyślną o najwyższym priorytecie.
+     * Zwraca aktualnie wybraną aktywną rolę z sesji lub domyślną o najwyższym priorytecie dla aktywnej szkoły.
      */
     public function activeRole(): ?UserRole
     {
-        if (!$this->roles || $this->roles->isEmpty()) {
+        $currentRoles = $this->rolesForActiveSchool();
+        if ($currentRoles->isEmpty()) {
             return null;
         }
 
@@ -76,20 +119,70 @@ class User extends Authenticatable implements MustVerifyEmail
             }
         }
 
-        return $this->roles->sortByDesc(fn (UserRole $role) => $role->priority())->first();
+        return $currentRoles->sortByDesc(fn (UserRole $role) => $role->priority())->first();
     }
 
     /**
-     * Sprawdza czy użytkownik ma przypisanych więcej niż jedną rolę.
+     * Sprawdza czy użytkownik ma przypisanych więcej niż jedną rolę w aktywnej szkole.
      */
     public function hasMultipleRoles(): bool
     {
-        return $this->roles !== null && $this->roles->count() > 1;
+        return $this->rolesForActiveSchool()->count() > 1;
     }
 
     public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(School::class);
+    }
+
+    public function schools(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(School::class, 'school_user')
+            ->withPivot('terms_accepted_at', 'roles')
+            ->withTimestamps();
+    }
+
+    /**
+     * Zwraca aktualnie wybraną aktywną szkołę z sesji lub powiązaną z modelem.
+     */
+    public function activeSchool(): ?School
+    {
+        $activeSchoolId = session('active_school_id') ?? $this->school_id;
+
+        if ($activeSchoolId) {
+            $school = $this->schools()->where('schools.id', $activeSchoolId)->first();
+            if ($school) {
+                return $school;
+            }
+        }
+
+        return $this->schools()->first() ?? $this->school;
+    }
+
+    /**
+     * Sprawdza, czy użytkownik zaakceptował regulamin dla aktualnie aktywnej szkoły.
+     */
+    public function hasAcceptedTermsForActiveSchool(): bool
+    {
+        $activeSchool = $this->activeSchool();
+        if (!$activeSchool) {
+            return true;
+        }
+
+        $membership = $this->schools()->where('schools.id', $activeSchool->id)->first();
+        if (!$membership) {
+            return true;
+        }
+
+        return $membership->pivot->terms_accepted_at !== null;
+    }
+
+    /**
+     * Sprawdza czy użytkownik jest przypisany do więcej niż jednej placówki.
+     */
+    public function hasMultipleSchools(): bool
+    {
+        return $this->schools()->count() > 1;
     }
 
     public function children(): \Illuminate\Database\Eloquent\Relations\HasMany

@@ -31,8 +31,11 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }} <br>{{ $user->phone }}</td>
                         <td>
-                            @if($user->roles && $user->roles->count())
-                                @foreach($user->roles as $role)
+                            @php
+                                $userSchoolRoles = $user->rolesForSchool(Auth::user()->school_id);
+                            @endphp
+                            @if($userSchoolRoles->isNotEmpty())
+                                @foreach($userSchoolRoles as $role)
                                     <span class="badge bg-{{ $role->color() }}-lt me-1">
                                         <i class="ti {{ $role->icon() }} me-1"></i>{{ $role->label() }}
                                     </span>
