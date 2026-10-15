@@ -19,7 +19,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Nazwa</th>
-                    <th>Email</th>
+                    <th>Kontakt</th>
                     <th>Rola</th>
                     <th class="w-1">Akcje</th>
                 </tr>
@@ -29,7 +29,7 @@
                     <tr>
                         <td>{{ $user->id }}</td>
                         <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->email }} <br>{{ $user->phone }}</td>
                         <td>
                             @if($user->roles && $user->roles->count())
                                 @foreach($user->roles as $role)

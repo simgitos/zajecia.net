@@ -40,31 +40,7 @@
                             @enderror
                         </div>
 
-                        <!-- Sala (wybór z istniejących lub wpisanie nowej) -->
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Sala zajęciowa</label>
-                            <select name="room_id" id="room_select" class="form-select @error('room_id') is-invalid @enderror" onchange="toggleNewRoomInput()">
-                                <option value="">-- Brak / Wybierz istniejącą salę --</option>
-                                @foreach($rooms as $room)
-                                    <option value="{{ $room->id }}" {{ old('room_id') == $room->id ? 'selected' : '' }}>
-                                        {{ $room->name }} @if($room->location) ({{ $room->location }}) @endif
-                                    </option>
-                                @endforeach
-                                <option value="NEW" {{ old('new_room_name') ? 'selected' : '' }}>+ Dodaj nową salę...</option>
-                            </select>
-                            @error('room_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mb-3 {{ old('new_room_name') ? '' : 'd-none' }}" id="new_room_wrapper">
-                            <label class="form-label text-primary"><i class="ti ti-plus me-1"></i> Nazwa nowej sali</label>
-                            <input type="text" name="new_room_name" id="new_room_name" class="form-control @error('new_room_name') is-invalid @enderror" value="{{ old('new_room_name') }}" placeholder="np. Sala 102 (Piętro 1)">
-                            <small class="form-hint">Zostanie automatycznie zapisana w bazie placówki.</small>
-                            @error('new_room_name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        
 
                         <!-- Typ zajęć -->
                         <div class="col-md-4 mb-3">
@@ -79,27 +55,27 @@
                             @enderror
                         </div>
 
-                        <!-- Typ rozliczenia -->
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label required">Sposób rozliczenia</label>
-                            <select name="billing_type" class="form-select @error('billing_type') is-invalid @enderror" required>
-                                <option value="monthly_flat" {{ old('billing_type', 'monthly_flat') === 'monthly_flat' ? 'selected' : '' }}>Ryczałt miesięczny</option>
-                                <option value="per_lesson_monthly" {{ old('billing_type') === 'per_lesson_monthly' ? 'selected' : '' }}>Wg lekcji (płatne miesięcznie)</option>
-                                <option value="per_lesson_single" {{ old('billing_type') === 'per_lesson_single' ? 'selected' : '' }}>Pojedyncza lekcja</option>
-                            </select>
-                            @error('billing_type')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
                         <!-- Cena jednostkowa -->
                         <div class="col-md-4 mb-3">
-                            <label class="form-label required">Cena jednostkowa (zł)</label>
+                            <label class="form-label required">Cena</label>
                             <div class="input-group">
                                 <input type="number" step="0.01" min="0" name="price_per_unit" class="form-control @error('price_per_unit') is-invalid @enderror" value="{{ old('price_per_unit', '0.00') }}" required>
                                 <span class="input-group-text">PLN</span>
                             </div>
                             @error('price_per_unit')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Typ rozliczenia -->
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label required">Sposób rozliczenia</label>
+                            <select name="billing_type" class="form-select @error('billing_type') is-invalid @enderror" required>
+                                <option value="monthly_flat" {{ old('billing_type', 'monthly_flat') === 'monthly_flat' ? 'selected' : '' }}>Ryczałt miesięczny</option>
+                                <!-- <option value="per_lesson_monthly" {{ old('billing_type') === 'per_lesson_monthly' ? 'selected' : '' }}>Wg lekcji (płatne miesięcznie)</option> -->
+                                <option value="per_lesson_single" {{ old('billing_type') === 'per_lesson_single' ? 'selected' : '' }}>Za lekcję</option>
+                            </select>
+                            @error('billing_type')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -128,6 +104,32 @@
                             <label class="form-label">Maksymalny wiek (lata)</label>
                             <input type="number" min="0" name="max_age" class="form-control @error('max_age') is-invalid @enderror" value="{{ old('max_age') }}" placeholder="opcjonalnie">
                             @error('max_age')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Sala (wybór z istniejących lub wpisanie nowej) -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Sala zajęciowa</label>
+                            <select name="room_id" id="room_select" class="form-select @error('room_id') is-invalid @enderror" onchange="toggleNewRoomInput()">
+                                <option value="">-- Brak / Wybierz istniejącą salę --</option>
+                                @foreach($rooms as $room)
+                                    <option value="{{ $room->id }}" {{ old('room_id') == $room->id ? 'selected' : '' }}>
+                                        {{ $room->name }} @if($room->location) ({{ $room->location }}) @endif
+                                    </option>
+                                @endforeach
+                                <option value="NEW" {{ old('new_room_name') ? 'selected' : '' }}>+ Dodaj nową salę...</option>
+                            </select>
+                            @error('room_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6 mb-3 {{ old('new_room_name') ? '' : 'd-none' }}" id="new_room_wrapper">
+                            <label class="form-label text-primary"><i class="ti ti-plus me-1"></i> Nazwa nowej sali</label>
+                            <input type="text" name="new_room_name" id="new_room_name" class="form-control @error('new_room_name') is-invalid @enderror" value="{{ old('new_room_name') }}" placeholder="np. Sala 102 (Piętro 1)">
+                            <small class="form-hint">Zostanie automatycznie zapisana w bazie placówki.</small>
+                            @error('new_room_name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

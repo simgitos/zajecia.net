@@ -27,7 +27,7 @@
         <span class="nav-link-icon">
             <i class="ti ti-users"></i>
         </span>
-        <span class="nav-link-title">Opiekunowie</span>
+        <span class="nav-link-title">Użytkownicy</span>
     </a>
 </li>
 <li class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">

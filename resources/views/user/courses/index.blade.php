@@ -205,13 +205,7 @@
                                             </span>
                                         @endif
                                     </div>
-                                    {{-- Harmonogram bezpośrednio pod tytułem --}}
-                                    @if($course->schedule_info)
-                                        <div class="course-meta-item">
-                                            <i class="ti ti-clock"></i>
-                                            {{ $course->schedule_info }}
-                                        </div>
-                                    @endif
+                                   
                                     
                                 </div>
 

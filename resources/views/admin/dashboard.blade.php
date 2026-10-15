@@ -53,7 +53,7 @@
                     <div class="card shadow-sm border-0 border-start border-success border-4 h-100">
                         <div class="card-body p-3 p-sm-4">
                             <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="subheader fw-bold text-uppercase fs-6">Zapisani Uczestnicy</div>
+                                <div class="subheader fw-bold text-uppercase fs-6">Uczestnicy zajęć</div>
                                 <span class="avatar bg-green-subtle text-success rounded-circle fs-2">
                                     <i class="ti ti-mood-kid"></i>
                                 </span>
@@ -198,10 +198,10 @@
                                 <i class="ti ti-school me-2 fs-2 text-primary"></i> Zarządzanie Zajęciami
                             </a>
                             <a href="{{ route('admin.user.index') }}" class="btn btn-outline-secondary justify-content-start py-2.5 fw-bold">
-                                <i class="ti ti-users me-2 fs-2 text-secondary"></i> Baza Opiekunów
+                                <i class="ti ti-users me-2 fs-2 text-secondary"></i> Użytkownicy
                             </a>
                             <a href="{{ route('admin.children.index') }}" class="btn btn-outline-info justify-content-start py-2.5 fw-bold">
-                                <i class="ti ti-users me-2 fs-2 text-info"></i> Lista Uczestników
+                                <i class="ti ti-users me-2 fs-2 text-info"></i> Uczestnicy
                             </a>
                             <a href="{{ route('admin.billing.index') }}" class="btn btn-outline-success justify-content-start py-2.5 fw-bold">
                                 <i class="ti ti-receipt-2 me-2 fs-2 text-success"></i> Raporty i Rozliczenia
@@ -213,7 +213,7 @@
                     <div class="card shadow-sm border-0 mb-4">
                         <div class="card-header bg-surface border-bottom py-3">
                             <h3 class="card-title fw-bold text-dark mb-0">
-                                <i class="ti ti-history me-2 text-warning"></i> Ostatnio Zrealizowane Terminy
+                                <i class="ti ti-history me-2 text-warning"></i> Ostatnio Zrealizowane Zajęcia
                             </h3>
                         </div>
                         <div class="card-body p-0">
