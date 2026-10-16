@@ -18,8 +18,8 @@ class CourseController extends Controller
      */
     public function index(Request $request)
     {
-        $schoolId = Auth::user()->school_id;
         $school = Auth::user()->activeSchool() ?? Auth::user()->school;
+        $schoolId = $school?->id ?? Auth::user()->school_id;
 
         $seasons = \App\Models\Season::where('school_id', $schoolId)->orderByDesc('start_date')->get();
         $activeSeason = $school?->activeSeason();
@@ -46,7 +46,8 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        $schoolId = Auth::user()->school_id;
+        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
+        $schoolId = $school?->id ?? Auth::user()->school_id;
         if ($course->school_id !== $schoolId) {
             abort(403);
         }
@@ -67,15 +68,19 @@ class CourseController extends Controller
      */
     public function create()
     {
-        $schoolId = Auth::user()->school_id;
         $school = Auth::user()->activeSchool() ?? Auth::user()->school;
+        $schoolId = $school?->id ?? Auth::user()->school_id;
         $seasons = \App\Models\Season::where('school_id', $schoolId)->orderByDesc('start_date')->get();
         $activeSeason = $school?->activeSeason();
 
         $rooms = Room::where('school_id', $schoolId)->orderBy('name')->get();
-        $instructors = User::where('school_id', $schoolId)
-            ->whereJsonContains('roles', UserRole::TEACHER->value)
-            ->orderBy('name')->get();
+        $instructors = User::whereHas('schools', function ($q) use ($schoolId) {
+            $q->where('schools.id', $schoolId)
+              ->whereJsonContains('school_user.roles', UserRole::TEACHER->value);
+        })->orWhere(function ($q) use ($schoolId) {
+            $q->where('school_id', $schoolId)
+              ->whereJsonContains('roles', UserRole::TEACHER->value);
+        })->distinct()->orderBy('name')->get();
         $children = \App\Models\Child::where('school_id', $schoolId)
             ->orderBy('name')
             ->get();
@@ -88,7 +93,8 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        $schoolId = Auth::user()->school_id;
+        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
+        $schoolId = $school?->id ?? Auth::user()->school_id;
 
         if ($request->input('room_id') === 'NEW') {
             $request->merge(['room_id' => null]);
@@ -97,7 +103,20 @@ class CourseController extends Controller
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'season_id' => ['nullable', Rule::exists('seasons', 'id')->where('school_id', $schoolId)],
-            'instructor_id' => ['required', Rule::exists('users', 'id')->where('school_id', $schoolId)],
+            'instructor_id' => [
+                'required',
+                'integer',
+                function ($attribute, $value, $fail) use ($schoolId) {
+                    $exists = User::where('id', $value)
+                        ->where(function ($query) use ($schoolId) {
+                            $query->whereHas('schools', fn ($q) => $q->where('schools.id', $schoolId))
+                                ->orWhere('school_id', $schoolId);
+                        })->exists();
+                    if (!$exists) {
+                        $fail('Wybrany instruktor jest nieprawidłowy dla tej placówki.');
+                    }
+                },
+            ],
             'room_id' => ['nullable', Rule::exists('rooms', 'id')->where('school_id', $schoolId)],
             'new_room_name' => ['required_if:room_id,NEW', 'nullable', 'string', 'max:255'],
             'type' => ['required', 'in:group,individual'],
@@ -206,16 +225,21 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        $schoolId = Auth::user()->school_id;
+        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
+        $schoolId = $school?->id ?? Auth::user()->school_id;
         if ($course->school_id !== $schoolId) {
             abort(403);
         }
 
         $seasons = \App\Models\Season::where('school_id', $schoolId)->orderByDesc('start_date')->get();
         $rooms = Room::where('school_id', $schoolId)->orderBy('name')->get();
-        $instructors = User::where('school_id', $schoolId)
-            ->whereJsonContains('roles', UserRole::TEACHER->value)
-            ->orderBy('name')->get();
+        $instructors = User::whereHas('schools', function ($q) use ($schoolId) {
+            $q->where('schools.id', $schoolId)
+              ->whereJsonContains('school_user.roles', UserRole::TEACHER->value);
+        })->orWhere(function ($q) use ($schoolId) {
+            $q->where('school_id', $schoolId)
+              ->whereJsonContains('roles', UserRole::TEACHER->value);
+        })->distinct()->orderBy('name')->get();
 
         return view('admin.courses.edit', compact('course', 'rooms', 'instructors', 'seasons'));
     }
@@ -225,7 +249,8 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        $schoolId = Auth::user()->school_id;
+        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
+        $schoolId = $school?->id ?? Auth::user()->school_id;
         if ($course->school_id !== $schoolId) {
             abort(403);
         }
@@ -237,7 +262,20 @@ class CourseController extends Controller
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'season_id' => ['nullable', Rule::exists('seasons', 'id')->where('school_id', $schoolId)],
-            'instructor_id' => ['required', Rule::exists('users', 'id')->where('school_id', $schoolId)],
+            'instructor_id' => [
+                'required',
+                'integer',
+                function ($attribute, $value, $fail) use ($schoolId) {
+                    $exists = User::where('id', $value)
+                        ->where(function ($query) use ($schoolId) {
+                            $query->whereHas('schools', fn ($q) => $q->where('schools.id', $schoolId))
+                                ->orWhere('school_id', $schoolId);
+                        })->exists();
+                    if (!$exists) {
+                        $fail('Wybrany instruktor jest nieprawidłowy dla tej placówki.');
+                    }
+                },
+            ],
             'room_id' => ['nullable', Rule::exists('rooms', 'id')->where('school_id', $schoolId)],
             'new_room_name' => ['required_if:room_id,NEW', 'nullable', 'string', 'max:255'],
             'type' => ['required', 'in:group,individual'],

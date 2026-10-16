@@ -43,7 +43,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function rolesForSchool(School|int $school): Collection
     {
         $schoolId = $school instanceof School ? $school->id : (int) $school;
-        $membership = $this->schools()->where('schools.id', $schoolId)->first();
+        
+        $membership = $this->relationLoaded('schools')
+            ? $this->schools->firstWhere('id', $schoolId)
+            : $this->schools()->where('schools.id', $schoolId)->first();
 
         if ($membership && $membership->pivot && $membership->pivot->roles) {
             $rawRoles = is_array($membership->pivot->roles)
@@ -57,8 +60,8 @@ class User extends Authenticatable implements MustVerifyEmail
             }
         }
 
-        // Fallback: jeśli rekord w pivot nie ma zdefiniowanych ról, sprawdź $this->roles lub domyślnie 'user'
-        if ($this->school_id === $schoolId && $this->roles && $this->roles->isNotEmpty()) {
+        // Fallback: tylko jeśli rekord w pivot nie istnieje w ogóle, a użytkownik ma przypisaną tę szkołę
+        if (!$membership && $this->school_id === $schoolId && $this->roles && $this->roles->isNotEmpty()) {
             return $this->roles;
         }
 

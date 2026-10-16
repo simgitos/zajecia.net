@@ -44,11 +44,18 @@ class RegisteredUserController extends Controller
                 ]);
             }
 
+            $schoolRoles = $user->rolesForSchool($school);
+            $roleValues = $schoolRoles->map(fn ($r) => $r->value)->toArray();
+            if (empty($roleValues)) {
+                $roleValues = ['user'];
+            }
+            $highestRole = $schoolRoles->sortByDesc(fn ($r) => $r->priority())->first();
+
             session(['active_school_id' => $school->id]);
-            session(['active_role' => 'user']);
+            session(['active_role' => $highestRole?->value ?? 'user']);
             $user->update([
                 'school_id' => $school->id,
-                'roles' => [UserRole::USER],
+                'roles' => $roleValues,
             ]);
 
             return redirect()->route('dashboard')->with(

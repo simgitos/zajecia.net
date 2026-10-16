@@ -32,7 +32,8 @@
                         <td>{{ $user->email }} <br>{{ $user->phone }}</td>
                         <td>
                             @php
-                                $userSchoolRoles = $user->rolesForSchool(Auth::user()->school_id);
+                                $currentSchoolId = $schoolId ?? Auth::user()->activeSchool()?->id ?? Auth::user()->school_id;
+                                $userSchoolRoles = $user->rolesForSchool($currentSchoolId);
                             @endphp
                             @if($userSchoolRoles->isNotEmpty())
                                 @foreach($userSchoolRoles as $role)

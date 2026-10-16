@@ -17,13 +17,15 @@ class UserController extends Controller
      */
     public function index(): View
     {
-        $schoolId = Auth::user()->school_id;
+        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
+        $schoolId = $school?->id ?? Auth::user()->school_id;
+
         $users = User::where(function ($query) use ($schoolId) {
             $query->where('school_id', $schoolId)
                 ->orWhereHas('schools', fn ($q) => $q->where('schools.id', $schoolId));
-        })->distinct()->latest()->paginate(10);
+        })->with('schools')->distinct()->latest()->paginate(10);
 
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.index', compact('users', 'schoolId'));
     }
 
     /**
@@ -31,7 +33,9 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        $adminSchoolId = Auth::user()->school_id;
+        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
+        $adminSchoolId = $school?->id ?? Auth::user()->school_id;
+
         $isMember = $user->school_id === $adminSchoolId || $user->schools()->where('schools.id', $adminSchoolId)->exists();
         if (!$isMember) {
             abort(403);
@@ -39,7 +43,7 @@ class UserController extends Controller
 
         $roles = UserRole::cases();
         $userSchoolRoles = $user->rolesForSchool($adminSchoolId);
-        return view('admin.users.edit', compact('user', 'roles', 'userSchoolRoles'));
+        return view('admin.users.edit', compact('user', 'roles', 'userSchoolRoles', 'adminSchoolId'));
     }
 
     /**
@@ -47,7 +51,9 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $adminSchoolId = Auth::user()->school_id;
+        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
+        $adminSchoolId = $school?->id ?? Auth::user()->school_id;
+
         $isMember = $user->school_id === $adminSchoolId || $user->schools()->where('schools.id', $adminSchoolId)->exists();
         if (!$isMember) {
             abort(403);
@@ -67,19 +73,17 @@ class UserController extends Controller
             ]);
         }
 
-        // Jeśli edytowany użytkownik ma tę szkołę jako aktywną, zaktualizuj też jego cache roles
+        $updateData = [
+            'name' => $request->validated('name'),
+            'email' => $request->validated('email'),
+        ];
+
+        // Jeśli edytowany użytkownik ma tę szkołę jako aktywną, aktualizujemy też cache roles dla tej szkoły
         if ($user->school_id === $adminSchoolId) {
-            $user->update([
-                'name' => $request->validated('name'),
-                'email' => $request->validated('email'),
-                'roles' => $newRoles,
-            ]);
-        } else {
-            $user->update([
-                'name' => $request->validated('name'),
-                'email' => $request->validated('email'),
-            ]);
+            $updateData['roles'] = $newRoles;
         }
+
+        $user->update($updateData);
 
         return redirect()->route('admin.user.index')->with('success', 'Użytkownik został pomyślnie zaktualizowany.');
     }
@@ -89,7 +93,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $adminSchoolId = Auth::user()->school_id;
+        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
+        $adminSchoolId = $school?->id ?? Auth::user()->school_id;
+
         $isMember = $user->school_id === $adminSchoolId || $user->schools()->where('schools.id', $adminSchoolId)->exists();
         if (!$isMember) {
             abort(403);
