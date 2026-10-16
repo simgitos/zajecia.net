@@ -38,7 +38,7 @@
                     <div class="mb-3">
                         <label class="form-label required">Nazwa sezonu / semestru</label>
                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" 
-                               value="{{ old('name', 'Rok szkolny ' . date('Y') . '/' . (date('Y') + 1)) }}" 
+                               value="{{ old('name') }}" 
                                placeholder="np. Rok szkolny 2026/2027 lub Semestr letni 2026" required>
                         <small class="form-hint">Czytelna nazwa wyświetlana rodzicom oraz w panelu (np. Rok szkolny 2026/2027, Semestr zimowy).</small>
                         @error('name')

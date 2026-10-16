@@ -8,18 +8,32 @@
                     </div>
                     <h2 class="page-title text-primary fw-extrabold fs-1">
                         Pulpit Zarządzania Placówką
-                        @if(isset($activeSeason) && $activeSeason)
-                            <a href="{{ route('admin.seasons.index') }}" class="badge bg-primary-lt fs-6 ms-2 align-middle text-decoration-none" title="Zarządzaj sezonami">
-                                <i class="ti ti-calendar me-1"></i> Sezon: {{ $activeSeason->name }}
-                            </a>
-                        @endif
+
                     </h2>
                     <div class="text-secondary mt-1 fs-4">
                         Przegląd kluczowych wskaźników, obłożenia sal oraz finansów szkoły.
                     </div>
+                    @if(isset($activeSeason) && $activeSeason)
+                        <a href="{{ route('admin.seasons.index') }}"
+                            class="badge bg-primary-lt fs-6 ms-2 align-middle text-decoration-none"
+                            title="Zarządzaj sezonami">
+                            <i class="ti ti-calendar me-1"></i> Sezon: {{ $activeSeason->name }}
+                        </a>
+                    @else
+                        <a href="{{ route('admin.seasons.create') }}"
+                            class="badge bg-danger-lt fs-6 ms-2 align-middle text-decoration-none"
+                            title="Brak aktywnego sezonu">Dodaj sezon</a>
+                    @endif
+                    
+                    <a href="#"
+                        class="badge bg-primary-lt fs-6 ms-2 align-middle text-decoration-none"
+                        title="Ustaw uprawnienia dla instruktorów">
+                        <i class="ti ti-user-edit me-1"></i> Ustaw uprawnienia dla instruktorów
+                    </a>
+
                 </div>
                 <!-- Szybkie akcje dyrektora -->
-                <div class="col-auto ms-auto d-print-none">
+                <!-- <div class="col-auto ms-auto d-print-none">
                     <div class="d-flex gap-2">
                         <a href="{{ route('admin.courses.create') }}" class="btn btn-primary fw-bold shadow-sm">
                             <i class="ti ti-plus me-1 fs-3"></i> Dodaj Zajęcia
@@ -28,7 +42,7 @@
                             <i class="ti ti-receipt-2 me-1 fs-3"></i> Rozliczenia
                         </a>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -79,7 +93,8 @@
                                     <i class="ti ti-users"></i>
                                 </span>
                             </div>
-                            <div class="h1 mb-1 fw-extrabold text-dark fs-1">{{ $totalTeachersCount }} / {{ $totalParentsCount }}</div>
+                            <div class="h1 mb-1 fw-extrabold text-dark fs-1">{{ $totalTeachersCount }} /
+                                {{ $totalParentsCount }}</div>
                             <div class="text-secondary small">Prowadzący i konta opiekunów</div>
                         </div>
                     </div>
@@ -95,8 +110,10 @@
                                     <i class="ti ti-currency-zloty"></i>
                                 </span>
                             </div>
-                            <div class="h1 mb-1 fw-extrabold text-danger fs-1">{{ number_format($unpaidAmount, 2, ',', ' ') }} zł</div>
-                            <div class="text-secondary small">Opłacono: {{ number_format($paidAmount, 2, ',', ' ') }} zł</div>
+                            <div class="h1 mb-1 fw-extrabold text-danger fs-1">
+                                {{ number_format($unpaidAmount, 2, ',', ' ') }} zł</div>
+                            <div class="text-secondary small">Opłacono: {{ number_format($paidAmount, 2, ',', ' ') }} zł
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -106,7 +123,8 @@
                 <!-- Lewa kolumna: Obłożenie grup i kursów -->
                 <div class="col-lg-8">
                     <div class="card shadow-sm border-0 mb-4">
-                        <div class="card-header bg-surface border-bottom d-flex align-items-center justify-content-between py-3">
+                        <div
+                            class="card-header bg-surface border-bottom d-flex align-items-center justify-content-between py-3">
                             <h3 class="card-title fw-bold text-dark mb-0">
                                 <i class="ti ti-chart-bar me-2 text-primary"></i> Obłożenie Grup Zajęciowych i Sal
                             </h3>
@@ -137,7 +155,8 @@
                                             <td>
                                                 <strong class="text-dark fs-3 d-block">{{ $course->title }}</strong>
                                                 <small class="text-muted">
-                                                    Typ: {{ $course->billing_type === 'monthly_flat' ? 'Ryczałt' : ($course->billing_type === 'per_lesson_monthly' ? 'Za termin' : 'Pojedyncze') }}
+                                                    Typ:
+                                                    {{ $course->billing_type === 'monthly_flat' ? 'Ryczałt' : ($course->billing_type === 'per_lesson_monthly' ? 'Za termin' : 'Pojedyncze') }}
                                                 </small>
                                             </td>
                                             <td>
@@ -152,7 +171,8 @@
                                             </td>
                                             <td class="text-center" style="min-width: 140px;">
                                                 <div class="d-flex align-items-center justify-content-between mb-1">
-                                                    <span class="fw-bold fs-4 {{ $isFull ? 'text-danger' : 'text-primary' }}">
+                                                    <span
+                                                        class="fw-bold fs-4 {{ $isFull ? 'text-danger' : 'text-primary' }}">
                                                         {{ $enrolled }} / {{ $max }}
                                                     </span>
                                                     @if($isFull)
@@ -162,16 +182,15 @@
                                                     @endif
                                                 </div>
                                                 <div class="progress progress-sm">
-                                                    <div class="progress-bar {{ $isFull ? 'bg-danger' : ($pct > 75 ? 'bg-warning' : 'bg-primary') }}" 
-                                                         style="width: {{ min(100, $pct) }}%" 
-                                                         role="progressbar" 
-                                                         aria-valuenow="{{ $pct }}" 
-                                                         aria-valuemin="0" 
-                                                         aria-valuemax="100"></div>
+                                                    <div class="progress-bar {{ $isFull ? 'bg-danger' : ($pct > 75 ? 'bg-warning' : 'bg-primary') }}"
+                                                        style="width: {{ min(100, $pct) }}%" role="progressbar"
+                                                        aria-valuenow="{{ $pct }}" aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td class="text-end">
-                                                <a href="{{ route('admin.courses.edit', $course) }}" class="btn btn-sm btn-ghost-primary">
+                                                <a href="{{ route('admin.courses.edit', $course) }}"
+                                                    class="btn btn-sm btn-ghost-primary">
                                                     <i class="ti ti-edit me-1"></i> Edytuj
                                                 </a>
                                             </td>
@@ -199,16 +218,20 @@
                             </h3>
                         </div>
                         <div class="card-body p-3 d-flex flex-column gap-2">
-                            <a href="{{ route('admin.courses.index') }}" class="btn btn-outline-primary justify-content-start py-2.5 fw-bold">
+                            <a href="{{ route('admin.courses.index') }}"
+                                class="btn btn-outline-primary justify-content-start py-2.5 fw-bold">
                                 <i class="ti ti-school me-2 fs-2 text-primary"></i> Zarządzanie Zajęciami
                             </a>
-                            <a href="{{ route('admin.user.index') }}" class="btn btn-outline-secondary justify-content-start py-2.5 fw-bold">
+                            <a href="{{ route('admin.user.index') }}"
+                                class="btn btn-outline-secondary justify-content-start py-2.5 fw-bold">
                                 <i class="ti ti-users me-2 fs-2 text-secondary"></i> Użytkownicy
                             </a>
-                            <a href="{{ route('admin.children.index') }}" class="btn btn-outline-info justify-content-start py-2.5 fw-bold">
+                            <a href="{{ route('admin.children.index') }}"
+                                class="btn btn-outline-info justify-content-start py-2.5 fw-bold">
                                 <i class="ti ti-users me-2 fs-2 text-info"></i> Uczestnicy
                             </a>
-                            <a href="{{ route('admin.billing.index') }}" class="btn btn-outline-success justify-content-start py-2.5 fw-bold">
+                            <a href="{{ route('admin.billing.index') }}"
+                                class="btn btn-outline-success justify-content-start py-2.5 fw-bold">
                                 <i class="ti ti-receipt-2 me-2 fs-2 text-success"></i> Raporty i Rozliczenia
                             </a>
                         </div>
@@ -237,7 +260,8 @@
                                                 </span>
                                             </div>
                                             <div class="text-secondary small">
-                                                <i class="ti ti-calendar me-1"></i> {{ $lesson->realized_at ? $lesson->realized_at->format('d.m.Y') : '-' }} • 
+                                                <i class="ti ti-calendar me-1"></i>
+                                                {{ $lesson->realized_at ? $lesson->realized_at->format('d.m.Y') : '-' }} •
                                                 <i class="ti ti-user me-1"></i> {{ $lesson->teacher?->name }}
                                             </div>
                                             @if($lesson->topic)
