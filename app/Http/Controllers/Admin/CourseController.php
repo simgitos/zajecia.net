@@ -105,10 +105,8 @@ class CourseController extends Controller
                 'integer',
                 function ($attribute, $value, $fail) use ($schoolId) {
                     $exists = User::where('id', $value)
-                        ->where(function ($query) use ($schoolId) {
-                            $query->whereHas('schools', fn ($q) => $q->where('schools.id', $schoolId))
-                                ->orWhere('school_id', $schoolId);
-                        })->exists();
+                        ->whereHas('schools', fn ($q) => $q->where('schools.id', $schoolId))
+                        ->exists();
                     if (!$exists) {
                         $fail('Wybrany instruktor jest nieprawidłowy dla tej placówki.');
                     }
@@ -261,10 +259,8 @@ class CourseController extends Controller
                 'integer',
                 function ($attribute, $value, $fail) use ($schoolId) {
                     $exists = User::where('id', $value)
-                        ->where(function ($query) use ($schoolId) {
-                            $query->whereHas('schools', fn ($q) => $q->where('schools.id', $schoolId))
-                                ->orWhere('school_id', $schoolId);
-                        })->exists();
+                        ->whereHas('schools', fn ($q) => $q->where('schools.id', $schoolId))
+                        ->exists();
                     if (!$exists) {
                         $fail('Wybrany instruktor jest nieprawidłowy dla tej placówki.');
                     }

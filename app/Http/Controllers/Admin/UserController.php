@@ -17,13 +17,11 @@ class UserController extends Controller
      */
     public function index(): View
     {
-        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
-        $schoolId = $school?->id ?? Auth::user()->school_id;
+        $school = Auth::user()->activeSchool();
+        $schoolId = $school?->id;
 
-        $users = User::where(function ($query) use ($schoolId) {
-            $query->where('school_id', $schoolId)
-                ->orWhereHas('schools', fn ($q) => $q->where('schools.id', $schoolId));
-        })->with('schools')->distinct()->latest()->paginate(10);
+        $users = User::whereHas('schools', fn ($q) => $q->where('schools.id', $schoolId))
+            ->with('schools')->latest()->paginate(10);
 
         return view('admin.users.index', compact('users', 'schoolId'));
     }
@@ -33,10 +31,10 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
-        $adminSchoolId = $school?->id ?? Auth::user()->school_id;
+        $school = Auth::user()->activeSchool();
+        $adminSchoolId = $school?->id;
 
-        $isMember = $user->school_id === $adminSchoolId || $user->schools()->where('schools.id', $adminSchoolId)->exists();
+        $isMember = $user->schools()->where('schools.id', $adminSchoolId)->exists();
         if (!$isMember) {
             abort(403);
         }
@@ -51,10 +49,10 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
-        $adminSchoolId = $school?->id ?? Auth::user()->school_id;
+        $school = Auth::user()->activeSchool();
+        $adminSchoolId = $school?->id;
 
-        $isMember = $user->school_id === $adminSchoolId || $user->schools()->where('schools.id', $adminSchoolId)->exists();
+        $isMember = $user->schools()->where('schools.id', $adminSchoolId)->exists();
         if (!$isMember) {
             abort(403);
         }
@@ -73,12 +71,10 @@ class UserController extends Controller
             ]);
         }
 
-        $updateData = [
+        $user->update([
             'name' => $request->validated('name'),
             'email' => $request->validated('email'),
-        ];
-
-        $user->update($updateData);
+        ]);
 
         return redirect()->route('admin.user.index')->with('success', 'Użytkownik został pomyślnie zaktualizowany.');
     }
@@ -88,10 +84,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $school = Auth::user()->activeSchool() ?? Auth::user()->school;
-        $adminSchoolId = $school?->id ?? Auth::user()->school_id;
+        $school = Auth::user()->activeSchool();
+        $adminSchoolId = $school?->id;
 
-        $isMember = $user->school_id === $adminSchoolId || $user->schools()->where('schools.id', $adminSchoolId)->exists();
+        $isMember = $user->schools()->where('schools.id', $adminSchoolId)->exists();
         if (!$isMember) {
             abort(403);
         }
@@ -106,12 +102,6 @@ class UserController extends Controller
         // Jeśli to była jedyna placówka użytkownika, usuń konto
         if ($user->schools()->count() === 0) {
             $user->delete();
-        } elseif ($user->school_id === $adminSchoolId) {
-            // Przepnij na inną dostępną placówkę
-            $nextSchool = $user->schools()->first();
-            $user->update([
-                'school_id' => $nextSchool?->id,
-            ]);
         }
 
         return redirect()->route('admin.user.index')->with('success', 'Użytkownik został odłączony od placówki.');

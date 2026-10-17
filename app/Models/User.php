@@ -19,7 +19,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'city',
         'postal_code',
         'password',
-        'school_id',
     ];
 
     /**
@@ -31,6 +30,22 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Akcesor zwracający ID aktualnie aktywnej szkoły.
+     */
+    public function getSchoolIdAttribute(): ?int
+    {
+        return $this->activeSchool()?->id;
+    }
+
+    /**
+     * Akcesor zwracający instancję aktualnie aktywnej szkoły (kompatybilność z dawnym $user->school).
+     */
+    public function getSchoolAttribute(): ?School
+    {
+        return $this->activeSchool();
     }
 
     /**
@@ -124,11 +139,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->rolesForActiveSchool()->count() > 1;
     }
 
-    public function school(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(School::class);
-    }
-
     public function schools(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(School::class, 'school_user')
@@ -137,20 +147,25 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Zwraca aktualnie wybraną aktywną szkołę z sesji lub powiązaną z modelem.
+     * Zwraca aktualnie wybraną aktywną szkołę z sesji lub pierwszą przypisaną użytkownikowi.
      */
     public function activeSchool(): ?School
     {
-        $activeSchoolId = session('active_school_id') ?? $this->school_id;
+        $activeSchoolId = session('active_school_id');
 
         if ($activeSchoolId) {
-            $school = $this->schools()->where('schools.id', $activeSchoolId)->first();
+            $school = $this->relationLoaded('schools')
+                ? $this->schools->firstWhere('id', (int) $activeSchoolId)
+                : $this->schools()->where('schools.id', (int) $activeSchoolId)->first();
+
             if ($school) {
                 return $school;
             }
         }
 
-        return $this->schools()->first() ?? $this->school;
+        return $this->relationLoaded('schools')
+            ? $this->schools->first()
+            : $this->schools()->first();
     }
 
     /**

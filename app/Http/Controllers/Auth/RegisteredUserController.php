@@ -53,9 +53,6 @@ class RegisteredUserController extends Controller
 
             session(['active_school_id' => $school->id]);
             session(['active_role' => $highestRole?->value ?? 'user']);
-            $user->update([
-                'school_id' => $school->id,
-            ]);
 
             return redirect()->route('dashboard')->with(
                 'success',
@@ -116,7 +113,6 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'school_id' => $schoolId,
         ]);
 
         // Dodanie wpisu do pivota school_user
