@@ -78,11 +78,6 @@ class UserController extends Controller
             'email' => $request->validated('email'),
         ];
 
-        // Jeśli edytowany użytkownik ma tę szkołę jako aktywną, aktualizujemy też cache roles dla tej szkoły
-        if ($user->school_id === $adminSchoolId) {
-            $updateData['roles'] = $newRoles;
-        }
-
         $user->update($updateData);
 
         return redirect()->route('admin.user.index')->with('success', 'Użytkownik został pomyślnie zaktualizowany.');
@@ -114,10 +109,8 @@ class UserController extends Controller
         } elseif ($user->school_id === $adminSchoolId) {
             // Przepnij na inną dostępną placówkę
             $nextSchool = $user->schools()->first();
-            $nextRoles = $nextSchool ? $user->rolesForSchool($nextSchool->id)->map(fn ($r) => $r->value)->toArray() : ['user'];
             $user->update([
                 'school_id' => $nextSchool?->id,
-                'roles' => $nextRoles,
             ]);
         }
 

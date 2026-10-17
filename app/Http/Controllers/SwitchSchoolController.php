@@ -48,10 +48,9 @@ class SwitchSchoolController extends Controller
         $highestRole = $schoolRoles->sortByDesc(fn ($r) => $r->priority())->first();
         session(['active_role' => $highestRole?->value ?? 'user']);
 
-        // Synchronizujemy school_id oraz roles w modelu
+        // Synchronizujemy school_id w modelu
         $user->update([
             'school_id' => $school->id,
-            'roles' => $roleValues,
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Przełączono aktywną placówkę na: ' . $school->name);

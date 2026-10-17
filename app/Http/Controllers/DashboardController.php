@@ -36,25 +36,15 @@ class DashboardController extends Controller
                 ->when($activeSeason, fn ($q) => $q->where('season_id', $activeSeason->id))
                 ->count();
             $totalChildrenCount = Child::where('school_id', $schoolId)->count();
-            $totalParentsCount = User::where(function ($query) use ($schoolId) {
-                $query->whereHas('schools', function ($q) use ($schoolId) {
-                    $q->where('schools.id', $schoolId)
-                      ->whereJsonContains('school_user.roles', 'user');
-                })->orWhere(function ($q) use ($schoolId) {
-                    $q->where('school_id', $schoolId)
-                      ->whereJsonContains('roles', 'user');
-                });
-            })->distinct()->count();
+            $totalParentsCount = User::whereHas('schools', function ($q) use ($schoolId) {
+                $q->where('schools.id', $schoolId)
+                  ->whereJsonContains('school_user.roles', 'user');
+            })->count();
 
-            $totalTeachersCount = User::where(function ($query) use ($schoolId) {
-                $query->whereHas('schools', function ($q) use ($schoolId) {
-                    $q->where('schools.id', $schoolId)
-                      ->whereJsonContains('school_user.roles', 'teacher');
-                })->orWhere(function ($q) use ($schoolId) {
-                    $q->where('school_id', $schoolId)
-                      ->whereJsonContains('roles', 'teacher');
-                });
-            })->distinct()->count();
+            $totalTeachersCount = User::whereHas('schools', function ($q) use ($schoolId) {
+                $q->where('schools.id', $schoolId)
+                  ->whereJsonContains('school_user.roles', 'teacher');
+            })->count();
 
             // Obłożenie kursów dla aktywnego sezonu
             $courses = Course::where('school_id', $schoolId)

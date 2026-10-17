@@ -77,10 +77,7 @@ class CourseController extends Controller
         $instructors = User::whereHas('schools', function ($q) use ($schoolId) {
             $q->where('schools.id', $schoolId)
               ->whereJsonContains('school_user.roles', UserRole::TEACHER->value);
-        })->orWhere(function ($q) use ($schoolId) {
-            $q->where('school_id', $schoolId)
-              ->whereJsonContains('roles', UserRole::TEACHER->value);
-        })->distinct()->orderBy('name')->get();
+        })->orderBy('name')->get();
         $children = \App\Models\Child::where('school_id', $schoolId)
             ->orderBy('name')
             ->get();
@@ -236,10 +233,7 @@ class CourseController extends Controller
         $instructors = User::whereHas('schools', function ($q) use ($schoolId) {
             $q->where('schools.id', $schoolId)
               ->whereJsonContains('school_user.roles', UserRole::TEACHER->value);
-        })->orWhere(function ($q) use ($schoolId) {
-            $q->where('school_id', $schoolId)
-              ->whereJsonContains('roles', UserRole::TEACHER->value);
-        })->distinct()->orderBy('name')->get();
+        })->orderBy('name')->get();
 
         return view('admin.courses.edit', compact('course', 'rooms', 'instructors', 'seasons'));
     }

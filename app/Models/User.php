@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Enums\UserRole;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -20,7 +19,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'city',
         'postal_code',
         'password',
-        'roles',
         'school_id',
     ];
 
@@ -32,8 +30,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            // Eloquent automatycznie zamienia JSON na Collection<UserRole>
-            'roles' => AsEnumCollection::of(UserRole::class),
         ];
     }
 
@@ -60,11 +56,6 @@ class User extends Authenticatable implements MustVerifyEmail
             }
         }
 
-        // Fallback: tylko jeśli rekord w pivot nie istnieje w ogóle, a użytkownik ma przypisaną tę szkołę
-        if (!$membership && $this->school_id === $schoolId && $this->roles && $this->roles->isNotEmpty()) {
-            return $this->roles;
-        }
-
         return collect([UserRole::USER]);
     }
 
@@ -78,7 +69,7 @@ class User extends Authenticatable implements MustVerifyEmail
             return $this->rolesForSchool($activeSchool);
         }
 
-        return $this->roles ?? collect([UserRole::USER]);
+        return collect([UserRole::USER]);
     }
 
     /**
