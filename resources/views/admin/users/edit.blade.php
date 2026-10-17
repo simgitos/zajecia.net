@@ -39,7 +39,7 @@
                         <div class="row g-2">
                             @foreach($roles as $role)
                                 @php
-                                    $currentSchoolId = $adminSchoolId ?? Auth::user()->activeSchool()?->id ?? Auth::user()->school_id;
+                                    $currentSchoolId = $adminSchoolId ?? Auth::user()->activeSchool()?->id;
                                     $currentRoles = $userSchoolRoles ?? $user->rolesForSchool($currentSchoolId);
                                     $userRoleValues = $currentRoles->map(fn($r) => $r->value)->toArray();
                                     $isChecked = in_array($role->value, old('roles', $userRoleValues), true);

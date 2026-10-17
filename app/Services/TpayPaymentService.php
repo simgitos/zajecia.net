@@ -69,7 +69,11 @@ class TpayPaymentService
             throw new RuntimeException('Brak pozycji do opłacenia.');
         }
 
-        $school = $user->school;
+        $firstItem = $billingItems->first();
+        $school = ($firstItem && $firstItem->school_id)
+            ? (\App\Models\School::find($firstItem->school_id) ?? $user->school)
+            : $user->school;
+
         if (!$school) {
             throw new RuntimeException('Użytkownik nie jest przypisany do żadnej szkoły.');
         }
