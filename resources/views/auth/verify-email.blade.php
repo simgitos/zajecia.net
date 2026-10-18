@@ -7,7 +7,7 @@
         <h2 class="card-title text-center mb-4">Weryfikacja adresu e-mail</h2>
 
         <p class="text-secondary mb-4">
-            Dziękujemy za rejestrację! Zanim rozpoczniesz, zweryfikuj swój adres e-mail, klikając w link, który właśnie do Ciebie wysłaliśmy. Jeśli nie otrzymałeś wiadomości e-mail, z chęcią wyślemy kolejną.
+            Dziękujemy za rejestrację! Zanim rozpoczniesz, zweryfikuj swój adres e-mail, klikając w link, który właśnie do Ciebie wysłaliśmy.<br> Sprawdź również foldery Spam i Oferty.
         </p>
 
         @if (session('status') == 'verification-link-sent')

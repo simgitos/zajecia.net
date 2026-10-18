@@ -16,14 +16,14 @@
             <div class="alert alert-info d-flex align-items-center mb-3">
                 <i class="ti ti-school fs-2 me-2"></i>
                 <div>
-                    Rejestrujesz się w placówce <strong>{{ $selectedSchool->name }}</strong> jako użytkownik. <br>Po zalogowaniu będziesz mógł zapisać siebie lub podopiecznych na organizowane przez placówkę zajęcia.
+                    Rejestrujesz się w placówce <strong>{{ $selectedSchool->name }}</strong> jako użytkownik. <br>Po zalogowaniu będziesz mógł zapisać siebie lub podopiecznych na organizowane zajęcia.
                 </div>
             </div>
         @else
             <div class="alert alert-primary d-flex align-items-center mb-3">
                 <i class="ti ti-building-plus fs-2 me-2"></i>
                 <div>
-                    Tworzysz nową placówkę/szkołę. <br>Zostaniesz automatycznie jej administratorem.
+                    Tworzysz nową placówkę/szkołę. <br>Zostaniesz automatycznie jej administratorem.<br><b>Dodając placówkę oświadczasz że masz pełne prawo do jej reprezentowania.</b>
                 </div>
             </div>
         @endif

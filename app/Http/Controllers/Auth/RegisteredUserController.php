@@ -101,7 +101,7 @@ class RegisteredUserController extends Controller
             $school = School::create([
                 'name' => $schoolName,
                 'slug' => $slug,
-                'email' => $request->email,
+                
             ]);
 
             $schoolId = $school->id;
