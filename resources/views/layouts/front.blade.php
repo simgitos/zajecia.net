@@ -5,12 +5,24 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
-
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-TWG3S5S3');</script>
+  <!-- End Google Tag Manager -->
   <!-- Primary Meta Tags -->
   <title>@yield('title', 'Zajęciownia.pl - Miejsce dla Twoich Zajęć | Zarządzanie, Zapisy i Płatności Online')</title>
-  <meta name="title" content="@yield('title', 'Zajęciownia.pl - Miejsce dla Twoich Zajęć | Zarządzanie, Zapisy i Płatności Online')">
-  <meta name="description" content="@yield('meta_description', 'Kompleksowa platforma do zarządzania zajęciami: tancami, sportem, korepetytorow, sztuką i innymi. Automatyczne rozliczenia, listy obecności i błyskawiczne płatności online dla opiekunów.')">
-  <meta name="keywords" content="system obsługi zajęć, domy kultury, szkoły tańca, korepetycje, zajęcia sportowe, ewidencja obecności, płatności online za zajęcia, oprogramowanie MDK, zapis na zajęcia">
+  <meta name="title"
+    content="@yield('title', 'Zajęciownia.pl - Miejsce dla Twoich Zajęć | Zarządzanie, Zapisy i Płatności Online')">
+  <meta name="description"
+    content="@yield('meta_description', 'Kompleksowa platforma do zarządzania zajęciami: tancami, sportem, korepetytorow, sztuką i innymi. Automatyczne rozliczenia, listy obecności i błyskawiczne płatności online dla opiekunów.')">
+  <meta name="keywords"
+    content="system obsługi zajęć, domy kultury, szkoły tańca, korepetycje, zajęcia sportowe, ewidencja obecności, płatności online za zajęcia, oprogramowanie MDK, zapis na zajęcia">
   <meta name="author" content="Zajęciownia.pl">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="{{ url()->current() }}" />
@@ -19,14 +31,16 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ url()->current() }}">
   <meta property="og:title" content="@yield('title', 'Zajęciownia.pl - Miejsce dla Twoich Zajęć')">
-  <meta property="og:description" content="@yield('meta_description', 'Automatyzacja zapisów, ewidencji obecności i płatności online w placówkach. Wypróbuj za darmo!')">
+  <meta property="og:description"
+    content="@yield('meta_description', 'Automatyzacja zapisów, ewidencji obecności i płatności online w placówkach. Wypróbuj za darmo!')">
   <meta property="og:image" content="{{ asset('images/hero-mockup.jpg') }}">
 
   <!-- Twitter Card -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="{{ url()->current() }}">
   <meta property="twitter:title" content="@yield('title', 'EduZajęcia.net - System Obsługi Zajęć Pozalekcyjnych')">
-  <meta property="twitter:description" content="@yield('meta_description', 'Platforma SaaS dla szkół i rodziców. Zapisy, frekwencja i płatności online w jednym miejscu.')">
+  <meta property="twitter:description"
+    content="@yield('meta_description', 'Platforma SaaS dla szkół i rodziców. Zapisy, frekwencja i płatności online w jednym miejscu.')">
   <meta property="twitter:image" content="{{ asset('images/hero-mockup.jpg') }}">
 
   <!-- Favicon -->
@@ -35,13 +49,24 @@
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
   <!-- CSS Tablera (Bootstrap 5) & Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.6.0/dist/css/tabler.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.48.0/dist/tabler-icons.min.css" />
 
   <!-- Dynamic Styles & Design System Tokens -->
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-TWG3S5S3');</script>
+  <!-- End Google Tag Manager -->
   <style>
     :root {
       --primary-color: #3b82f6;
@@ -267,6 +292,7 @@
       .hero-title {
         font-size: 2.25rem;
       }
+
       .hero-wrapper {
         padding: 2.5rem 0 3.5rem;
       }
@@ -277,12 +303,17 @@
 </head>
 
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TWG3S5S3" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
   <!-- Header / Navigation -->
   <header class="navbar navbar-expand-lg front-navbar">
     <div class="container-xl">
       <!-- Logo & Brand Name -->
       <a class="navbar-brand d-flex align-items-center me-4" href="{{ url('/') }}">
-        <img src="{{ asset('images/logo.png') }}" alt="Zajęciownia.pl Logo" class="navbar-brand me-1" style="width: 40px">
+        <img src="{{ asset('images/logo.png') }}" alt="Zajęciownia.pl Logo" class="navbar-brand me-1"
+          style="width: 40px">
         <div>
           <span class="brand-title d-block">Zajęciownia.pl</span>
           <small class="text-secondary fw-semibold fs-6 d-none d-sm-block">Miejsce dla Twoich Zajęć</small>
@@ -290,7 +321,8 @@
       </a>
 
       <!-- Mobile Toggle Button -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Przełącz nawigację">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
+        aria-controls="navbar-menu" aria-expanded="false" aria-label="Przełącz nawigację">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -333,7 +365,8 @@
         <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
           @auth
             <div class="nav-item dropdown">
-              <a href="#" class="btn btn-outline-primary d-flex align-items-center gap-2 dropdown-toggle" data-bs-toggle="dropdown">
+              <a href="#" class="btn btn-outline-primary d-flex align-items-center gap-2 dropdown-toggle"
+                data-bs-toggle="dropdown">
                 <span class="avatar avatar-xs bg-primary text-white rounded-circle">
                   {{ mb_substr(Auth::user()->name, 0, 1) }}
                 </span>
@@ -374,8 +407,8 @@
               <i class="ti ti-login me-1 fs-3"></i> Zaloguj się
             </a>
             <!-- <a href="{{ route('register') }}" class="btn btn-primary fw-bold shadow-sm d-inline-flex align-items-center">
-              <i class="ti ti-user-plus me-1 fs-3"></i> Zarejestruj się
-            </a> -->
+                <i class="ti ti-user-plus me-1 fs-3"></i> Zarejestruj się
+              </a> -->
           @endauth
         </div>
       </div>
@@ -398,11 +431,14 @@
             <span class="fs-2 fw-extrabold text-white">Zajęciownia.pl</span>
           </div>
           <p class="text-secondary leading-relaxed mb-4">
-          Platforma do obsługi zajęć dowolnego rodzaju: taniec, sport, sztuka, korepetycje, MDK i inne. Zapisy, ewidencja obecności i płatności online w jednym miejscu.
+            Platforma do obsługi zajęć dowolnego rodzaju: taniec, sport, sztuka, korepetycje, MDK i inne. Zapisy,
+            ewidencja obecności i płatności online w jednym miejscu.
           </p>
           <div class="d-flex gap-2 flex-wrap">
-            <span class="badge bg-blue-subtle text-primary p-2 rounded-2"><i class="ti ti-shield-check me-1"></i> Certyfikat SSL 256-bit</span>
-            <span class="badge bg-green-subtle text-success p-2 rounded-2"><i class="ti ti-currency-zloty me-1"></i> Płatności BLIK & PayU</span>
+            <span class="badge bg-blue-subtle text-primary p-2 rounded-2"><i class="ti ti-shield-check me-1"></i>
+              Certyfikat SSL 256-bit</span>
+            <span class="badge bg-green-subtle text-success p-2 rounded-2"><i class="ti ti-currency-zloty me-1"></i>
+              Płatności BLIK & PayU</span>
           </div>
         </div>
 
@@ -413,7 +449,8 @@
             <li><a href="{{ url('/') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Strona Główna</a></li>
             <li><a href="{{ url('/#funkcje') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Funkcjonalności</a></li>
             <li><a href="{{ url('/#dla-kogo') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Dla Kogo</a></li>
-            <li><a href="{{ route('schools.index') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Katalog Placówek</a></li>
+            <li><a href="{{ route('schools.index') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Katalog
+                Placówek</a></li>
             <li><a href="{{ url('/#cennik') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Cennik</a></li>
             <li><a href="{{ url('/#faq') }}"><i class="ti ti-chevron-right me-1 fs-6"></i> Pytania i Odpowiedzi</a></li>
           </ul>
@@ -439,16 +476,21 @@
             <li><i class="ti ti-map-pin me-2 text-warning"></i> ul. Rynek 18, 27-640 Klimontów</li>
           </ul>
           <div class="d-flex gap-2">
-            <a href="#" class="btn btn-icon btn-dark text-white rounded-circle"><i class="ti ti-brand-facebook fs-2"></i></a>
-            <a href="#" class="btn btn-icon btn-dark text-white rounded-circle"><i class="ti ti-brand-linkedin fs-2"></i></a>
-            <a href="#" class="btn btn-icon btn-dark text-white rounded-circle"><i class="ti ti-brand-youtube fs-2"></i></a>
+            <a href="#" class="btn btn-icon btn-dark text-white rounded-circle"><i
+                class="ti ti-brand-facebook fs-2"></i></a>
+            <a href="#" class="btn btn-icon btn-dark text-white rounded-circle"><i
+                class="ti ti-brand-linkedin fs-2"></i></a>
+            <a href="#" class="btn btn-icon btn-dark text-white rounded-circle"><i
+                class="ti ti-brand-youtube fs-2"></i></a>
           </div>
         </div>
       </div>
 
-      <div class="border-top border-slate-800 pt-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+      <div
+        class="border-top border-slate-800 pt-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
         <div class="text-secondary small mb-0">
-          &copy; {{ date('Y') }} Zajęciownia.pl. Wszelkie prawa zastrzeżone. Platforma dla domów kultury, szkół tańca, sportów, korepetycji i innych zajęć.
+          &copy; {{ date('Y') }} Zajęciownia.pl. Wszelkie prawa zastrzeżone. Platforma dla domów kultury, szkół tańca,
+          sportów, korepetycji i innych zajęć.
         </div>
         <div class="d-flex gap-3 small">
           <a href="{{asset('docs/polityka-prywatnosci.pdf')}}" target="_blank">Polityka prywatności</a>
