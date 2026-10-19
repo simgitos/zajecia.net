@@ -12,9 +12,9 @@
                     Raportowanie płatności w szkole, księgowanie wpłat oraz obsługa zaległości.
                 </div>
             </div>
-            <!-- Wybór miesiąca / okresu rozliczeniowego -->
-            <div class="col-auto ms-auto d-print-none">
-                <form action="{{ route('admin.billing.index') }}" method="GET" class="d-flex align-items-center gap-2">
+            <!-- Wybór miesiąca / okresu rozliczeniowego i akcja powiadomień -->
+            <div class="col-auto ms-auto d-print-none d-flex flex-wrap align-items-center gap-2">
+                <form action="{{ route('admin.billing.index') }}" method="GET" class="d-flex align-items-center gap-2 m-0">
                     @if(request('status'))
                         <input type="hidden" name="status" value="{{ request('status') }}">
                     @endif
@@ -27,6 +27,10 @@
                         @endforeach
                     </select>
                 </form>
+
+                <button type="button" class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#modal-send-billing-summary">
+                    <i class="ti ti-bell-ringing me-1"></i> Powiadom rodziców o opłatach
+                </button>
             </div>
         </div>
     </div>
@@ -38,6 +42,13 @@
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show shadow-sm mb-3" role="alert">
                 <i class="ti ti-check me-1"></i> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm mb-3" role="alert">
+                <i class="ti ti-alert-circle me-1"></i> {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
@@ -299,6 +310,78 @@
                     {{ $billingItems->links() }}
                 </div>
             @endif
+        </div>
+    </div>
+</div>
+
+{{-- Modal wysyłki powiadomień o rozliczeniach miesiąca --}}
+<div class="modal modal-blur fade" id="modal-send-billing-summary" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg border-0">
+            <form action="{{ route('admin.notifications.billing-summary') }}" method="POST">
+                @csrf
+                <div class="modal-header bg-surface">
+                    <h5 class="modal-title fw-bold">
+                        <i class="ti ti-bell-ringing me-1.5 text-primary"></i> Powiadom rodziców o rozliczeniach
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-secondary small mb-3">
+                        System automatycznie podsumuje kwoty i roześle spersonalizowane powiadomienia do rodziców z linkiem bezpośrednim do płatności online.
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="form-label required">Miesiąc / Okres rozliczeniowy</label>
+                        <select name="year_month" class="form-select" required>
+                            @foreach($monthOptions as $value => $label)
+                                @if($value !== 'all')
+                                    <option value="{{ $value }}" {{ ($month === $value || ($month === 'all' && $value === now()->format('Y-m'))) ? 'selected' : '' }}>
+                                        {{ $label }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label required">Grupa docelowa rodziców</label>
+                        <div class="form-selectgroup form-selectgroup-boxes d-flex flex-column gap-2">
+                            <label class="form-selectgroup-item">
+                                <input type="radio" name="target_group" value="unpaid" class="form-selectgroup-input" checked>
+                                <div class="form-selectgroup-label d-flex align-items-center p-2.5">
+                                    <span class="badge bg-danger-lt me-2 p-1"><i class="ti ti-alert-triangle fs-3"></i></span>
+                                    <div class="text-start">
+                                        <div class="font-weight-medium">Tylko rodzice z nieopłaconymi rachunkami</div>
+                                        <div class="text-secondary small">Przypomnienie o zaległej kwocie do uregulowania</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="form-selectgroup-item">
+                                <input type="radio" name="target_group" value="all" class="form-selectgroup-input">
+                                <div class="form-selectgroup-label d-flex align-items-center p-2.5">
+                                    <span class="badge bg-primary-lt me-2 p-1"><i class="ti ti-users fs-3"></i></span>
+                                    <div class="text-start">
+                                        <div class="font-weight-medium">Wszyscy rodzice objęci rozliczeniem w tym miesiącu</div>
+                                        <div class="text-secondary small">Zarówno z kwotą do zapłaty, jak i podziękowaniem za opłacenie</div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Dodatkowa notatka / komunikat od placówki (opcjonalnie)</label>
+                        <textarea name="custom_note" class="form-control" rows="3" placeholder="np. Przypominamy o terminie płatności do 10. dnia miesiąca."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer bg-surface">
+                    <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Anuluj</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ti ti-send me-1"></i> Wyślij powiadomienia
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

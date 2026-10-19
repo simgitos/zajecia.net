@@ -22,3 +22,11 @@
         <span class="nav-link-title">Przeprowadzone lekcje</span>
     </a>
 </li>
+<li class="nav-item {{ request()->routeIs('teacher.notifications.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('teacher.notifications.create') }}">
+        <span class="nav-link-icon">
+            <i class="ti ti-send"></i>
+        </span>
+        <span class="nav-link-title">Powiadom grupę</span>
+    </a>
+</li>

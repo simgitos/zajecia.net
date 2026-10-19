@@ -46,6 +46,14 @@
         <span class="nav-link-title">Dokumenty placówki</span>
     </a>
 </li>
+<li class="nav-item {{ request()->routeIs('admin.notifications.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('admin.notifications.create') }}">
+        <span class="nav-link-icon">
+            <i class="ti ti-send"></i>
+        </span>
+        <span class="nav-link-title">Wyślij powiadomienie</span>
+    </a>
+</li>
 <li class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('admin.settings.edit') }}">
         <span class="nav-link-icon">

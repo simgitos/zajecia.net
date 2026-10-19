@@ -33,6 +33,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::put('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
         Route::resource('/documents', \App\Http\Controllers\Admin\DocumentController::class)->names('documents');
         Route::get('/documents/{document}/download', [\App\Http\Controllers\Admin\DocumentController::class, 'download'])->name('documents.download');
+        Route::get('/notifications/create', [\App\Http\Controllers\Admin\NotificationController::class, 'create'])->name('notifications.create');
+        Route::post('/notifications', [\App\Http\Controllers\Admin\NotificationController::class, 'store'])->name('notifications.store');
+        Route::post('/notifications/billing-summary', [\App\Http\Controllers\Admin\NotificationController::class, 'sendBillingSummary'])->name('notifications.billing-summary');
     });
 
 ////////////////////////////////////// Teacher / Nauczyciel
@@ -50,9 +53,11 @@ Route::middleware(['auth', 'verified', 'role:teacher'])
         Route::get('/courses/{course}/lessons/create', [\App\Http\Controllers\Teacher\LessonController::class, 'create'])->name('lessons.create');
         Route::post('/courses/{course}/lessons', [\App\Http\Controllers\Teacher\LessonController::class, 'store'])->name('lessons.store');
         Route::get('/lessons/{lesson}', [\App\Http\Controllers\Teacher\LessonController::class, 'show'])->name('lessons.show');
+        Route::get('/notifications/create', [\App\Http\Controllers\Teacher\NotificationController::class, 'create'])->name('notifications.create');
+        Route::post('/notifications', [\App\Http\Controllers\Teacher\NotificationController::class, 'store'])->name('notifications.store');
     });
 
-////////////////////////////////////// User / Rodzic
+////////////////////////////////////// User / Rodzic & Wspólne dla zalogowanych
 Route::middleware(['auth', 'verified'])
     ->group(function () {
         Route::get('/pulpit', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
@@ -62,6 +67,13 @@ Route::middleware(['auth', 'verified'])
         Route::get('/profil', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profil', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profil', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+        // Powiadomienia użytkownika
+        Route::get('/powiadomienia', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+        Route::post('/powiadomienia/{id}/read', [\App\Http\Controllers\NotificationController::class, 'read'])->name('notifications.read');
+        Route::get('/powiadomienia/{id}/go', [\App\Http\Controllers\NotificationController::class, 'read'])->name('notifications.go');
+        Route::post('/powiadomienia/mark-all-read', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+        Route::get('/powiadomienia/unread-count', [\App\Http\Controllers\NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
     });
 
 Route::middleware(['auth', 'verified', 'role:user'])

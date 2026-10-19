@@ -33,3 +33,18 @@
         <span class="nav-link-title">Dokumenty</span>
     </a>
 </li>
+
+<li class="nav-item {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('notifications.index') }}">
+        <span class="nav-link-icon">
+            <i class="ti ti-bell"></i>
+        </span>
+        <span class="nav-link-title">Powiadomienia</span>
+        @php
+            $navUnread = Auth::user()->unreadNotifications()->count();
+        @endphp
+        @if($navUnread > 0)
+            <span class="badge bg-red ms-auto">{{ $navUnread }}</span>
+        @endif
+    </a>
+</li>

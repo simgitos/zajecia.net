@@ -17,49 +17,85 @@
         <div class="navbar-nav flex-row order-md-last align-items-center">
 
             @auth
-                {{-- Ikona powiadomień z powiadomieniami --}}
+                @php
+                    $unreadCount = Auth::user()->unreadNotifications()->count();
+                    $recentNotifications = Auth::user()->notifications()->latest()->take(5)->get();
+                @endphp
+                {{-- Dynamiczna ikona powiadomień --}}
                 <div class="nav-item dropdown me-2 me-md-3">
-                    <a href="#" class="nav-link px-0 d-flex align-items-center position-relative" data-bs-toggle="dropdown" tabindex="-1" aria-label="Powiadomienia">
+                    <a href="#" class="nav-link px-0 d-flex align-items-center position-relative" data-bs-toggle="dropdown" tabindex="-1" aria-label="Powiadomienia" aria-expanded="false">
                         <i class="ti ti-bell fs-2 text-secondary"></i>
-                        <span class="badge bg-red badge-blink position-absolute top-0 end-0 translate-middle-y rounded-circle p-1"></span>
+                        @if($unreadCount > 0)
+                            <span class="badge bg-red text-red-fg badge-pill position-absolute top-0 end-0 translate-middle-y fs-6 px-1.5 py-0.5 shadow-sm" style="font-size: 0.7rem; min-width: 18px; line-height: 1.2;">
+                                {{ $unreadCount > 99 ? '99+' : $unreadCount }}
+                            </span>
+                        @endif
                     </a>
-                    <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end shadow-lg py-0" style="width: 300px; max-width: 90vw;">
-                        <div class="card border-0">
-                            <div class="card-header d-flex justify-content-between align-items-center py-2 bg-surface">
-                                <h3 class="card-title fw-bold fs-4 mb-0"><i class="ti ti-bell me-1 text-primary"></i> Powiadomienia</h3>
-                                <span class="badge bg-primary-lt">Nowe</span>
-                            </div>
-                            <div class="list-group list-group-flush list-group-hoverable" style="max-height: 240px; overflow-y: auto;">
-                                <div class="list-group-item p-2.5">
-                                    <div class="row align-items-center">
-                                        <div class="col-auto"><span class="status-dot status-dot-animated bg-success d-block"></span></div>
-                                        <div class="col text-truncate">
-                                            <a href="{{ route('dashboard') }}" class="text-body d-block fw-bold fs-5">System gotowy do użycia</a>
-                                            <div class="text-secondary small text-truncate">Witaj w panelu Zajęciownia.pl</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @if(Auth::user()->hasRole('user'))
-                                <div class="list-group-item p-2.5">
-                                    <div class="row align-items-center">
-                                        <div class="col-auto"><span class="status-dot bg-warning d-block"></span></div>
-                                        <div class="col text-truncate">
-                                            <a href="{{ route('user.payments.index') }}" class="text-body d-block fw-bold fs-5">Stan rozliczeń</a>
-                                            <div class="text-secondary small text-truncate">Sprawdź opłaty za zajęcia</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @elseif(Auth::user()->hasRole('teacher'))
-                                <div class="list-group-item p-2.5">
-                                    <div class="row align-items-center">
-                                        <div class="col-auto"><span class="status-dot bg-azure d-block"></span></div>
-                                        <div class="col text-truncate">
-                                            <a href="{{ route('teacher.courses.index') }}" class="text-body d-block fw-bold fs-5">Moje zajęcia</a>
-                                            <div class="text-secondary small text-truncate">Lista zajęć i ewidencja obecności</div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end shadow-lg py-0" style="width: 360px; max-width: 92vw;">
+                        <div class="card border-0 mb-0">
+                            <div class="card-header d-flex justify-content-between align-items-center py-2.5 bg-surface border-bottom">
+                                <h3 class="card-title fw-bold fs-4 mb-0 d-flex align-items-center">
+                                    <i class="ti ti-bell me-1.5 text-primary"></i> Powiadomienia
+                                </h3>
+                                @if($unreadCount > 0)
+                                    <form action="{{ route('notifications.mark-all-read') }}" method="POST" class="m-0">
+                                        @csrf
+                                        <button type="submit" class="btn btn-link btn-sm text-muted text-decoration-none p-0 fs-6">
+                                            <i class="ti ti-check-double me-1"></i>Oznacz wszystkie
+                                        </button>
+                                    </form>
                                 @endif
+                            </div>
+                            <div class="list-group list-group-flush list-group-hoverable" style="max-height: 320px; overflow-y: auto;">
+                                @forelse($recentNotifications as $notification)
+                                    @php
+                                        $data = $notification->data;
+                                        $type = $data['type'] ?? 'info';
+                                        $isUnread = is_null($notification->read_at);
+                                        $statusClass = match($type) {
+                                            'warning' => 'bg-warning',
+                                            'danger'  => 'bg-danger',
+                                            'success' => 'bg-success',
+                                            default   => 'bg-azure',
+                                        };
+                                    @endphp
+                                    <a href="{{ route('notifications.go', $notification->id) }}" 
+                                       class="list-group-item list-group-item-action p-2.5 text-reset {{ $isUnread ? 'bg-primary-lt-subtle border-start border-3 border-primary' : '' }}">
+                                        <div class="row align-items-start g-2">
+                                            <div class="col-auto pt-1">
+                                                <span class="status-dot {{ $isUnread ? 'status-dot-animated' : '' }} {{ $statusClass }} d-block"></span>
+                                            </div>
+                                            <div class="col text-truncate">
+                                                <div class="d-flex justify-content-between align-items-center mb-0.5">
+                                                    <span class="d-block text-truncate {{ $isUnread ? 'fw-bold text-dark' : 'text-body' }} fs-5">
+                                                        {{ $data['title'] ?? 'Nowe powiadomienie' }}
+                                                    </span>
+                                                    <span class="badge text-secondary bg-transparent p-0 fs-6 flex-shrink-0 ms-1">
+                                                        {{ $notification->created_at->diffForHumans() }}
+                                                    </span>
+                                                </div>
+                                                <div class="text-secondary small text-truncate">
+                                                    {{ Str::limit($data['message'] ?? '', 75) }}
+                                                </div>
+                                                @if(!empty($data['sender_name']))
+                                                    <div class="text-muted extra-small mt-0.5" style="font-size: 0.72rem;">
+                                                        <i class="ti ti-user me-0.5"></i>{{ $data['sender_name'] }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <div class="p-4 text-center text-muted">
+                                        <i class="ti ti-bell-off fs-1 d-block mb-1 opacity-40"></i>
+                                        <div class="small">Brak nowych powiadomień</div>
+                                    </div>
+                                @endforelse
+                            </div>
+                            <div class="card-footer text-center py-2 bg-surface border-top">
+                                <a href="{{ route('notifications.index') }}" class="btn btn-outline-primary btn-sm w-100">
+                                    <i class="ti ti-list me-1"></i> Wszystkie powiadomienia
+                                </a>
                             </div>
                         </div>
                     </div>
