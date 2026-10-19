@@ -44,7 +44,7 @@
   <meta property="twitter:image" content="{{ asset('images/hero-mockup.jpg') }}">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/jpeg" href="{{ asset('images/logo.jpg') }}">
+  <link rel="icon" type="image/jpeg" href="{{ asset('images/logo.png') }}">
 
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
