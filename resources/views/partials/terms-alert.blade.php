@@ -42,21 +42,29 @@
                         <div class="form-check mb-2">
                             <input class="form-check-input consent-checkbox" type="checkbox" name="terms_accepted"
                                 id="consent_terms" value="1" required {{ old('terms_accepted') ? 'checked' : '' }}>
-                            <label class="form-check-label  " for="consent_terms">
-                               Zapoznałem i akceptuję <a href="{{ $termsDoc->fileUrl() }}" target="_blank">Regulamin
-                                    {{ $userActiveSchool->name }}</a>. *
+                            <label class="form-check-label" for="consent_terms">
+                                Zapoznałem i akceptuję 
+                                @if($termsDoc)
+                                    <a href="{{ $termsDoc->fileUrl() }}" target="_blank">Regulamin {{ $userActiveSchool->name }}</a>
+                                @else
+                                    Regulamin {{ $userActiveSchool->name }}
+                                @endif
+                                .*
                             </label>
-
                         </div>
 
                         <div class="form-check mb-2">
                             <input class="form-check-input consent-checkbox" type="checkbox" name="rodo_accepted"
                                 id="consent_rodo" value="1" required {{ old('rodo_accepted') ? 'checked' : '' }}>
-                            <label class="form-check-label  " for="consent_rodo">
-                                Zapoznałem/am się z <a href="{{ $rodoDoc->fileUrl() }}" target="_blank">Klauzulą Informacyjną
-                                    RODO</a>.*
+                            <label class="form-check-label" for="consent_rodo">
+                                Zapoznałem/am się z 
+                                @if($rodoDoc)
+                                    <a href="{{ $rodoDoc->fileUrl() }}" target="_blank">Klauzulą Informacyjną RODO</a>
+                                @else
+                                    Klauzulą Informacyjną RODO
+                                @endif
+                                .*
                             </label>
-
                         </div>
 
                         <div class="form-check mb-2">
@@ -68,15 +76,16 @@
                             </label>
                         </div>
 
-                        <div class="form-check">
+                        <div class="form-check mb-2">
                             <input class="form-check-input consent-checkbox" type="checkbox" name="marketing_consent"
                                 id="consent_marketing" value="1" {{ old('marketing_consent') ? 'checked' : '' }}>
                             <label class="form-check-label" for="consent_marketing">
                                 Wyrażam zgodę na kontakt SMS/e-mail w celach promocyjnych.
                             </label>
                         </div>
-                        <div class="form-check fw-bold">
-                            <input type="checkbox" class="form-check-input consent-checkbox" name="select-all"
+
+                        <div class="form-check fw-bold mt-2 pt-2 border-top">
+                            <input type="checkbox" class="form-check-input" name="select-all"
                                 id="btn-select-all-consents">
                             <label class="form-check-label" for="btn-select-all-consents">
                                 Zaznacz wszystkie zgody
@@ -97,9 +106,9 @@
             document.addEventListener('DOMContentLoaded', function () {
                 var btnSelectAll = document.getElementById('btn-select-all-consents');
                 if (btnSelectAll) {
-                    btnSelectAll.addEventListener('click', function () {
+                    btnSelectAll.addEventListener('change', function () {
                         document.querySelectorAll('.consent-checkbox').forEach(function (cb) {
-                            cb.checked = true;
+                            cb.checked = btnSelectAll.checked;
                         });
                     });
                 }
