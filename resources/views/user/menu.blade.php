@@ -24,3 +24,12 @@
         <span class="nav-link-title">Płatności</span>
     </a>
 </li>
+
+<li class="nav-item {{ request()->routeIs('user.documents.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('user.documents.index') }}">
+        <span class="nav-link-icon">
+            <i class="ti ti-files"></i>
+        </span>
+        <span class="nav-link-title">Dokumenty</span>
+    </a>
+</li>

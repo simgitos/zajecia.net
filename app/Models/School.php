@@ -85,8 +85,21 @@ class School extends Model
     public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class, 'school_user')
-            ->withPivot('terms_accepted_at', 'roles')
+            ->withPivot([
+                'terms_accepted_at',
+                'terms_accepted_ip',
+                'rodo_accepted_at',
+                'rodo_accepted_ip',
+                'image_consent_accepted_at',
+                'marketing_consent_accepted_at',
+                'roles',
+            ])
             ->withTimestamps();
+    }
+
+    public function documents(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Document::class);
     }
 
     public function seasons(): \Illuminate\Database\Eloquent\Relations\HasMany

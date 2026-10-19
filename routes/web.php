@@ -31,6 +31,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::post('/billing/{item}/mark-unpaid', [\App\Http\Controllers\Admin\BillingController::class, 'markUnpaid'])->name('billing.mark-unpaid');
         Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'edit'])->name('settings.edit');
         Route::put('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
+        Route::resource('/documents', \App\Http\Controllers\Admin\DocumentController::class)->names('documents');
+        Route::get('/documents/{document}/download', [\App\Http\Controllers\Admin\DocumentController::class, 'download'])->name('documents.download');
     });
 
 ////////////////////////////////////// Teacher / Nauczyciel
@@ -75,6 +77,9 @@ Route::middleware(['auth', 'verified', 'role:user'])
         Route::post('/platnosci/{item}/pay', [\App\Http\Controllers\User\PaymentController::class, 'payItem'])->name('payments.pay-item');
         Route::get('/platnosci/sukces', [\App\Http\Controllers\User\PaymentController::class, 'success'])->name('payments.success');
         Route::get('/platnosci/blad', [\App\Http\Controllers\User\PaymentController::class, 'error'])->name('payments.error');
+        Route::get('/dokumenty', [\App\Http\Controllers\User\DocumentController::class, 'index'])->name('documents.index');
+        Route::get('/dokumenty/{document}/download', [\App\Http\Controllers\User\DocumentController::class, 'download'])->name('documents.download');
+        Route::post('/dokumenty/zgody', [\App\Http\Controllers\User\DocumentController::class, 'updateConsents'])->name('documents.consents');
     });
 
 // Tpay Webhook

@@ -38,6 +38,14 @@
         <span class="nav-link-title">Użytkownicy</span>
     </a>
 </li>
+<li class="nav-item {{ request()->routeIs('admin.documents.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('admin.documents.index') }}">
+        <span class="nav-link-icon">
+            <i class="ti ti-files"></i>
+        </span>
+        <span class="nav-link-title">Dokumenty placówki</span>
+    </a>
+</li>
 <li class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('admin.settings.edit') }}">
         <span class="nav-link-icon">

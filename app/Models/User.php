@@ -142,7 +142,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function schools(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(School::class, 'school_user')
-            ->withPivot('terms_accepted_at', 'roles')
+            ->withPivot([
+                'terms_accepted_at',
+                'terms_accepted_ip',
+                'rodo_accepted_at',
+                'rodo_accepted_ip',
+                'image_consent_accepted_at',
+                'marketing_consent_accepted_at',
+                'roles',
+            ])
             ->withTimestamps();
     }
 
@@ -169,7 +177,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Sprawdza, czy użytkownik zaakceptował regulamin dla aktualnie aktywnej szkoły.
+     * Sprawdza, czy użytkownik zaakceptował regulamin oraz RODO dla aktualnie aktywnej szkoły.
      */
     public function hasAcceptedTermsForActiveSchool(): bool
     {
@@ -183,7 +191,20 @@ class User extends Authenticatable implements MustVerifyEmail
             return true;
         }
 
-        return $membership->pivot->terms_accepted_at !== null;
+        return $membership->pivot->terms_accepted_at !== null && $membership->pivot->rodo_accepted_at !== null;
+    }
+
+    /**
+     * Zwraca rekord pivot ze zgodami dla aktualnie aktywnej szkoły.
+     */
+    public function activeSchoolMembership()
+    {
+        $activeSchool = $this->activeSchool();
+        if (!$activeSchool) {
+            return null;
+        }
+
+        return $this->schools()->where('schools.id', $activeSchool->id)->first();
     }
 
     /**
