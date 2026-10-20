@@ -67,7 +67,7 @@
                             </label>
                         </div>
 
-                        <div class="form-check mb-2">
+                        <!-- <div class="form-check mb-2">
                             <input class="form-check-input consent-checkbox" type="checkbox" name="image_consent"
                                 id="consent_image" value="1" {{ old('image_consent') ? 'checked' : '' }}>
                             <label class="form-check-label" for="consent_image">
@@ -82,7 +82,7 @@
                             <label class="form-check-label" for="consent_marketing">
                                 Wyrażam zgodę na kontakt SMS/e-mail w celach promocyjnych.
                             </label>
-                        </div>
+                        </div> -->
 
                         <div class="form-check fw-bold mt-2 pt-2 border-top">
                             <input type="checkbox" class="form-check-input" name="select-all"
