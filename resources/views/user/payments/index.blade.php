@@ -189,8 +189,22 @@
                                                                 </div>
                                                                 <small class="text-secondary d-block mt-1">
                                                                     <i class="ti ti-calendar me-1"></i> Okres: <strong>{{ ucfirst($monthLabel) }}</strong>
-                                                                    
                                                                 </small>
+                                                                <div class="d-flex align-items-center gap-1.5 flex-wrap mt-1">
+                                                                    <span class="badge bg-success-lt text-success fs-6" title="Obecności (płatne)">
+                                                                        <i class="ti ti-check me-0.5"></i>{{ $item->present_count }} obecności
+                                                                    </span>
+                                                                    @if($item->absent_count > 0)
+                                                                        <span class="badge bg-danger-lt text-danger fs-6" title="Nieobecności (płatne)">
+                                                                            <i class="ti ti-x me-0.5"></i>{{ $item->absent_count }} nieobecności
+                                                                        </span>
+                                                                    @endif
+                                                                    @if($item->excused_count > 0)
+                                                                        <span class="badge bg-warning-lt text-warning fs-6" title="Usprawiedliwione (bezpłatne)">
+                                                                            <i class="ti ti-clock me-0.5"></i>{{ $item->excused_count }} uspr.
+                                                                        </span>
+                                                                    @endif
+                                                                </div>
                                                                 @if($item->notes)
                                                                     <small class="text-muted d-block mt-1 bg-light p-1 px-2 rounded">
                                                                         {{ $item->notes }}

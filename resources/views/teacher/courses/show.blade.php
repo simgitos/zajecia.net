@@ -247,11 +247,24 @@
                                         @else
                                             @php
                                                 $present = $lesson->attendances->where('status', 'present')->count();
-                                                $total = $lesson->attendances->count();
+                                                $absent = $lesson->attendances->where('status', 'absent')->count();
+                                                $excused = $lesson->attendances->where('status', 'excused')->count();
                                             @endphp
-                                            <span class="badge bg-success-lt fw-bold fs-4">
-                                                <i class="ti ti-users me-1"></i> {{ $present }} / {{ $total }} obecnych
-                                            </span>
+                                            <div class="d-flex align-items-center gap-1 flex-wrap">
+                                                <span class="badge bg-success-lt fw-bold fs-4" title="Obecni">
+                                                    <i class="ti ti-check me-1"></i> {{ $present }} obecnych
+                                                </span>
+                                                @if($absent > 0)
+                                                    <span class="badge bg-danger-lt fw-bold fs-4" title="Nieobecni">
+                                                        <i class="ti ti-x me-1"></i> {{ $absent }} nieobecnych
+                                                    </span>
+                                                @endif
+                                                @if($excused > 0)
+                                                    <span class="badge bg-warning-lt fw-bold fs-4" title="Usprawiedliwieni">
+                                                        <i class="ti ti-clock me-1"></i> {{ $excused }} uspr.
+                                                    </span>
+                                                @endif
+                                            </div>
                                         @endif
                                     </td>
                                     <td>

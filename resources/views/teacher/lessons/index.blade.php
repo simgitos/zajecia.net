@@ -74,9 +74,48 @@
                                             {{ $lesson->realized_at ? $lesson->realized_at->format('d.m.Y') : '—' }}
                                         </td>
                                         <td>
-                                            <span class="badge bg-green-lt text-green fw-semibold">
-                                                <i class="ti ti-check me-1"></i>{{ $lesson->attendances_count }} obecnych
-                                            </span>
+                                            @if($lesson->course?->isIndividual())
+                                                @php $firstAtt = $lesson->attendances->first(); @endphp
+                                                @if($firstAtt && $firstAtt->child)
+                                                    <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                                                        <span class="fw-semibold text-dark">{{ $firstAtt->child->name }}:</span>
+                                                        @switch($firstAtt->status)
+                                                            @case('present')
+                                                                <span class="badge bg-success-lt text-success fw-semibold"><i class="ti ti-check me-1"></i>Obecny</span>
+                                                                @break
+                                                            @case('absent')
+                                                                <span class="badge bg-danger-lt text-danger fw-semibold"><i class="ti ti-x me-1"></i>Nieobecny</span>
+                                                                @break
+                                                            @case('excused')
+                                                                <span class="badge bg-warning-lt text-warning fw-semibold"><i class="ti ti-clock me-1"></i>Usprawiedliwiony</span>
+                                                                @break
+                                                        @endswitch
+                                                    </div>
+                                                @else
+                                                    <span class="text-muted">Brak danych</span>
+                                                @endif
+                                            @else
+                                                @php
+                                                    $presentCount = $lesson->attendances->where('status', 'present')->count();
+                                                    $absentCount = $lesson->attendances->where('status', 'absent')->count();
+                                                    $excusedCount = $lesson->attendances->where('status', 'excused')->count();
+                                                @endphp
+                                                <div class="d-flex align-items-center gap-1 flex-wrap">
+                                                    <span class="badge bg-success-lt text-success fw-semibold" title="Obecni">
+                                                        <i class="ti ti-check me-1"></i>{{ $presentCount }} obecnych
+                                                    </span>
+                                                    @if($absentCount > 0)
+                                                        <span class="badge bg-danger-lt text-danger fw-semibold" title="Nieobecni">
+                                                            <i class="ti ti-x me-1"></i>{{ $absentCount }} nieobecnych
+                                                        </span>
+                                                    @endif
+                                                    @if($excusedCount > 0)
+                                                        <span class="badge bg-warning-lt text-warning fw-semibold" title="Usprawiedliwieni">
+                                                            <i class="ti ti-clock me-1"></i>{{ $excusedCount }} uspr.
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            @endif
                                         </td>
                                         <td class="text-end">
                                             <a href="{{ route('teacher.lessons.show', $lesson) }}"

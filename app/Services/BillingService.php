@@ -41,10 +41,12 @@ class BillingService
             }
         }
 
+        $enrollmentStartOfDay = $enrollmentTimestamp ? Carbon::parse($enrollmentTimestamp)->startOfDay() : null;
+
         $startDate = $selectedDate->copy()->startOfMonth();
         $endDate = $selectedDate->copy()->endOfMonth();
 
-        // Pobranie zrealizowanych lekcji dla tego kursu w tym miesiącu wraz z obecnościami
+        // Pobranie zrealizowanych lekcji dla tego kursu w tym miesiącu wraz z obecnościami dziecka
         $lessons = $course->lessons()
             ->whereBetween('realized_at', [$startDate, $endDate])
             ->with(['attendances' => function ($query) use ($child) {
@@ -52,14 +54,22 @@ class BillingService
             }])
             ->get();
 
-        $realizedLessonsCount = $lessons->count();
+        $childLessonsCount = 0;
         $presentCount = 0;
         $absentCount = 0;
         $excusedCount = 0;
 
         foreach ($lessons as $lesson) {
+            $lessonDate = Carbon::parse($lesson->realized_at)->startOfDay();
+
+            // Lekcja z datą sprzed momentu zapisu dziecka do kursu nie dotyczy tego dziecka
+            if ($enrollmentStartOfDay && $lessonDate->lt($enrollmentStartOfDay)) {
+                continue;
+            }
+
             $childAttendance = $lesson->attendances->first();
             if ($childAttendance) {
+                $childLessonsCount++;
                 if ($childAttendance->status === 'present') {
                     $presentCount++;
                 } elseif ($childAttendance->status === 'absent') {
@@ -73,37 +83,41 @@ class BillingService
         $amount = 0.0;
         $calculationNote = '';
 
-        if ($realizedLessonsCount === 0) {
+        // Naliczenie opłaty (zarówno ryczałtu jak i opłat za lekcję) następuje dopiero po odbyciu zajęć przez uczestnika
+        if ($childLessonsCount === 0) {
             $amount = 0.0;
-            $calculationNote = 'Brak przeprowadzonych lekcji w tym miesiącu';
+            $calculationNote = 'Brak odbytych lekcji dla uczestnika od momentu zapisu w tym miesiącu';
         } else {
             switch ($course->billing_type) {
                 case 'monthly_flat':
-                    if ($course->type === 'individual' && $excusedCount > 0 && $presentCount === 0) {
+                    if ($course->type === 'individual' && $excusedCount > 0 && $presentCount === 0 && $absentCount === 0) {
                         $amount = 0.0;
-                        $calculationNote = 'Zajęcia indywidualne usprawiedliwione';
+                        $calculationNote = 'Zajęcia indywidualne usprawiedliwione (bez opłaty)';
                     } else {
                         $amount = (float) $course->price_per_unit;
-                        $calculationNote = 'Stały ryczałt miesięczny';
+                        $calculationNote = "Stały ryczałt miesięczny (zrealizowano {$childLessonsCount} zajęć od zapisu)";
                     }
                     break;
 
                 case 'per_lesson_monthly':
                 case 'per_lesson_single':
-                    if ($course->type === 'individual') {
-                        $billableCount = $presentCount;
-                    } else {
-                        $billableCount = max(0, $realizedLessonsCount - $excusedCount);
-                    }
+                    // Zgodnie z zasadami: obecny i nieobecny dolicza kwotę do billingu, usprawiedliwiony nie dolicza
+                    $billableCount = $presentCount + $absentCount;
 
                     $amount = (float) $course->price_per_unit * $billableCount;
                     $priceFormatted = number_format((float) $course->price_per_unit, 2, ',', ' ');
 
-                    if ($course->type === 'individual') {
-                        $calculationNote = "{$billableCount} płatnych lekcji indywidualnych ({$presentCount} obecności, {$excusedCount} usprawiedliwionych)";
-                    } else {
-                        $calculationNote = "{$billableCount} płatnych lekcji ({$realizedLessonsCount} zrealizowanych, {$excusedCount} usprawiedliwionych) × {$priceFormatted} zł";
+                    $parts = [];
+                    $parts[] = "{$presentCount} obecn.";
+                    if ($absentCount > 0) {
+                        $parts[] = "{$absentCount} nieobecn. (płatne)";
                     }
+                    if ($excusedCount > 0) {
+                        $parts[] = "{$excusedCount} uspr. (bezpłatne)";
+                    }
+
+                    $details = implode(', ', $parts);
+                    $calculationNote = "{$billableCount} płatnych lekcji ({$details}) × {$priceFormatted} zł";
                     break;
             }
         }
@@ -126,7 +140,7 @@ class BillingService
         $billingItem->parent_id = $child->parent_id;
         $billingItem->billing_type = $course->billing_type;
         $billingItem->price_per_unit = (float) $course->price_per_unit;
-        $billingItem->realized_lessons_count = $realizedLessonsCount;
+        $billingItem->realized_lessons_count = $childLessonsCount;
         $billingItem->present_count = $presentCount;
         $billingItem->excused_count = $excusedCount;
         $billingItem->absent_count = $absentCount;
@@ -207,5 +221,28 @@ class BillingService
             'payment_method' => null,
             'transaction_id' => null,
         ]);
+    }
+
+    /**
+     * Przelicza wszystkie pozycje rozliczeniowe w szkole lub globalnie dla nieopłaconych wpisów.
+     */
+    public function recalculateAllUnpaid(?int $schoolId = null): int
+    {
+        $query = BillingItem::where('status', 'unpaid')->with(['child', 'course']);
+        if ($schoolId) {
+            $query->where('school_id', $schoolId);
+        }
+
+        $items = $query->get();
+        $count = 0;
+
+        foreach ($items as $item) {
+            if ($item->child && $item->course) {
+                $this->syncBillingItem($item->child, $item->course, $item->year_month);
+                $count++;
+            }
+        }
+
+        return $count;
     }
 }

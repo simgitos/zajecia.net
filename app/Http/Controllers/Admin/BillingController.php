@@ -24,9 +24,14 @@ class BillingController extends Controller
     /**
      * Lista rozliczeń i pozycji płatności w szkole dla administratora.
      */
-    public function index(Request $request): View
+    public function index(Request $request, BillingService $service): View
     {
         $schoolId = Auth::user()->school_id;
+
+        // Upewnij się, że nieopłacone pozycje rozliczeniowe są aktualne
+        if ($schoolId) {
+            $service->recalculateAllUnpaid($schoolId);
+        }
 
         // Domyślnie wybrany bieżący miesiąc, chyba że użytkownik wybierze konkretny miesiąc lub "all"
         $month = $request->input('month', now()->format('Y-m'));

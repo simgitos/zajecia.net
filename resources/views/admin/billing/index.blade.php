@@ -208,12 +208,22 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <small class="d-block">
+                                    <div class="d-flex align-items-center gap-1 flex-wrap mb-1">
+                                        <span class="badge bg-success-lt text-success" title="Obecności (płatne)">
+                                            <i class="ti ti-check me-0.5"></i>{{ $item->present_count }} obecn.
+                                        </span>
+                                        <span class="badge {{ $item->absent_count > 0 ? 'bg-danger-lt text-danger' : 'bg-secondary-lt text-secondary opacity-50' }}" title="Nieobecności (płatne)">
+                                            <i class="ti ti-x me-0.5"></i>{{ $item->absent_count }} nieobecn.
+                                        </span>
+                                        <span class="badge {{ $item->excused_count > 0 ? 'bg-warning-lt text-warning' : 'bg-secondary-lt text-secondary opacity-50' }}" title="Usprawiedliwione (bezpłatne)">
+                                            <i class="ti ti-clock me-0.5"></i>{{ $item->excused_count }} uspr.
+                                        </span>
+                                    </div>
+                                    <small class="text-secondary d-block">
                                         Odbytych lekcji: <strong>{{ $item->realized_lessons_count }}</strong>
-                                    </small>
-                                    <small class="text-muted">
-                                        <span class="text-success">{{ $item->present_count }} obecności</span>,
-                                        <span class="text-warning">{{ $item->excused_count }} uspr.</span>
+                                        @if(in_array($item->billing_type, ['per_lesson_monthly', 'per_lesson_single']))
+                                            &bull; Płatnych: <strong class="text-primary">{{ $item->present_count + $item->absent_count }}</strong>
+                                        @endif
                                     </small>
                                 </td>
                                 <td>

@@ -41,17 +41,47 @@
                             <span class="text-secondary d-block fs-5">Frekwencja</span>
                             @if($lesson->course->isIndividual())
                                 @php $firstAtt = $lesson->attendances->first(); @endphp
-                                <span class="badge bg-azure-lt fs-3 fw-bold">
-                                    <i class="ti ti-user me-1"></i> Sesja indywidualna: {{ $firstAtt?->child?->name ?? '1 uczestnik' }}
-                                </span>
+                                @if($firstAtt && $firstAtt->child)
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <span class="fw-bold fs-4">{{ $firstAtt->child->name }}:</span>
+                                        @switch($firstAtt->status)
+                                            @case('present')
+                                                <span class="badge bg-success text-white fs-4"><i class="ti ti-check me-1"></i>Obecny</span>
+                                                @break
+                                            @case('absent')
+                                                <span class="badge bg-danger text-white fs-4"><i class="ti ti-x me-1"></i>Nieobecny</span>
+                                                @break
+                                            @case('excused')
+                                                <span class="badge bg-warning text-white fs-4"><i class="ti ti-clock me-1"></i>Usprawiedliwiony</span>
+                                                @break
+                                        @endswitch
+                                    </div>
+                                @else
+                                    <span class="badge bg-azure-lt fs-4">Brak danych uczestnika</span>
+                                @endif
                             @else
                                 @php
                                     $presentCount = $lesson->attendances->where('status', 'present')->count();
+                                    $absentCount = $lesson->attendances->where('status', 'absent')->count();
+                                    $excusedCount = $lesson->attendances->where('status', 'excused')->count();
                                     $totalCount = $lesson->attendances->count();
                                 @endphp
-                                <span class="badge bg-success-lt fs-3 fw-bold">
-                                    Obecnych: {{ $presentCount }} / {{ $totalCount }}
-                                </span>
+                                <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                                    <span class="badge bg-success-lt text-success fw-bold fs-4" title="Obecni">
+                                        <i class="ti ti-check me-1"></i> {{ $presentCount }} obecnych
+                                    </span>
+                                    @if($absentCount > 0)
+                                        <span class="badge bg-danger-lt text-danger fw-bold fs-4" title="Nieobecni">
+                                            <i class="ti ti-x me-1"></i> {{ $absentCount }} nieobecnych
+                                        </span>
+                                    @endif
+                                    @if($excusedCount > 0)
+                                        <span class="badge bg-warning-lt text-warning fw-bold fs-4" title="Usprawiedliwieni">
+                                            <i class="ti ti-clock me-1"></i> {{ $excusedCount }} uspr.
+                                        </span>
+                                    @endif
+                                    <span class="text-secondary small ms-1">(z {{ $totalCount }})</span>
+                                </div>
                             @endif
                         </div>
                         @if($lesson->notes)
