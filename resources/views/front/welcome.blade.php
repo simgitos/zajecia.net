@@ -336,76 +336,430 @@
 <!-- Sekcja Cennika -->
 <section id="cennik" class="py-6 bg-white border-top border-bottom">
   <div class="container-xl">
-    <div class="text-center max-w-2xl mx-auto mb-5">
-      <span class="badge bg-green-subtle text-success fw-bold px-3 py-2 rounded-pill mb-2">PRZERZYSTY CENNIK</span>
-      <h2 class="display-6 fw-extrabold text-dark">Proste Plany Bez Ukrytych Kosztów</h2>
-      <p class="text-secondary fs-3">Wybierz plan dopasowany do wielkości Twojej szkoły lub placówki edukacyjnej.</p>
+    <div class="text-center max-w-2xl mx-auto mb-4">
+      <span class="badge bg-green-subtle text-success fw-bold px-3 py-2 rounded-pill mb-2">PRZEJRZYSTY CENNIK</span>
+      <h2 class="display-6 fw-extrabold text-dark">Wybierz Plan Dopasowany do Twojej Placówki</h2>
+      <p class="text-secondary fs-3 mb-3">Elastyczne pakiety bez ukrytych opłat. Przetestuj dowolny pakiet za darmo przez 14 dni.</p>
+      
+      <!-- Przełącznik rozliczenia (Zachęta do umowy rocznej) -->
+      <div class="d-inline-flex align-items-center bg-light p-1 rounded-pill border shadow-sm">
+        <button type="button" class="btn btn-sm rounded-pill px-3 py-2 fw-bold btn-primary" id="btn-billing-annual" onclick="switchBilling('annual')">
+          Rozliczenie roczne <span class="badge bg-success text-white ms-1">2 mies. gratis (-20%)</span>
+        </button>
+        <button type="button" class="btn btn-sm rounded-pill px-3 py-2 fw-semibold text-secondary" id="btn-billing-monthly" onclick="switchBilling('monthly')">
+          Rozliczenie miesięczne
+        </button>
+      </div>
+    </div>
+
+    <!-- Pasek gwarancji 14-dniowego testu -->
+    <div class="alert alert-success bg-green-subtle border-green-subtle text-green-900 rounded-3 text-center mb-5 py-2 px-3 d-flex align-items-center justify-content-center gap-2">
+      <i class="ti ti-circle-check-filled fs-2 text-success"></i>
+      <span><strong>14 dni bezpłatnego testu</strong> bez podawania karty płatniczej. Pełny dostęp do modułów i natychmiastowe uruchomienie.</span>
     </div>
 
     <div class="row g-4 align-items-stretch">
-      <!-- Plan Start -->
-      <div class="col-lg-4">
-        <div class="pricing-card shadow-sm">
-          <h3 class="fw-bold text-dark fs-2 mb-1">Plan Start</h3>
-          <p class="text-secondary small mb-4">Dla małych jednostek, korepetytorów...</p>
-          <div class="mb-4">
-            <span class="display-5 fw-extrabold text-dark"> zł</span>
-            <span class="text-secondary">/ miesiąc</span>
+      <!-- 1. Plan SOLO -->
+      <div class="col-12 col-md-6 col-xl-3">
+        <div class="pricing-card shadow-sm h-100 d-flex flex-column border">
+          <div class="mb-3">
+            <span class="badge bg-secondary-subtle text-secondary fw-bold px-2 py-1 rounded">🍮 SOLO</span>
+            <h3 class="fw-bold text-dark fs-2 mt-2 mb-1">Solo</h3>
+            <p class="text-secondary small mb-0">Dla korepetytorów i działalności 1-osobowej</p>
           </div>
-          <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary">
-            <li><i class="ti ti-check text-success me-2"></i> Do 50 uczniów</li>
-            <li><i class="ti ti-check text-success me-2"></i> Zarządzanie grupami</li>
-            <li><i class="ti ti-check text-success me-2"></i> Dziennik obecności na telefonie</li>
-            <li><i class="ti ti-check text-success me-2"></i> Podstawowe rozliczenia opłat</li>
+
+          <div class="my-3 py-2 border-top border-bottom">
+            <div class="pricing-price" data-annual-price="49" data-monthly-price="69">
+              <span class="display-6 fw-extrabold text-dark price-val">49</span>
+              <span class="fs-4 fw-bold text-dark">zł</span>
+              <span class="text-secondary small">netto / mc</span>
+            </div>
+            <div class="text-muted small price-gross">(60,27 zł brutto)</div>
+            <div class="text-success small fw-medium mt-1 billing-note">w umowie rocznej</div>
+          </div>
+
+          <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary flex-grow-1">
+            <li class="d-flex align-items-start">
+              <i class="ti ti-users text-primary me-2 mt-1"></i>
+              <span><strong>Do 30</strong> aktywnych zapisów <span class="text-muted small">(~20–30 dzieci)</span></span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-user-check text-primary me-2 mt-1"></i>
+              <span><strong>1 instruktor</strong></span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Dziennik elektroniczny & zapisy</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Rozliczenia Tpay / Płatności z dołu</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Dokumentacja RODO & Regulaminy</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Powiadomienia E-mail & In-App</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-chart-bar text-muted me-2 mt-1"></i>
+              <span>Raporty podstawowe</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-help text-muted me-2 mt-1"></i>
+              <span>Wdrożenie: Samoobsługa</span>
+            </li>
           </ul>
-          <a href="{{ route('register') }}" class="btn btn-outline-primary w-100 fw-bold mt-auto py-2">Wybierz Plan Start</a>
+
+          <a href="{{ route('register') }}" class="btn btn-outline-primary w-100 fw-bold py-2 mt-auto">
+            Testuj 14 dni za darmo
+          </a>
         </div>
       </div>
 
-      <!-- Plan Pro (Rekomendowany) -->
-      <div class="col-lg-4">
-        <div class="pricing-card featured shadow">
-          <span class="pricing-badge">Najchętniej wybierany</span>
-          <h3 class="fw-bold text-primary fs-2 mb-1">Plan Pro</h3>
-          <p class="text-secondary small mb-4">Dla domów kultury, placówek i szkół językowych, muzycznych, sportowych i MDK-ów.</p>
-          <div class="mb-4">
-            <span class="display-5 fw-extrabold text-primary"> zł</span>
-            <span class="text-secondary">/ miesiąc</span>
+      <!-- 2. Plan START -->
+      <div class="col-12 col-md-6 col-xl-3">
+        <div class="pricing-card shadow-sm h-100 d-flex flex-column border">
+          <div class="mb-3">
+            <span class="badge bg-secondary-subtle text-secondary fw-bold px-2 py-1 rounded">🥇 START</span>
+            <h3 class="fw-bold text-dark fs-2 mt-2 mb-1">Start</h3>
+            <p class="text-secondary small mb-0">Mały / Wiejski GOK, kluby i sekcje</p>
           </div>
-          <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary">
-            <li><i class="ti ti-check text-success me-2"></i> <strong>Do 200 uczestników</strong></li>
-            <li><i class="ti ti-check text-success me-2"></i> Powiadomienia na e-mail i w aplikacji</li>
-            <li><i class="ti ti-check text-success me-2"></i> Płatności online BLIK i kartą dla rodziców</li>
-            <li><i class="ti ti-check text-success me-2"></i> Wskaźnik obłożenia grup (np. 5/15)</li>
-            <li><i class="ti ti-check text-success me-2"></i> Portal dla Opiekuna</li>
-            <li><i class="ti ti-check text-success me-2"></i> Automatyczne rozliczenia od zapisu</li>
+
+          <div class="my-3 py-2 border-top border-bottom">
+            <div class="pricing-price" data-annual-price="149" data-monthly-price="189">
+              <span class="display-6 fw-extrabold text-dark price-val">149</span>
+              <span class="fs-4 fw-bold text-dark">zł</span>
+              <span class="text-secondary small">netto / mc</span>
+            </div>
+            <div class="text-muted small price-gross">(183,27 zł brutto)</div>
+            <div class="text-success small fw-medium mt-1 billing-note">w umowie rocznej</div>
+          </div>
+
+          <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary flex-grow-1">
+            <li class="d-flex align-items-start">
+              <i class="ti ti-users text-primary me-2 mt-1"></i>
+              <span><strong>Do 100</strong> aktywnych zapisów <span class="text-muted small">(~50–70 dzieci)</span></span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-users-plus text-success me-2 mt-1"></i>
+              <span><strong>Instruktorzy: Bez limitu</strong></span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Dziennik elektroniczny & zapisy</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Rozliczenia Tpay / Płatności z dołu</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Dokumentacja RODO & Regulaminy</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Powiadomienia E-mail & In-App</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-chart-bar text-primary me-2 mt-1"></i>
+              <span>Raporty i zestawienia finansowe</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-mail text-primary me-2 mt-1"></i>
+              <span>Wsparcie e-mail</span>
+            </li>
           </ul>
-          <a href="{{ route('register') }}" class="btn btn-primary w-100 fw-bold mt-auto py-2 shadow-sm">Rozpocznij 14 dni za darmo</a>
+
+          <a href="{{ route('register') }}" class="btn btn-outline-primary w-100 fw-bold py-2 mt-auto">
+            Testuj 14 dni za darmo
+          </a>
         </div>
       </div>
 
-      <!-- Plan Enterprise -->
-      <div class="col-lg-4">
-        <div class="pricing-card shadow-sm">
-          <h3 class="fw-bold text-dark fs-2 mb-1">Plan Enterprise</h3>
-          <p class="text-secondary small mb-4">Dla sieci szkół, dużych placówek oraz jednostek samorządowych.</p>
-          <div class="mb-4">
-            <span class="display-5 fw-extrabold text-dark"> zł</span>
-            <span class="text-secondary">/ miesiąc</span>
+      <!-- 3. Plan STANDARD (Rekomendowany - Pozycjonowany) -->
+      <div class="col-12 col-md-6 col-xl-3">
+        <div class="pricing-card featured shadow-lg h-100 d-flex flex-column border-primary position-relative" style="background: linear-gradient(180deg, #f8faff 0%, #ffffff 100%); border-width: 2px;">
+          <span class="pricing-badge bg-primary text-white fw-bold shadow-sm">
+            <i class="ti ti-star-filled me-1 text-warning"></i> REKOMENDOWANY
+          </span>
+
+          <div class="mb-3">
+            <span class="badge bg-primary-subtle text-primary fw-bold px-2 py-1 rounded">🥈 STANDARD</span>
+            <h3 class="fw-bold text-primary fs-2 mt-2 mb-1">Standard</h3>
+            <p class="text-secondary small mb-0">Średni MDK / OOK, placówki kultury</p>
           </div>
-          <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary">
-            <li><i class="ti ti-check text-success me-2"></i> <strong>Nielimitowana liczba uczestników</strong></li>
-            <li><i class="ti ti-check text-success me-2"></i> Obsługa wielu placówek i szkół</li>
-            <li><i class="ti ti-check text-success me-2"></i> Dedykowany opiekun konta</li>
-            <li><i class="ti ti-check text-success me-2"></i> Dedykowane integracje płatności</li>
-            <li><i class="ti ti-check text-success me-2"></i> Dedykowany serwer i SLA 99.9%</li>
+
+          <div class="my-3 py-2 border-top border-bottom border-primary-subtle bg-white rounded-2 px-2">
+            <div class="pricing-price" data-annual-price="349" data-monthly-price="429">
+              <span class="display-6 fw-extrabold text-primary price-val">349</span>
+              <span class="fs-4 fw-bold text-primary">zł</span>
+              <span class="text-secondary small">netto / mc</span>
+            </div>
+            <div class="text-muted small price-gross">(429,27 zł brutto)</div>
+            <div class="text-success small fw-medium mt-1 billing-note">w umowie rocznej</div>
+          </div>
+
+          <div class="badge bg-blue-lt text-start text-wrap py-2 px-2 mb-3 small border border-blue-subtle">
+            <i class="ti ti-sparkles text-primary me-1"></i> <strong>Najlepszy stosunek wartości:</strong> w cenie bezpłatne wdrożenie online i wsparcie startowe!
+          </div>
+
+          <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary flex-grow-1">
+            <li class="d-flex align-items-start">
+              <i class="ti ti-users text-primary me-2 mt-1"></i>
+              <span><strong>Do 350</strong> aktywnych zapisów <span class="text-muted small">(~150–250 dzieci)</span></span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-users-plus text-success me-2 mt-1"></i>
+              <span><strong>Instruktorzy: Bez limitu</strong></span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Dziennik elektroniczny & zapisy</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Rozliczenia Tpay / Płatności z dołu</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Dokumentacja RODO & Regulaminy</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Powiadomienia E-mail & In-App</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-chart-arrows text-primary me-2 mt-1"></i>
+              <span><strong>Raporty zaawansowane</strong></span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-device-laptop text-primary me-2 mt-1"></i>
+              <span><strong>Dedykowane wdrożenie online</strong></span>
+            </li>
           </ul>
-          <a href="{{ route('register') }}" class="btn btn-outline-dark w-100 fw-bold mt-auto py-2">Skontaktuj się z nami</a>
+
+          <a href="{{ route('register') }}" class="btn btn-primary btn-lg w-100 fw-bold py-2 mt-auto shadow">
+            Rozpocznij 14 dni testu
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Plan PRO / MAXI -->
+      <div class="col-12 col-md-6 col-xl-3">
+        <div class="pricing-card shadow-sm h-100 d-flex flex-column border">
+          <div class="mb-3">
+            <span class="badge bg-secondary-subtle text-secondary fw-bold px-2 py-1 rounded">🥉 PRO / MAXI</span>
+            <h3 class="fw-bold text-dark fs-2 mt-2 mb-1">Pro / Maxi</h3>
+            <p class="text-secondary small mb-0">Duży CKiS / MCK, wielosekcyjne ośrodki</p>
+          </div>
+
+          <div class="my-3 py-2 border-top border-bottom">
+            <div class="pricing-price" data-annual-price="599" data-monthly-price="749">
+              <span class="display-6 fw-extrabold text-dark price-val">599</span>
+              <span class="fs-4 fw-bold text-dark">zł</span>
+              <span class="text-secondary small">netto / mc</span>
+            </div>
+            <div class="text-muted small price-gross">(736,77 zł brutto)</div>
+            <div class="text-success small fw-medium mt-1 billing-note">w umowie rocznej</div>
+          </div>
+
+          <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary flex-grow-1">
+            <li class="d-flex align-items-start">
+              <i class="ti ti-users text-primary me-2 mt-1"></i>
+              <span><strong>Do 800</strong> aktywnych zapisów <span class="text-muted small">(~400–600 dzieci)</span></span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-users-plus text-success me-2 mt-1"></i>
+              <span><strong>Instruktorzy: Bez limitu</strong></span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Dziennik elektroniczny & zapisy</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Rozliczenia Tpay / Płatności z dołu</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Dokumentacja RODO & Regulaminy</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Powiadomienia E-mail & In-App</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-chart-dots text-primary me-2 mt-1"></i>
+              <span><strong>Raporty dedykowane</strong></span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-headset text-primary me-2 mt-1"></i>
+              <span><strong>Dedykowany opiekun</strong></span>
+            </li>
+          </ul>
+
+          <a href="{{ route('register') }}" class="btn btn-outline-primary w-100 fw-bold py-2 mt-auto">
+            Testuj 14 dni za darmo
+          </a>
         </div>
       </div>
     </div>
+
+    <!-- Tabela szczegółowego porównania modułów (wg specyfikacji) -->
+    <div class="mt-5 pt-3">
+      <div class="text-center mb-3">
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-4" type="button" data-bs-toggle="collapse" data-bs-target="#pricingTableCollapse" aria-expanded="false" aria-controls="pricingTableCollapse">
+          <i class="ti ti-table me-1"></i> Zobacz szczegółowe porównanie parametrów (tabela)
+        </button>
+      </div>
+
+      <div class="collapse" id="pricingTableCollapse">
+        <div class="table-responsive bg-white rounded-3 border shadow-sm p-3">
+          <table class="table table-hover align-middle mb-0 text-center">
+            <thead class="table-light">
+              <tr>
+                <th class="text-start" style="width: 28%;">Cecha / Moduł</th>
+                <th style="width: 18%;">🍮 SOLO</th>
+                <th style="width: 18%;">🥇 START</th>
+                <th style="width: 18%;" class="bg-primary-subtle text-primary fw-bold">🥈 STANDARD (Rekomendowany)</th>
+                <th style="width: 18%;">🥉 PRO / MAXI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-start fw-semibold text-secondary">Główny odbiorca</td>
+                <td>Korepetytor / 1 osoba</td>
+                <td>Mały / Wiejski GOK</td>
+                <td class="bg-primary-subtle fw-semibold">Średni MDK / OOK</td>
+                <td>Duży CKiS / MCK</td>
+              </tr>
+              <tr>
+                <td class="text-start fw-semibold text-secondary">Limit Aktywnych Zapisów</td>
+                <td><strong>do 30</strong></td>
+                <td><strong>do 100</strong></td>
+                <td class="bg-primary-subtle fw-bold text-primary">do 350</td>
+                <td><strong>do 800</strong></td>
+              </tr>
+              <tr>
+                <td class="text-start fw-semibold text-secondary">Szacowana liczba dzieci</td>
+                <td>(~20–30)</td>
+                <td>(~50–70)</td>
+                <td class="bg-primary-subtle fw-semibold">(~150–250)</td>
+                <td>(~400–600)</td>
+              </tr>
+              <tr>
+                <td class="text-start fw-semibold text-secondary">Liczba Instruktorów</td>
+                <td>1</td>
+                <td><span class="badge bg-green-lt">Bez limitu</span></td>
+                <td class="bg-primary-subtle"><span class="badge bg-primary">Bez limitu</span></td>
+                <td><span class="badge bg-green-lt">Bez limitu</span></td>
+              </tr>
+              <tr>
+                <td class="text-start fw-semibold text-secondary">Cena miesięczna (umowa roczna)</td>
+                <td><strong>49 zł</strong> netto<br><span class="text-muted small">(60,27 zł brutto)</span></td>
+                <td><strong>149 zł</strong> netto<br><span class="text-muted small">(183,27 zł brutto)</span></td>
+                <td class="bg-primary-subtle fw-bold text-primary">349 zł netto<br><span class="text-muted small">(429,27 zł brutto)</span></td>
+                <td><strong>599 zł</strong> netto<br><span class="text-muted small">(736,77 zł brutto)</span></td>
+              </tr>
+              <tr>
+                <td class="text-start fw-semibold text-secondary">Cena przy rozliczeniu miesięcznym</td>
+                <td>69 zł netto / mc</td>
+                <td>189 zł netto / mc</td>
+                <td class="bg-primary-subtle fw-semibold">429 zł netto / mc</td>
+                <td>749 zł netto / mc</td>
+              </tr>
+              <tr>
+                <td class="text-start fw-semibold text-secondary">Dziennik elektroniczny & Zapisy</td>
+                <td><i class="ti ti-check text-success fs-2"></i></td>
+                <td><i class="ti ti-check text-success fs-2"></i></td>
+                <td class="bg-primary-subtle"><i class="ti ti-check text-primary fs-2"></i></td>
+                <td><i class="ti ti-check text-success fs-2"></i></td>
+              </tr>
+              <tr>
+                <td class="text-start fw-semibold text-secondary">Rozliczenia Tpay / Płatności z dołu</td>
+                <td><i class="ti ti-check text-success fs-2"></i></td>
+                <td><i class="ti ti-check text-success fs-2"></i></td>
+                <td class="bg-primary-subtle"><i class="ti ti-check text-primary fs-2"></i></td>
+                <td><i class="ti ti-check text-success fs-2"></i></td>
+              </tr>
+              <tr>
+                <td class="text-start fw-semibold text-secondary">Dokumentacja RODO & Regulaminy</td>
+                <td><i class="ti ti-check text-success fs-2"></i></td>
+                <td><i class="ti ti-check text-success fs-2"></i></td>
+                <td class="bg-primary-subtle"><i class="ti ti-check text-primary fs-2"></i></td>
+                <td><i class="ti ti-check text-success fs-2"></i></td>
+              </tr>
+              <tr>
+                <td class="text-start fw-semibold text-secondary">Powiadomienia E-mail & In-App</td>
+                <td><i class="ti ti-check text-success fs-2"></i></td>
+                <td><i class="ti ti-check text-success fs-2"></i></td>
+                <td class="bg-primary-subtle"><i class="ti ti-check text-primary fs-2"></i></td>
+                <td><i class="ti ti-check text-success fs-2"></i></td>
+              </tr>
+              <tr>
+                <td class="text-start fw-semibold text-secondary">Raporty i zestawienia finansowe</td>
+                <td>Podstawowe</td>
+                <td>Tak</td>
+                <td class="bg-primary-subtle fw-bold text-primary">Zaawansowane</td>
+                <td><strong>Dedykowane</strong></td>
+              </tr>
+              <tr>
+                <td class="text-start fw-semibold text-secondary">Pomoc przy wdrożeniu i migracji</td>
+                <td>Samoobsługa</td>
+                <td>Pomoc e-mail</td>
+                <td class="bg-primary-subtle fw-bold text-primary">Dedykowane wdrożenie online</td>
+                <td><strong>Dedykowany opiekun</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
+
+<!-- Skrypt obsługi przełącznika rozliczenia cennika -->
+<script>
+function switchBilling(type) {
+  const btnAnnual = document.getElementById('btn-billing-annual');
+  const btnMonthly = document.getElementById('btn-billing-monthly');
+  const priceElements = document.querySelectorAll('.pricing-price');
+  const grossPrices = {
+    annual: ['(60,27 zł brutto)', '(183,27 zł brutto)', '(429,27 zł brutto)', '(736,77 zł brutto)'],
+    monthly: ['(84,87 zł brutto)', '(232,47 zł brutto)', '(527,67 zł brutto)', '(921,27 zł brutto)']
+  };
+
+  if (type === 'annual') {
+    btnAnnual.className = 'btn btn-sm rounded-pill px-3 py-2 fw-bold btn-primary';
+    btnMonthly.className = 'btn btn-sm rounded-pill px-3 py-2 fw-semibold text-secondary';
+    
+    priceElements.forEach((el, index) => {
+      const val = el.getAttribute('data-annual-price');
+      el.querySelector('.price-val').textContent = val;
+      const card = el.closest('.pricing-card');
+      card.querySelector('.price-gross').textContent = grossPrices.annual[index];
+      card.querySelector('.billing-note').textContent = 'w umowie rocznej';
+      card.querySelector('.billing-note').className = 'text-success small fw-medium mt-1 billing-note';
+    });
+  } else {
+    btnMonthly.className = 'btn btn-sm rounded-pill px-3 py-2 fw-bold btn-primary';
+    btnAnnual.className = 'btn btn-sm rounded-pill px-3 py-2 fw-semibold text-secondary';
+    
+    priceElements.forEach((el, index) => {
+      const val = el.getAttribute('data-monthly-price');
+      el.querySelector('.price-val').textContent = val;
+      const card = el.closest('.pricing-card');
+      card.querySelector('.price-gross').textContent = grossPrices.monthly[index];
+      card.querySelector('.billing-note').textContent = 'rozliczenie miesięczne (bez zobowiązań)';
+      card.querySelector('.billing-note').className = 'text-muted small fw-medium mt-1 billing-note';
+    });
+  }
+}
+</script>
 
 <!-- Sekcja FAQ -->
 <section id="faq" class="py-6 bg-light front-faq">

@@ -54,7 +54,7 @@
                         <div class="card-body d-flex flex-column justify-content-between p-2.5 p-sm-3">
                             <div>
                                 <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <div class="subheader fw-bold text-uppercase fs-6">Bieżąca suma do zapłaty</div>
+                                    <div class="subheader fw-bold text-uppercase fs-6">Bieżące należności do zapłaty</div>
                                     <span class="avatar avatar-sm bg-danger text-white rounded-circle fs-3">
                                         <i class="ti ti-clock"></i>
                                     </span>
@@ -67,10 +67,14 @@
                             <div class="d-flex flex-column flex-sm-row gap-1.5 mt-2">
                                 @if($totalUnpaidAmount > 0)
                                     @if($isTpayConfigured)
-                                        <form action="{{ route('user.payments.pay-all') }}" method="POST" class="w-100" onsubmit="return confirm('Czy na pewno chcesz opłacić online wszystkie nieopłacone zajęcia ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł)?');">
+                                        @php
+                                            $commissionAll = round($totalUnpaidAmount * 0.015, 2);
+                                            $totalWithCommissionAll = $totalUnpaidAmount + $commissionAll;
+                                        @endphp
+                                        <form action="{{ route('user.payments.pay-all') }}" method="POST" class="w-100" onsubmit="return confirm('Czy na pewno chcesz opłacić online wszystkie nieopłacone zajęcia ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł + prowizja 1,5%: {{ number_format($commissionAll, 2, ',', ' ') }} zł)?');">
                                             @csrf
                                             <button type="submit" class="btn btn-danger w-100 py-1.5 fw-bold shadow-sm">
-                                                <i class="ti ti-credit-card me-1 fs-3"></i> Zapłać online ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł)
+                                                <i class="ti ti-credit-card me-1 fs-3"></i> Zapłać online
                                             </button>
                                         </form>
                                     @else
@@ -87,6 +91,13 @@
                                     <i class="ti ti-history me-1 fs-3"></i> Historia wpłat ({{ $paidItems->count() }})
                                 </button>
                             </div>
+
+                            @if($totalUnpaidAmount > 0 && $isTpayConfigured)
+                                <div class="text-muted small mt-2 d-flex align-items-center" style="font-size: 0.8rem;">
+                                    <i class="ti ti-info-circle text-secondary me-1"></i>
+                                    <span>Prowizja operatora płatności: <strong>+{{ number_format($commissionAll, 2, ',', ' ') }} zł</strong> (razem: <strong>{{ number_format($totalWithCommissionAll, 2, ',', ' ') }} zł</strong>)</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -213,11 +224,21 @@
                                                             </div>
                                                             <div class="d-flex align-items-center justify-content-between justify-content-sm-end w-100 w-sm-auto mt-2 mt-sm-0 pt-2 pt-sm-0 border-top border-sm-0 gap-2">
                                                                 <span class="badge bg-danger-lt fs-5">Nieopłacone</span>
-                                                                <span class="fw-extrabold text-danger fs-2 me-2">
-                                                                    {{ number_format((float) $item->amount, 2, ',', ' ') }} zł
-                                                                </span>
+                                                                <div class="text-end me-2">
+                                                                    <div class="fw-extrabold text-danger fs-2 lh-1">
+                                                                        {{ number_format((float) $item->amount, 2, ',', ' ') }} zł
+                                                                    </div>
+                                                                    @if($isTpayConfigured)
+                                                                        @php
+                                                                            $itemCommission = round((float) $item->amount * 0.015, 2);
+                                                                        @endphp
+                                                                        <small class="text-muted d-block" style="font-size: 0.72rem;" title="Prowizja operatora płatności online">
+                                                                            +{{ number_format($itemCommission, 2, ',', ' ') }} zł prowizji 
+                                                                        </small>
+                                                                    @endif
+                                                                </div>
                                                                 @if($isTpayConfigured)
-                                                                    <form action="{{ route('user.payments.pay-item', $item) }}" method="POST" class="d-inline" onsubmit="return confirm('Czy na pewno chcesz opłacić online zajęcia &quot;{{ $course?->title }}&quot; ({{ number_format((float) $item->amount, 2, ',', ' ') }} zł)?');">
+                                                                    <form action="{{ route('user.payments.pay-item', $item) }}" method="POST" class="d-inline" onsubmit="return confirm('Czy na pewno chcesz opłacić online zajęcia &quot;{{ $course?->title }}&quot; ({{ number_format((float) $item->amount, 2, ',', ' ') }} zł + prowizja 1,5%: {{ number_format($itemCommission, 2, ',', ' ') }} zł)?');">
                                                                         @csrf
                                                                         <button type="submit" class="btn btn-sm btn-success fw-bold px-2 py-1 shadow-sm">
                                                                             <i class="ti ti-credit-card me-1"></i> Zapłać

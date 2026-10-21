@@ -44,7 +44,7 @@
                                     </div>
                                     <div class="col-12 col-sm-auto mt-2 mt-sm-0">
                                         <a href="{{ route('user.payments.index') }}" class="btn btn-danger btn-lg w-100 fw-bold shadow-sm py-2 px-3">
-                                            <i class="ti ti-credit-card me-2 fs-2"></i> Przejdź do płatności
+                                            <i class="ti ti-credit-card me-2 fs-2"></i> Szczegóły płatności
                                         </a>
                                     </div>
                                 </div>
