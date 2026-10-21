@@ -45,7 +45,7 @@
                             <label class="form-check-label" for="consent_terms">
                                 Zapoznałem i akceptuję 
                                 @if($termsDoc)
-                                    <a href="{{ route('admin.documents.download', $termsDoc) }}" target="_blank">Regulamin {{ $userActiveSchool->name }}</a>
+                                    <a href="{{ route('documents.download', $termsDoc) }}" target="_blank">Regulamin {{ $userActiveSchool->name }}</a>
                                 @else
                                     Regulamin {{ $userActiveSchool->name }}
                                 @endif
@@ -59,7 +59,7 @@
                             <label class="form-check-label" for="consent_rodo">
                                 Zapoznałem/am się z 
                                 @if($rodoDoc)
-                                    <a href="{{ route('admin.documents.download', $rodoDoc) }}" target="_blank">Klauzulą Informacyjną RODO</a>
+                                    <a href="{{ route('documents.download', $rodoDoc) }}" target="_blank">Klauzulą Informacyjną RODO</a>
                                 @else
                                     Klauzulą Informacyjną RODO
                                 @endif

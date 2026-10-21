@@ -13,6 +13,9 @@ Route::get('/', function () {
 // Front Schools
 Route::get('/schools', [SchoolController::class, 'index'])->name('schools.index');
 
+// Ogólnodostępne pobieranie / podgląd dokumentów placówki (Regulamin, RODO itp.)
+Route::get('/documents/{document}/download', \App\Http\Controllers\DocumentDownloadController::class)->name('documents.download');
+
 ////////////////////////////////////// Admin szkoły
 Route::middleware(['auth', 'verified', 'role:admin'])
     ->prefix('admin')
@@ -32,7 +35,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'edit'])->name('settings.edit');
         Route::put('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
         Route::resource('/documents', \App\Http\Controllers\Admin\DocumentController::class)->names('documents');
-        Route::get('/documents/{document}/download', [\App\Http\Controllers\Admin\DocumentController::class, 'download'])->name('documents.download');
+        Route::get('/documents/{document}/download', \App\Http\Controllers\DocumentDownloadController::class)->name('documents.download');
         Route::get('/notifications/create', [\App\Http\Controllers\Admin\NotificationController::class, 'create'])->name('notifications.create');
         Route::post('/notifications', [\App\Http\Controllers\Admin\NotificationController::class, 'store'])->name('notifications.store');
         Route::post('/notifications/billing-summary', [\App\Http\Controllers\Admin\NotificationController::class, 'sendBillingSummary'])->name('notifications.billing-summary');
@@ -90,7 +93,7 @@ Route::middleware(['auth', 'verified', 'role:user'])
         Route::get('/platnosci/sukces', [\App\Http\Controllers\User\PaymentController::class, 'success'])->name('payments.success');
         Route::get('/platnosci/blad', [\App\Http\Controllers\User\PaymentController::class, 'error'])->name('payments.error');
         Route::get('/dokumenty', [\App\Http\Controllers\User\DocumentController::class, 'index'])->name('documents.index');
-        Route::get('/dokumenty/{document}/download', [\App\Http\Controllers\User\DocumentController::class, 'download'])->name('documents.download');
+        Route::get('/dokumenty/{document}/download', \App\Http\Controllers\DocumentDownloadController::class)->name('documents.download');
         Route::post('/dokumenty/zgody', [\App\Http\Controllers\User\DocumentController::class, 'updateConsents'])->name('documents.consents');
     });
 
