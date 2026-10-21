@@ -132,8 +132,8 @@
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link d-flex lh-1 text-reset p-0 px-1 px-md-2" data-bs-toggle="dropdown"
                         aria-label="Menu użytkownika" aria-expanded="false">
-                        <span class="avatar avatar-sm rounded-circle shadow-xs"
-                            style="background-image: url('https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=206bc4&color=fff&size=64')">
+                        <span class="avatar avatar-sm rounded-circle shadow-xs bg-primary text-white">
+                            <i class="ti ti-user me-1 fs-2"></i>
                         </span>
                         <div class="d-none d-md-block ps-2">
                             <div class="fw-medium">{{ Auth::user()->name }}</div>

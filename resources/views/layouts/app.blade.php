@@ -35,6 +35,7 @@
           @yield('content')
         </div>
       </main>
+      @include('layouts.partials.copy')
     </div>
   </div>
 
