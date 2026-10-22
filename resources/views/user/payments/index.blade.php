@@ -68,10 +68,11 @@
                                 @if($totalUnpaidAmount > 0)
                                     @if($isTpayConfigured)
                                         @php
-                                            $commissionAll = round($totalUnpaidAmount * 0.015, 2);
+                                            $commissionRate = ($commissionPercent ?? 1.5) / 100;
+                                            $commissionAll = round($totalUnpaidAmount * $commissionRate, 2);
                                             $totalWithCommissionAll = $totalUnpaidAmount + $commissionAll;
                                         @endphp
-                                        <form action="{{ route('user.payments.pay-all') }}" method="POST" class="w-100" onsubmit="return confirm('Czy na pewno chcesz opłacić online wszystkie nieopłacone zajęcia ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł + prowizja 1,5%: {{ number_format($commissionAll, 2, ',', ' ') }} zł)?');">
+                                        <form action="{{ route('user.payments.pay-all') }}" method="POST" class="w-100" onsubmit="return confirm('Czy na pewno chcesz opłacić online wszystkie nieopłacone zajęcia ({{ number_format($totalUnpaidAmount, 2, ',', ' ') }} zł + prowizja {{ $commissionPercent ?? 1.5 }}%: {{ number_format($commissionAll, 2, ',', ' ') }} zł)?');">
                                             @csrf
                                             <button type="submit" class="btn btn-danger w-100 py-1.5 fw-bold shadow-sm">
                                                 <i class="ti ti-credit-card me-1 fs-3"></i> Zapłać online
@@ -95,7 +96,7 @@
                             @if($totalUnpaidAmount > 0 && $isTpayConfigured)
                                 <div class="text-muted small mt-2 d-flex align-items-center" style="font-size: 0.8rem;">
                                     <i class="ti ti-info-circle text-secondary me-1"></i>
-                                    <span>Prowizja operatora płatności: <strong>+{{ number_format($commissionAll, 2, ',', ' ') }} zł</strong> (razem: <strong>{{ number_format($totalWithCommissionAll, 2, ',', ' ') }} zł</strong>)</span>
+                                    <span>Prowizja operatora ({{ $commissionPercent ?? 1.5 }}%): <strong>+{{ number_format($commissionAll, 2, ',', ' ') }} zł</strong> (razem: <strong>{{ number_format($totalWithCommissionAll, 2, ',', ' ') }} zł</strong>)</span>
                                 </div>
                             @endif
                         </div>
@@ -230,15 +231,16 @@
                                                                     </div>
                                                                     @if($isTpayConfigured)
                                                                         @php
-                                                                            $itemCommission = round((float) $item->amount * 0.015, 2);
+                                                                            $rate = ($commissionPercent ?? 1.5) / 100;
+                                                                            $itemCommission = round((float) $item->amount * $rate, 2);
                                                                         @endphp
                                                                         <small class="text-muted d-block" style="font-size: 0.72rem;" title="Prowizja operatora płatności online">
-                                                                            +{{ number_format($itemCommission, 2, ',', ' ') }} zł prowizji 
+                                                                            +{{ number_format($itemCommission, 2, ',', ' ') }} zł prowizji ({{ $commissionPercent ?? 1.5 }}%)
                                                                         </small>
                                                                     @endif
                                                                 </div>
                                                                 @if($isTpayConfigured)
-                                                                    <form action="{{ route('user.payments.pay-item', $item) }}" method="POST" class="d-inline" onsubmit="return confirm('Czy na pewno chcesz opłacić online zajęcia &quot;{{ $course?->title }}&quot; ({{ number_format((float) $item->amount, 2, ',', ' ') }} zł + prowizja 1,5%: {{ number_format($itemCommission, 2, ',', ' ') }} zł)?');">
+                                                                    <form action="{{ route('user.payments.pay-item', $item) }}" method="POST" class="d-inline" onsubmit="return confirm('Czy na pewno chcesz opłacić online zajęcia &quot;{{ $course?->title }}&quot; ({{ number_format((float) $item->amount, 2, ',', ' ') }} zł + prowizja {{ $commissionPercent ?? 1.5 }}%: {{ number_format($itemCommission, 2, ',', ' ') }} zł)?');">
                                                                         @csrf
                                                                         <button type="submit" class="btn btn-sm btn-success fw-bold px-2 py-1 shadow-sm">
                                                                             <i class="ti ti-credit-card me-1"></i> Zapłać

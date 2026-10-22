@@ -7,9 +7,11 @@ namespace App\Services;
 use App\Models\BillingItem;
 use App\Models\Payment;
 use App\Models\School;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache as LaravelCache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Psr\SimpleCache\CacheInterface;
@@ -23,24 +25,42 @@ use Tpay\OpenApi\Webhook\JWSVerifiedPaymentNotification;
 class TpayPaymentService
 {
     /**
-     * Sprawdza, czy dana szkoła posiada skonfigurowane dane Tpay.
+     * Sprawdza, czy globalne płatności online Tpay są skonfigurowane w systemie.
+     */
+    public function isGlobalConfigured(): bool
+    {
+        return Setting::isTpayConfigured();
+    }
+
+    /**
+     * Sprawdza, czy dla danej szkoły płatności online są aktywne.
+     * Wymagany jest globalny Tpay oraz podany numer rachunku bankowego szkoły.
      */
     public function isSchoolConfigured(?School $school): bool
     {
+        if (!$this->isGlobalConfigured()) {
+            return false;
+        }
+
         if (!$school) {
             return false;
         }
 
-        return !empty($school->tpay_client_id) && !empty($school->tpay_client_secret);
+        // Szkoła musi posiadać rachunek bankowy
+        return !empty($school->bank_account_number);
     }
 
     /**
-     * Inicjalizuje instancję TpayApi dla podanej szkoły.
+     * Inicjalizuje instancję TpayApi na podstawie globalnych poświadczeń z tabeli settings.
      */
-    public function getApiClientForSchool(School $school): TpayApi
+    public function getApiClient(): TpayApi
     {
-        if (!$this->isSchoolConfigured($school)) {
-            throw new RuntimeException("Szkoła \"{$school->name}\" nie posiada skonfigurowanych danych dostępowych Tpay (Client ID i Secret).");
+        $clientId = (string) Setting::get('tpay_client_id');
+        $clientSecret = (string) Setting::getSecret('tpay_client_secret');
+        $productionMode = (bool) Setting::get('tpay_production_mode', false);
+
+        if (empty($clientId) || empty($clientSecret)) {
+            throw new RuntimeException('Globalne poświadczenia operatora Tpay nie zostały jeszcze skonfigurowane w panelu SuperAdmina (SU).');
         }
 
         $psrCache = $this->createSimpleCacheAdapter();
@@ -48,10 +68,18 @@ class TpayPaymentService
 
         return new TpayApi(
             $tpayCache,
-            (string) $school->tpay_client_id,
-            (string) $school->tpay_client_secret,
-            (bool) $school->tpay_production_mode
+            $clientId,
+            $clientSecret,
+            $productionMode
         );
+    }
+
+    /**
+     * Kompatybilność wsteczna - zwraca instancję API dla szkoły (lub globalną).
+     */
+    public function getApiClientForSchool(?School $school = null): TpayApi
+    {
+        return $this->getApiClient();
     }
 
     /**
@@ -71,15 +99,19 @@ class TpayPaymentService
 
         $firstItem = $billingItems->first();
         $school = ($firstItem && $firstItem->school_id)
-            ? (\App\Models\School::find($firstItem->school_id) ?? $user->school)
+            ? (School::find($firstItem->school_id) ?? $user->school)
             : $user->school;
 
         if (!$school) {
             throw new RuntimeException('Użytkownik nie jest przypisany do żadnej szkoły.');
         }
 
-        if (!$this->isSchoolConfigured($school)) {
-            throw new RuntimeException('Płatności online nie są obecnie skonfigurowane dla tej placówki. Skontaktuj się z administratorem szkoły.');
+        if (!$this->isGlobalConfigured()) {
+            throw new RuntimeException('Płatności online nie są obecnie skonfigurowane w systemie. Skontaktuj się z administratorem.');
+        }
+
+        if (empty($school->bank_account_number)) {
+            throw new RuntimeException("Placówka \"{$school->name}\" nie posiada zdefiniowanego numeru konta bankowego do wypłat.");
         }
 
         $totalAmount = 0.0;
@@ -110,8 +142,7 @@ class TpayPaymentService
 
         $payment->billingItems()->sync($billingItems->pluck('id'));
 
-        // Pobieramy klienta Tpay dedykowanego dla tej konkretnej szkoły
-        $tpayApi = $this->getApiClientForSchool($school);
+        $tpayApi = $this->getApiClient();
 
         $transactionData = [
             'amount' => (float) number_format($totalAmount, 2, '.', ''),
@@ -131,6 +162,16 @@ class TpayPaymentService
                 ],
             ],
         ];
+
+        // Obsługa Tpay Collect - bezpośrednie przekazanie środków na subkonto/rachunek placówki
+        $iban = $school->formattedIban();
+        if ($iban) {
+            $receiverName = preg_replace('/[^A-Za-z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ \/\-,\.]/u', '', (string) ($school->full_name ?: $school->name));
+            $transactionData['collect'] = [
+                'account' => $iban,
+                'receiver' => mb_substr(trim($receiverName), 0, 100),
+            ];
+        }
 
         try {
             $response = $tpayApi->transactions()->createTransaction($transactionData);
@@ -160,7 +201,93 @@ class TpayPaymentService
     }
 
     /**
-     * Weryfikuje i przetwarza webhook z powiadomieniem od Tpay dla odpowiedniej szkoły.
+     * Dodaje rachunek bankowy szkoły do białej listy Tpay Collect (POST /collect/bank-accounts).
+     */
+    public function addToWhitelist(School $school): array
+    {
+        $iban = $school->formattedIban();
+        if (!$iban) {
+            throw new RuntimeException('Placówka nie posiada wprowadzonego poprawnego numeru konta bankowego.');
+        }
+
+        $clientId = (string) Setting::get('tpay_client_id');
+        $clientSecret = (string) Setting::getSecret('tpay_client_secret');
+        $productionMode = (bool) Setting::get('tpay_production_mode', false);
+
+        if (empty($clientId) || empty($clientSecret)) {
+            throw new RuntimeException('Brak skonfigurowanych globalnych poświadczeń Tpay w ustawieniach SU.');
+        }
+
+        $oauthBaseUrl = $productionMode ? 'https://openapi.tpay.com' : 'https://openapi.sandbox.tpay.com';
+        $apiBaseUrl = $productionMode ? 'https://api.tpay.com' : 'https://api.tpay.com'; // lub sandbox
+
+        // 1. Pobranie Bearer Token z OAuth
+        $authResponse = Http::asJson()->timeout(15)->post("{$oauthBaseUrl}/oauth/auth", [
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+        ]);
+
+        if (!$authResponse->successful()) {
+            throw new RuntimeException('Błąd autoryzacji w Tpay OAuth: ' . ($authResponse->json('error_description') ?? $authResponse->body()));
+        }
+
+        $token = $authResponse->json('access_token');
+        if (empty($token)) {
+            throw new RuntimeException('Nie udało się uzyskać tokena autoryzacyjnego z Tpay.');
+        }
+
+        // 2. Dodanie konta do białej listy Tpay Collect
+        $ownerName = mb_substr((string) ($school->full_name ?: $school->name), 0, 1000);
+        $additionalInfo = mb_substr(trim("NIP: {$school->nip}, Adres: {$school->address}, {$school->postal_code} {$school->city}"), 0, 1000);
+
+        $payload = [
+            'accountNumber' => $iban,
+            'ownerName' => $ownerName,
+            'additionalInformation' => $additionalInfo,
+        ];
+
+        $whitelistResponse = Http::withToken($token)
+            ->asJson()
+            ->timeout(15)
+            ->post("{$apiBaseUrl}/collect/bank-accounts", $payload);
+
+        $responseData = $whitelistResponse->json() ?? ['raw' => $whitelistResponse->body()];
+
+        if ($whitelistResponse->successful() || $whitelistResponse->status() === 201 || $whitelistResponse->status() === 200) {
+            $school->update([
+                'tpay_whitelist_status' => 'verified',
+                'tpay_whitelist_at' => now(),
+                'tpay_whitelist_response' => json_encode($responseData),
+            ]);
+
+            return [
+                'success' => true,
+                'message' => 'Rachunek bankowy placówki został pomyślnie zgłoszony i zweryfikowany na białej liście Tpay Collect.',
+                'data' => $responseData,
+            ];
+        }
+
+        // Jeśli konto już istnieje w białej liście
+        $body = $whitelistResponse->body();
+        if (str_contains(strtolower($body), 'already') || str_contains(strtolower($body), 'istnieje')) {
+            $school->update([
+                'tpay_whitelist_status' => 'verified',
+                'tpay_whitelist_at' => now(),
+                'tpay_whitelist_response' => json_encode($responseData),
+            ]);
+
+            return [
+                'success' => true,
+                'message' => 'Rachunek bankowy placówki znajduje się już na białej liście Tpay.',
+                'data' => $responseData,
+            ];
+        }
+
+        throw new RuntimeException('Odpowiedź Tpay API (' . $whitelistResponse->status() . '): ' . $body);
+    }
+
+    /**
+     * Weryfikuje i przetwarza webhook z powiadomieniem od Tpay.
      */
     public function handleWebhook(): void
     {
@@ -171,7 +298,7 @@ class TpayPaymentService
         $tpayTransactionId = $parsed['transactionId'] ?? $parsed['tr_id'] ?? null;
         $status = strtolower((string) ($parsed['status'] ?? $parsed['tr_status'] ?? ''));
 
-        // Wyszukanie płatności w bazie danych, aby poznać szkołę
+        // Wyszukanie płatności w bazie danych
         $payment = null;
         if (!empty($hiddenDescription)) {
             $payment = Payment::where('session_id', $hiddenDescription)->with('school')->first();
@@ -182,16 +309,15 @@ class TpayPaymentService
         }
 
         if (!$payment || !$payment->school) {
-            Log::warning('Tpay Webhook: Nie znaleziono płatności lub powiązanej szkoły w bazie danych', [
+            Log::warning('Tpay Webhook: Nie znaleziono płatności w bazie danych', [
                 'hiddenDescription' => $hiddenDescription,
                 'tpayTransactionId' => $tpayTransactionId,
             ]);
             throw new RuntimeException('Nie znaleziono zarejestrowanej płatności dla powiadomienia.');
         }
 
-        $school = $payment->school;
-        $merchantSecret = (string) ($school->tpay_merchant_secret ?: $school->tpay_client_secret);
-        $productionMode = (bool) $school->tpay_production_mode;
+        $merchantSecret = (string) (Setting::getSecret('tpay_merchant_secret') ?: Setting::getSecret('tpay_client_secret'));
+        $productionMode = (bool) Setting::get('tpay_production_mode', false);
 
         // Weryfikacja JWS
         $psrCache = $this->createSimpleCacheAdapter();
@@ -205,16 +331,14 @@ class TpayPaymentService
             $requestParser
         );
 
-        // Jeśli sygnatura jest błędna, rzuci wyjątek TpayException
         $notificationService->getNotification();
 
-        Log::info("Odebrano zweryfikowane powiadomienie Tpay dla szkoły #{$school->id} ({$school->name})", [
+        Log::info("Odebrano zweryfikowane powiadomienie Tpay dla płatności #{$payment->id}", [
             'payment_id' => $payment->id,
             'session_id' => $payment->session_id,
             'status' => $status,
         ]);
 
-        // Statusy w Tpay: 'correct', 'paid', 'success' oznaczają powodzenie
         if (in_array($status, ['correct', 'paid', 'true', 'success'], true)) {
             $this->finalizePaymentAsPaid($payment, (string) $tpayTransactionId);
         } elseif (in_array($status, ['error', 'chargeback', 'declined'], true)) {

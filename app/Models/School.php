@@ -9,10 +9,14 @@ class School extends Model
 {
     protected $fillable = [
         'name',
+        'full_name',
         'slug',
         'nip',
         'email',
         'phone',
+        'address',
+        'city',
+        'postal_code',
         'bank_account_number',
         'subscription_plan',
         'cancellation_cutoff_hours',
@@ -21,13 +25,46 @@ class School extends Model
         'tpay_client_secret',
         'tpay_merchant_secret',
         'tpay_production_mode',
+        'tpay_whitelist_status',
+        'tpay_whitelist_at',
+        'tpay_whitelist_response',
     ];
 
     protected function casts(): array
     {
         return [
             'tpay_production_mode' => 'boolean',
+            'tpay_whitelist_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Zwraca numer konta sformatowany w formacie IBAN (np. PL + 26 cyfr) dla Tpay Collect.
+     */
+    public function formattedIban(): ?string
+    {
+        if (empty($this->bank_account_number)) {
+            return null;
+        }
+
+        $clean = preg_replace('/[^A-Za-z0-9]/', '', (string) $this->bank_account_number);
+        if (empty($clean)) {
+            return null;
+        }
+
+        if (!str_starts_with(strtoupper($clean), 'PL')) {
+            $clean = 'PL' . $clean;
+        }
+
+        return strtoupper($clean);
+    }
+
+    /**
+     * Sprawdza, czy placówka ma zweryfikowane konto w białej liście Tpay.
+     */
+    public function isTpayWhitelisted(): bool
+    {
+        return $this->tpay_whitelist_status === 'verified';
     }
 
     /**
@@ -105,6 +142,21 @@ class School extends Model
     public function seasons(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Season::class);
+    }
+
+    public function courses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Course::class);
+    }
+
+    public function children(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Child::class);
+    }
+
+    public function rooms(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Room::class);
     }
 
     /**

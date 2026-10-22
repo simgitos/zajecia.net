@@ -27,14 +27,14 @@ class UpdateSchoolSettingsRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'full_name' => ['nullable', 'string', 'max:255'],
             'nip' => ['nullable', 'string', 'max:20'],
             'email' => ['nullable', 'email', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:100'],
+            'postal_code' => ['nullable', 'string', 'max:20'],
             'bank_account_number' => ['nullable', 'string', 'max:50'],
-            'tpay_client_id' => ['nullable', 'string', 'max:255'],
-            'tpay_client_secret' => ['nullable', 'string', 'max:500'],
-            'tpay_merchant_secret' => ['nullable', 'string', 'max:500'],
-            'tpay_production_mode' => ['nullable', 'boolean'],
         ];
     }
 

@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'role' => EnsureUserHasRole::class,
+            'su' => \App\Http\Middleware\EnsureIsSuperAdmin::class,
         ]);
         $middleware->validateCsrfTokens(except: [
             'tpay/webhook',

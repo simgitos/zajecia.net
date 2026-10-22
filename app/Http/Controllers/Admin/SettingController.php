@@ -44,22 +44,15 @@ class SettingController extends Controller
 
         $updateData = [
             'name' => $validated['name'],
+            'full_name' => $validated['full_name'] ?? null,
             'nip' => $validated['nip'] ?? null,
             'email' => $validated['email'] ?? null,
             'phone' => $validated['phone'] ?? null,
+            'address' => $validated['address'] ?? null,
+            'city' => $validated['city'] ?? null,
+            'postal_code' => $validated['postal_code'] ?? null,
             'bank_account_number' => $validated['bank_account_number'] ?? null,
-            'tpay_client_id' => $validated['tpay_client_id'] ?? null,
-            'tpay_production_mode' => (bool) ($request->boolean('tpay_production_mode')),
         ];
-
-        // Aktualizujemy secret tylko jeśli podano nową wartość (aby nie nadpisać istniejącego pustym polem)
-        if ($request->filled('tpay_client_secret')) {
-            $updateData['tpay_client_secret'] = trim((string) $validated['tpay_client_secret']);
-        }
-
-        if ($request->filled('tpay_merchant_secret')) {
-            $updateData['tpay_merchant_secret'] = trim((string) $validated['tpay_merchant_secret']);
-        }
 
         $school->update($updateData);
 

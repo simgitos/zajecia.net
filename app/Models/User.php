@@ -19,6 +19,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'city',
         'postal_code',
         'password',
+        'is_superadmin',
     ];
 
     /**
@@ -29,7 +30,31 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_superadmin' => 'boolean',
         ];
+    }
+
+    /**
+     * Sprawdza, czy użytkownik jest SuperAdminem (SU).
+     * Uwzględnia flagę w bazie (is_superadmin) oraz zmienne środowiskowe SUPERADMIN_ID / SUPERADMIN_EMAIL.
+     */
+    public function isSuperAdmin(): bool
+    {
+        if ($this->is_superadmin) {
+            return true;
+        }
+
+        $superadminId = config('app.superadmin_id') ?? env('SUPERADMIN_ID');
+        if ($superadminId !== null && (int) $this->id === (int) $superadminId) {
+            return true;
+        }
+
+        $superadminEmail = config('app.superadmin_email') ?? env('SUPERADMIN_EMAIL');
+        if ($superadminEmail && strcasecmp((string) $this->email, (string) $superadminEmail) === 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

@@ -155,6 +155,30 @@
                 @activeRole('user')
                 @include('user.menu')
                 @endactiveRole
+
+                @auth
+                    @if(Auth::user()->isSuperAdmin())
+                        <li class="nav-section-title text-danger fw-bold mt-2">
+                            <i class="ti ti-shield-bolt me-1"></i> SuperAdmin (SU)
+                        </li>
+                        <li class="nav-item {{ request()->routeIs('su.schools.*') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('su.schools.index') }}">
+                                <span class="nav-link-icon text-danger">
+                                    <i class="ti ti-building-community"></i>
+                                </span>
+                                <span class="nav-link-title">Szkoły</span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{ request()->routeIs('su.settings.*') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('su.settings.index') }}">
+                                <span class="nav-link-icon text-danger">
+                                    <i class="ti ti-adjustments-alt"></i>
+                                </span>
+                                <span class="nav-link-title">Ustawienia</span>
+                            </a>
+                        </li>
+                    @endif
+                @endauth
             </ul>
 
         </nav>

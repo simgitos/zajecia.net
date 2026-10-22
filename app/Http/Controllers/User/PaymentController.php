@@ -78,6 +78,7 @@ class PaymentController extends Controller
         }
 
         $isTpayConfigured = app(\App\Services\TpayPaymentService::class)->isSchoolConfigured($user->school);
+        $commissionPercent = (float) \App\Models\Setting::get('online_payment_commission_percent', 1.5);
 
         return view('user.payments.index', compact(
             'childUnpaidSummaries',
@@ -85,7 +86,8 @@ class PaymentController extends Controller
             'totalPaidAmount',
             'paidItems',
             'children',
-            'isTpayConfigured'
+            'isTpayConfigured',
+            'commissionPercent'
         ));
     }
 

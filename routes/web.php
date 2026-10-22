@@ -100,6 +100,22 @@ Route::middleware(['auth', 'verified', 'role:user'])
 // Tpay Webhook
 Route::post('/tpay/webhook', \App\Http\Controllers\TpayWebhookController::class)->name('tpay.webhook');
 
+////////////////////////////////////// SuperAdmin (SU)
+Route::middleware(['auth', 'verified', 'su'])
+    ->prefix('su')
+    ->name('su.')
+    ->group(function () {
+        Route::get('/', [\App\Http\Controllers\Su\SchoolController::class, 'index'])->name('dashboard');
+        Route::resource('/schools', \App\Http\Controllers\Su\SchoolController::class);
+        Route::post('/schools/{school}/switch', [\App\Http\Controllers\Su\SchoolController::class, 'switch'])->name('schools.switch');
+        Route::post('/schools/{school}/tpay-whitelist', [\App\Http\Controllers\Su\SchoolController::class, 'tpayWhitelist'])->name('schools.tpay-whitelist');
+        Route::post('/schools/{school}/tpay-manual-verify', [\App\Http\Controllers\Su\SchoolController::class, 'tpayManualVerify'])->name('schools.tpay-manual-verify');
+        Route::get('/settings', [\App\Http\Controllers\Su\SettingController::class, 'index'])->name('settings.index');
+        Route::post('/settings', [\App\Http\Controllers\Su\SettingController::class, 'store'])->name('settings.store');
+        Route::put('/settings', [\App\Http\Controllers\Su\SettingController::class, 'updateAll'])->name('settings.update-all');
+        Route::delete('/settings/{setting}', [\App\Http\Controllers\Su\SettingController::class, 'destroy'])->name('settings.destroy');
+    });
+
 require __DIR__ . '/auth.php';
 
 // School Landing Page & Rejestracja przypisana do szkoły

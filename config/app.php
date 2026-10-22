@@ -123,4 +123,13 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | SuperAdmin (SU)
+    |--------------------------------------------------------------------------
+    | Opcjonalne przypisanie ID lub e-maila SuperAdmina ze zmiennych środowiskowych.
+    */
+    'superadmin_id' => env('SUPERADMIN_ID'),
+    'superadmin_email' => env('SUPERADMIN_EMAIL'),
+
 ];
