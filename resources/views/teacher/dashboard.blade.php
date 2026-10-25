@@ -153,67 +153,18 @@
 
 
                 {{-- Kafelek: Moje zajęcia --}}
-                <div class="col-12 col-md-4">
-                    <div class="card  shadow-sm h-100" style="border-left: 4px solid var(--tblr-success) !important;">
-                        <div class="card-body p-3">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <span class="subheader fw-bold text-uppercase text-secondary mb-1 fs-6">Moje
-                                    zajęcia</span>
-                                <div class="bg-success-lt text-success">
-                                    <i class="ti ti-books"></i>
-                                </div>
-                            </div>
-                            <div class="h1 mb-1 fw-extrabold text-dark fs-1">{{ $teacherCourses->count() }}</div>
-                            <div class="text-secondary" style="font-size:0.78rem;">przypisanych grup / kursów</div>
-                            <a href="{{ route('teacher.courses.index') }}"
-                                class="btn btn-primary w-100 btn-sm fw-bold shadow-xs py-1.5">
-                                <i class="ti ti-users me-1"></i> Lista grup
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                
+                <x-stats icon="ti ti-books" color="success" title="Moje zajęcia" value="{{ $teacherCourses->count() }}" route="{{ route('teacher.courses.index') }}" description="Zarządzaj swoimi zajęciami" ></x-stats>
+                
 
                 {{-- Kafelek: Uczestnicy --}}
-                <div class="col-6 col-md-4">
-                    <div class="card  shadow-sm h-100" style="border-left: 4px solid var(--tblr-warning) !important;">
-                        <div class="card-body p-3">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <span class="subheader fw-bold text-uppercase text-secondary mb-1 fs-6">Uczestnicy</span>
-                                <div class="bg-warning-lt text-warning">
-                                    <i class="ti ti-users"></i>
-                                </div>
-                            </div>
-                            <div class="text-dark mb-1">{{ $assignedChildrenCount }}</div>
-                            <div class="text-secondary" style="font-size:0.78rem;">zapisanych uczestników</div>
-                            <a href="{{ route('teacher.children.index') }}" class="btn btn-warning btn-sm fw-bold shadow-xs py-1.5">
-                                 Lista uczestników
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                <x-stats icon="ti ti-users" color="warning" title="Uczestnicy" value="{{ $assignedChildrenCount }}" route="{{ route('teacher.children.index') }}" description="Zarządzaj uczestnikami" ></x-stats>
+                
 
                 {{-- Kafelek: Zrealizowane --}}
-                <div class="col-6 col-md-4">
-                    <div class="card shadow-sm h-100" style="border-left: 4px solid var(--tblr-primary) !important;">
-                        <div class="card-body p-3">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <span class="subheader fw-bold text-uppercase text-secondary mb-1 fs-6">Zrealizowane</span>
-                                <div class="bg-blue-lt text-primary">
-                                    <i class="ti ti-calendar-check"></i>
-                                </div>
-                            </div>
-                            <div class="text-dark mb-1">{{ $currentMonthLessonsCount }}</div>
-                            <div class="text-secondary" style="font-size:0.78rem;">
-                                terminy w
-                                {{ \Carbon\Carbon::create()->month($filterMonth)->locale('pl')->isoFormat('MMMM') }}
-                                {{ $filterYear !== now()->year ? $filterYear : '' }}
-                            </div>
-                            <a href="{{ route('teacher.lessons.index') }}" class="btn btn-primary btn-sm fw-bold shadow-xs py-1.5">
-                                Lista lekcji
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                <x-stats icon="ti ti-calendar-check" color="primary" title="Zrealizowane" value="{{ $currentMonthLessonsCount }}" route="{{ route('teacher.lessons.index') }}" description="Zrealizowane zajęcia" ></x-stats>
+                
+                
             </div>
 
 

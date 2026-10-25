@@ -81,44 +81,12 @@
                 </div>
 
                 <!-- 2. KAFELEK UCZESTNICY (50% szerokości na mobile) -->
-                <div class="col-6">
-                    <div class="card shadow-sm border-0 border-top border-primary border-3 h-100 bg-surface rounded-3">
-                        <div class="card-body p-3 d-flex flex-column justify-content-between text-center">
-                            <div>
-                                <div class="avatar avatar-md bg-blue-subtle text-primary rounded-circle mx-auto mb-2 shadow-xs">
-                                    <i class="ti ti-mood-kid fs-1"></i>
-                                </div>
-                                <div class="subheader fw-bold text-uppercase text-secondary mb-1 fs-6">Uczestnicy zajęć</div>
-                                <div class="h1 mb-1 fw-extrabold text-dark fs-1">{{ $children->count() }}</div>
-                            </div>
-                            <div class="mt-2">
-                                <a href="{{ route('user.children.index') }}" class="btn btn-primary w-100 btn-sm fw-bold shadow-xs py-1.5">
-                                    <i class="ti ti-users me-1"></i> Dodaj/edytuj
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               <x-stats icon="ti ti-mood-kid" color="primary" title="Uczestnicy zajęć" value="{{ $children->count() }}" route="{{ route('user.children.index') }}" description="Zarządzaj uczestnikami" ></x-stats> 
+                
 
                 <!-- 3. KAFELEK OFERTA ZAJĘĆ (50% szerokości na mobile) -->
-                <div class="col-6">
-                    <div class="card shadow-sm border-0 border-top border-azure border-3 h-100 bg-surface rounded-3">
-                        <div class="card-body p-3 d-flex flex-column justify-content-between text-center">
-                            <div>
-                                <div class="avatar avatar-md bg-azure-subtle text-azure rounded-circle mx-auto mb-2 shadow-xs">
-                                    <i class="ti ti-school fs-1"></i>
-                                </div>
-                                <div class="subheader fw-bold text-uppercase text-secondary mb-1 fs-6">Oferta Zajęć</div>
-                                <div class="h2 mb-1 fw-extrabold text-dark fs-3">Katalog</div>
-                            </div>
-                            <div class="mt-2">
-                                <a href="{{ route('user.courses.index') }}" class="btn btn-azure w-100 btn-sm fw-bold shadow-xs py-1.5">
-                                    <i class="ti ti-layout-grid me-1"></i> Przeglądaj ofertę
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               <x-stats icon="ti ti-school" color="secondary" title="Oferta Zajęć" value="Katalog" route="{{ route('user.courses.index') }}" description="Zapisz się na zajęcia" ></x-stats> 
+                
             </div>
         </div>
     </div>

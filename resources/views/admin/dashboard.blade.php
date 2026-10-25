@@ -4,7 +4,7 @@
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <div class="page-pretitle text-uppercase fw-bold text-secondary">
-                        <i class="ti ti-shield-check me-1"></i> Panel Dyrektora / Administratora
+                        <i class="ti ti-shield-check me-1"></i> Panel Administratora 
                     </div>
                     <h2 class="page-title text-primary fw-extrabold fs-1">
                         Pulpit Zarządzania Placówką
@@ -50,73 +50,20 @@
     <div class="page-body">
         <div class="container-xl">
             <!-- 4 Kafelki Statystyk -->
-            <div class="row row-cards mb-4">
+            <div class="row g-4 mb-4">
                 <!-- Kafelek 1: Active Courses -->
-                <div class="col-sm-6 col-lg-3">
-                    <div class="card shadow-sm border-0 border-start border-primary border-4 h-100">
-                        <div class="card-body p-3 p-sm-4">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="subheader fw-bold text-uppercase fs-6">Aktywne Zajęcia</div>
-                                <span class="avatar bg-blue-subtle text-primary rounded-circle fs-2">
-                                    <i class="ti ti-school"></i>
-                                </span>
-                            </div>
-                            <div class="h1 mb-1 fw-extrabold text-dark fs-1">{{ $totalCoursesCount }}</div>
-                            <div class="text-secondary small">Wszystkie sekcje i kółka</div>
-                        </div>
-                    </div>
-                </div>
-
+                 <x-stats icon="ti ti-school" color="primary" title="Aktywne Zajęcia" value="{{ $totalCoursesCount }}" route="{{ route('admin.courses.index') }}" description="Zarządzaj zajęciami" ></x-stats>
+                
                 <!-- Kafelek 2: Total Children -->
-                <div class="col-sm-6 col-lg-3">
-                    <div class="card shadow-sm border-0 border-start border-success border-4 h-100">
-                        <div class="card-body p-3 p-sm-4">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="subheader fw-bold text-uppercase fs-6">Uczestnicy zajęć</div>
-                                <span class="avatar bg-green-subtle text-success rounded-circle fs-2">
-                                    <i class="ti ti-mood-kid"></i>
-                                </span>
-                            </div>
-                            <div class="h1 mb-1 fw-extrabold text-dark fs-1">{{ $totalChildrenCount }}</div>
-                            <div class="text-secondary small">Aktywni uczestnicy w placówce</div>
-                        </div>
-                    </div>
-                </div>
+                <x-stats icon="ti ti-mood-kid" color="success" title="Uczestnicy zajęć" value="{{ $totalChildrenCount }}" route="{{ route('admin.children.index') }}" description="Zarządzaj uczestnikami" ></x-stats>
 
                 <!-- Kafelek 3: Kadra i Rodzice -->
-                <div class="col-sm-6 col-lg-3">
-                    <div class="card shadow-sm border-0 border-start border-info border-4 h-100">
-                        <div class="card-body p-3 p-sm-4">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="subheader fw-bold text-uppercase fs-6">Prowadzący / Opiekunowie</div>
-                                <span class="avatar bg-purple-subtle text-purple rounded-circle fs-2">
-                                    <i class="ti ti-users"></i>
-                                </span>
-                            </div>
-                            <div class="h1 mb-1 fw-extrabold text-dark fs-1">{{ $totalTeachersCount }} /
-                                {{ $totalParentsCount }}</div>
-                            <div class="text-secondary small">Prowadzący i konta opiekunów</div>
-                        </div>
-                    </div>
-                </div>
-
+                <x-stats icon="ti ti-users" color="info" title="Prowadzący / Opiekunowie" value="{{ $totalTeachersCount }} / {{ $totalParentsCount }}" route="{{ route('admin.user.index') }}" description="Kadra / Opiekunowie" ></x-stats>
+                
                 <!-- Kafelek 4: Finanse / Zaległości -->
-                <div class="col-sm-6 col-lg-3">
-                    <div class="card shadow-sm border-0 border-start border-danger border-4 h-100">
-                        <div class="card-body p-3 p-sm-4">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <div class="subheader fw-bold text-uppercase fs-6">Zaległe Wpłaty</div>
-                                <span class="avatar bg-danger text-white rounded-circle fs-2">
-                                    <i class="ti ti-currency-zloty"></i>
-                                </span>
-                            </div>
-                            <div class="h1 mb-1 fw-extrabold text-danger fs-1">
-                                {{ number_format($unpaidAmount, 2, ',', ' ') }} zł</div>
-                            <div class="text-secondary small">Opłacono: {{ number_format($paidAmount, 2, ',', ' ') }} zł
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <x-stats icon="ti ti-currency-zloty" color="danger" title="Zaległe Wpłaty" value="{{ $unpaidAmount }}" route="{{ route('admin.billing.index') }}" description="Zarządzaj wpłatami" ></x-stats>
+                
+            
             </div>
 
             <div class="row row-cards">

@@ -54,75 +54,18 @@
         @endif
 
         <!-- 3 Kafelki Raportowe z aktywnym linkowaniem do filtrowania -->
-        <div class="row row-cards mb-4">
+        <div class="row g-4 mb-4">
             <!-- Kafelek 1: Suma rozliczeń (Wszystkie) -->
-            <div class="col-sm-6 col-lg-4">
-                <a href="{{ route('admin.billing.index', ['month' => $month, 'status' => '']) }}" class="card-link text-decoration-none">
-                    <div class="card shadow-sm border-0 bg-primary-subtle text-primary border-start border-primary border-4 h-100 {{ empty($statusFilter) ? 'ring-2 ring-primary' : '' }}">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="subheader text-primary fw-bold text-uppercase fs-5">Suma rozliczeń</div>
-                                <div class="ms-auto text-primary fs-2">
-                                    <i class="ti ti-cash"></i>
-                                </div>
-                            </div>
-                            <div class="h1 mb-1 fw-extrabold text-primary">
-                                {{ number_format($totalAmount, 2, ',', ' ') }} zł
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mt-2 text-secondary fs-5">
-                                <span>Okres: <strong>{{ $selectedMonthName }}</strong></span>
-                                <span class="badge bg-primary text-white">Wszystkie &rarr;</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+            <x-stats icon="ti ti-cash" color="primary" title="Suma rozliczeń" value="{{ $totalAmount }}" route="{{ route('admin.billing.index') }}" description="Zarządzaj wpłatami" ></x-stats>
+            
 
             <!-- Kafelek 2: Lista wpłat (Opłacone) -->
-            <div class="col-sm-6 col-lg-4">
-                <a href="{{ route('admin.billing.index', ['month' => $month, 'status' => 'paid']) }}" class="card-link text-decoration-none">
-                    <div class="card shadow-sm border-0 bg-success-subtle text-success border-start border-success border-4 h-100 {{ $statusFilter === 'paid' ? 'ring-2 ring-success' : '' }}">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="subheader text-success fw-bold text-uppercase fs-5">Zaksięgowane wpłaty</div>
-                                <div class="ms-auto text-success fs-2">
-                                    <i class="ti ti-check"></i>
-                                </div>
-                            </div>
-                            <div class="h1 mb-1 fw-bold text-success">
-                                {{ number_format($totalPaid, 2, ',', ' ') }} zł
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mt-2 text-secondary fs-5">
-                                <span>Wpłaty zaksięgowane</span>
-                                <span class="badge bg-success text-white">Lista wpłat &rarr;</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+             <x-stats icon="ti ti-check" color="success" title="Zaksięgowane wpłaty" value="{{ $totalPaid }}" route="{{ route('admin.billing.index', ['month' => $month, 'status' => 'paid']) }}" description="Lista wpłat" ></x-stats>   
+            
 
             <!-- Kafelek 3: Zaległości / Po terminie (Nieopłacone) -->
-            <div class="col-sm-6 col-lg-4">
-                <a href="{{ route('admin.billing.index', ['month' => $month, 'status' => 'unpaid']) }}" class="card-link text-decoration-none">
-                    <div class="card shadow-sm border-0 bg-danger-subtle text-danger border-start border-danger border-4 h-100 {{ $statusFilter === 'unpaid' ? 'ring-2 ring-danger' : '' }}">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="subheader text-danger fw-bold text-uppercase fs-5">Zaległości / Po terminie</div>
-                                <div class="ms-auto text-danger fs-2">
-                                    <i class="ti ti-clock"></i>
-                                </div>
-                            </div>
-                            <div class="h1 mb-1 fw-bold text-danger">
-                                {{ number_format($totalUnpaid, 2, ',', ' ') }} zł
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mt-2 text-secondary fs-5">
-                                <span>Nieopłacone należności</span>
-                                <span class="badge bg-danger text-white">Po terminie &rarr;</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+            <x-stats icon="ti ti-clock" color="danger" title="Zaległości / Po terminie" value="{{ $totalUnpaid }}" route="{{ route('admin.billing.index', ['month' => $month, 'status' => 'unpaid']) }}" description="Zaległości" ></x-stats>   
+            
         </div>
 
         <!-- Tabela pozycji rozliczeniowych z filtrami zakładek -->

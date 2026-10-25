@@ -12,7 +12,7 @@
   "@graph": [
     {
       "@type": "SoftwareApplication",
-      "name": "Zajęciownia.pl",
+      "name": "Zajeciownia.pl",
       "operatingSystem": "Web, iOS, Android",
       "applicationCategory": "EducationalApplication",
       "offers": {
@@ -26,14 +26,9 @@
     },
     {
       "@type": "Organization",
-      "name": "EduZajęcia.net",
+      "name": "Zajeciownia.pl",
       "url": "{{ url('/') }}",
-      "logo": "{{ asset('images/logo.jpg') }}",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+48 692 343 999",
-        "contactType": "customer service"
-      }
+      "logo": "{{ asset('images/logo.png') }}"
     },
     {
       "@type": "FAQPage",
@@ -118,7 +113,7 @@
 
       <div class="col-lg-6">
         <div class="hero-image-box">
-          <img src="{{ asset('images/hero-mockup.jpg') }}" alt="Mokup aplikacji EduZajęcia.net" class="w-100 h-auto d-block">
+          <img src="{{ asset('images/hero-mockup.jpg') }}" alt="Zajęciownia" class="w-100 h-auto d-block">
         </div>
       </div>
     </div>
@@ -177,9 +172,11 @@
           <p class="text-secondary mb-4">Pełna kontrola nad placówką, harmonogramem zajęć, salami oraz budżetem placówki.</p>
           <ul class="list-unstyled d-flex flex-column gap-2 mb-4">
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-primary me-2 fs-3"></i> <span><strong>Obłożenie grup (np. 5/15):</strong> Alerty o limitach miejsc.</span></li>
-            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-primary me-2 fs-3"></i> <span><strong>3 typy rozliczeń:</strong> Ryczałt, za lekcję, indywidualne.</span></li>
+            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-primary me-2 fs-3"></i> <span><strong>Różne typy rozliczeń:</strong> Ryczałt, za lekcję, indywidualne, grupowe.</span></li>
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-primary me-2 fs-3"></i> <span><strong>Księgowanie wpłat:</strong> Zestawienie wpłat online i gotówki.</span></li>
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-primary me-2 fs-3"></i> <span><strong>Zarządzanie kadrą:</strong> Przypisywanie lekcji i sal.</span></li>
+            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-primary me-2 fs-3"></i> <span><strong>Powiadomienia:</strong> Wygodny system powiadomień.</span></li>
+            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-primary me-2 fs-3"></i> <span><strong>Wszystko pod kontrolą:</strong> Wygodny system raportowania.</span></li>
           </ul>
           <a href="{{ route('register') }}" class="btn btn-outline-primary w-100 fw-bold mt-auto">Zarejestruj placówkę &rarr;</a>
         </div>
@@ -198,6 +195,8 @@
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-success me-2 fs-3"></i> <span><strong>Sprawdzanie obecności:</strong> Obecny, Nieobecny, Usprawiedliwiony.</span></li>
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-success me-2 fs-3"></i> <span><strong>Lista uczestników:</strong> Szybki wgląd do bazy grupy.</span></li>
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-success me-2 fs-3"></i> <span><strong>Plan zajęć:</strong> Porządek tygodniowych zajęć.</span></li>
+            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-success me-2 fs-3"></i> <span><strong>Powiadomienia:</strong> Wygodny system powiadomień.</span></li>
+            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-warning me-2 fs-3"></i> <span><strong>Wszytko w jednym miejscu:</strong> Jedno konto - wiele szkół i zajęć.</span></li>
           </ul>
           <a href="{{ route('login') }}" class="btn btn-outline-success w-100 fw-bold mt-auto">Przejdź do dziennika &rarr;</a>
         </div>
@@ -214,7 +213,7 @@
           <ul class="list-unstyled d-flex flex-column gap-2 mb-4">
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-warning me-2 fs-3"></i> <span><strong>Pełna kontrola:</strong> Podsumowanie kosztów dla każdego dodanego uczestnika.</span></li>
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-warning me-2 fs-3"></i> <span><strong>Płatności Online:</strong> Wszystkie zaległości lub poszczególne zajęcia.</span></li>
-            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-warning me-2 fs-3"></i> <span><strong>Rozliczenie od zapisu:</strong> Brak starych opłat.</span></li>
+            <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-warning me-2 fs-3"></i> <span><strong>Wszytko w jednym miejscu:</strong> Jedno konto - wiele szkół i zajęć.</span></li>
             <li class="d-flex align-items-center"><i class="ti ti-circle-check-filled text-warning me-2 fs-3"></i> <span><strong>Zwolnienia z opłat:</strong> Odliczanie usprawiedliwionych.</span></li>
           </ul>
           <a href="{{ route('login') }}" class="btn btn-outline-warning w-100 fw-bold mt-auto">Panel Rodzica &rarr;</a>
@@ -381,7 +380,7 @@
           <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary flex-grow-1">
             <li class="d-flex align-items-start">
               <i class="ti ti-users text-primary me-2 mt-1"></i>
-              <span><strong>Do 30</strong> aktywnych zapisów <span class="text-muted small">(~20–30 dzieci)</span></span>
+              <span><strong>Do 30</strong> aktywnych zapisów <span class="text-muted small">(~20–30 uczestników)</span></span>
             </li>
             <li class="d-flex align-items-start">
               <i class="ti ti-user-check text-primary me-2 mt-1"></i>
@@ -393,7 +392,7 @@
             </li>
             <li class="d-flex align-items-start">
               <i class="ti ti-check text-success me-2 mt-1"></i>
-              <span>Rozliczenia Tpay / Płatności z dołu</span>
+              <span>Płatności online lub gotówką</span>
             </li>
             <li class="d-flex align-items-start">
               <i class="ti ti-check text-success me-2 mt-1"></i>
@@ -409,7 +408,7 @@
             </li>
             <li class="d-flex align-items-start">
               <i class="ti ti-help text-muted me-2 mt-1"></i>
-              <span>Wdrożenie: Samoobsługa</span>
+              <span>Wdrożenie: E-mail</span>
             </li>
           </ul>
 
@@ -425,7 +424,7 @@
           <div class="mb-3">
             <span class="badge bg-secondary-subtle text-secondary fw-bold px-2 py-1 rounded">🥇 START</span>
             <h3 class="fw-bold text-dark fs-2 mt-2 mb-1">Start</h3>
-            <p class="text-secondary small mb-0">Mały / Wiejski GOK, kluby i sekcje</p>
+            <p class="text-secondary small mb-0">Mały GOK, kluby i sekcje</p>
           </div>
 
           <div class="my-3 py-2 border-top border-bottom">
@@ -441,7 +440,7 @@
           <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary flex-grow-1">
             <li class="d-flex align-items-start">
               <i class="ti ti-users text-primary me-2 mt-1"></i>
-              <span><strong>Do 100</strong> aktywnych zapisów <span class="text-muted small">(~50–70 dzieci)</span></span>
+              <span><strong>Do 150</strong> aktywnych zapisów <span class="text-muted small">(~100-150 uczestników)</span></span>
             </li>
             <li class="d-flex align-items-start">
               <i class="ti ti-users-plus text-success me-2 mt-1"></i>
@@ -493,12 +492,12 @@
           </div>
 
           <div class="my-3 py-2 border-top border-bottom border-primary-subtle bg-white rounded-2 px-2">
-            <div class="pricing-price" data-annual-price="349" data-monthly-price="429">
-              <span class="display-6 fw-extrabold text-primary price-val">349</span>
+            <div class="pricing-price" data-annual-price="299" data-monthly-price="359">
+              <span class="display-6 fw-extrabold text-primary price-val">299</span>
               <span class="fs-4 fw-bold text-primary">zł</span>
               <span class="text-secondary small">netto / mc</span>
             </div>
-            <div class="text-muted small price-gross">(429,27 zł brutto)</div>
+            <div class="text-muted small price-gross">(367,77 zł brutto)</div>
             <div class="text-success small fw-medium mt-1 billing-note">w umowie rocznej</div>
           </div>
 
@@ -509,7 +508,7 @@
           <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary flex-grow-1">
             <li class="d-flex align-items-start">
               <i class="ti ti-users text-primary me-2 mt-1"></i>
-              <span><strong>Do 350</strong> aktywnych zapisów <span class="text-muted small">(~150–250 dzieci)</span></span>
+              <span><strong>Do 350</strong> aktywnych zapisów <span class="text-muted small">(~200–350 uczestników)</span></span>
             </li>
             <li class="d-flex align-items-start">
               <i class="ti ti-users-plus text-success me-2 mt-1"></i>
@@ -530,6 +529,10 @@
             <li class="d-flex align-items-start">
               <i class="ti ti-check text-success me-2 mt-1"></i>
               <span>Powiadomienia E-mail & In-App</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Wyróżnienie placówki w katalogu Zajęciowni</span>
             </li>
             <li class="d-flex align-items-start">
               <i class="ti ti-chart-arrows text-primary me-2 mt-1"></i>
@@ -557,19 +560,19 @@
           </div>
 
           <div class="my-3 py-2 border-top border-bottom">
-            <div class="pricing-price" data-annual-price="599" data-monthly-price="749">
+            <div class="pricing-price" data-annual-price="599" data-monthly-price="719">
               <span class="display-6 fw-extrabold text-dark price-val">599</span>
               <span class="fs-4 fw-bold text-dark">zł</span>
               <span class="text-secondary small">netto / mc</span>
             </div>
-            <div class="text-muted small price-gross">(736,77 zł brutto)</div>
+            <div class="text-muted small price-gross">(719,17 zł brutto)</div>
             <div class="text-success small fw-medium mt-1 billing-note">w umowie rocznej</div>
           </div>
 
           <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-4 text-secondary flex-grow-1">
             <li class="d-flex align-items-start">
               <i class="ti ti-users text-primary me-2 mt-1"></i>
-              <span><strong>Do 800</strong> aktywnych zapisów <span class="text-muted small">(~400–600 dzieci)</span></span>
+              <span><strong>Do 800</strong> aktywnych zapisów <span class="text-muted small">(~500–800 dzieci)</span></span>
             </li>
             <li class="d-flex align-items-start">
               <i class="ti ti-users-plus text-success me-2 mt-1"></i>
@@ -590,6 +593,10 @@
             <li class="d-flex align-items-start">
               <i class="ti ti-check text-success me-2 mt-1"></i>
               <span>Powiadomienia E-mail & In-App</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <i class="ti ti-check text-success me-2 mt-1"></i>
+              <span>Wyróżnienie placówki na stronie głównej Zajęciowni</span>
             </li>
             <li class="d-flex align-items-start">
               <i class="ti ti-chart-dots text-primary me-2 mt-1"></i>
@@ -632,23 +639,23 @@
               <tr>
                 <td class="text-start fw-semibold text-secondary">Główny odbiorca</td>
                 <td>Korepetytor / 1 osoba</td>
-                <td>Mały / Wiejski GOK</td>
-                <td class="bg-primary-subtle fw-semibold">Średni MDK / OOK</td>
-                <td>Duży CKiS / MCK</td>
+                <td>Mały GOK</td>
+                <td class="bg-primary-subtle fw-semibold">Średni Dom Kultury, Szkoła Językowa, Klub Sportowy</td>
+                <td>Duże Centrum Kultury / Szkoła</td>
               </tr>
               <tr>
                 <td class="text-start fw-semibold text-secondary">Limit Aktywnych Zapisów</td>
                 <td><strong>do 30</strong></td>
-                <td><strong>do 100</strong></td>
+                <td><strong>do 150</strong></td>
                 <td class="bg-primary-subtle fw-bold text-primary">do 350</td>
                 <td><strong>do 800</strong></td>
               </tr>
               <tr>
                 <td class="text-start fw-semibold text-secondary">Szacowana liczba dzieci</td>
                 <td>(~20–30)</td>
-                <td>(~50–70)</td>
-                <td class="bg-primary-subtle fw-semibold">(~150–250)</td>
-                <td>(~400–600)</td>
+                <td>(~100-150)</td>
+                <td class="bg-primary-subtle fw-semibold">(~250–350)</td>
+                <td>(~600–800)</td>
               </tr>
               <tr>
                 <td class="text-start fw-semibold text-secondary">Liczba Instruktorów</td>
@@ -661,15 +668,15 @@
                 <td class="text-start fw-semibold text-secondary">Cena miesięczna (umowa roczna)</td>
                 <td><strong>49 zł</strong> netto<br><span class="text-muted small">(60,27 zł brutto)</span></td>
                 <td><strong>149 zł</strong> netto<br><span class="text-muted small">(183,27 zł brutto)</span></td>
-                <td class="bg-primary-subtle fw-bold text-primary">349 zł netto<br><span class="text-muted small">(429,27 zł brutto)</span></td>
+                <td class="bg-primary-subtle fw-bold text-primary">299 zł netto<br><span class="text-muted small">(367,77 zł brutto)</span></td>
                 <td><strong>599 zł</strong> netto<br><span class="text-muted small">(736,77 zł brutto)</span></td>
               </tr>
               <tr>
                 <td class="text-start fw-semibold text-secondary">Cena przy rozliczeniu miesięcznym</td>
                 <td>69 zł netto / mc</td>
                 <td>189 zł netto / mc</td>
-                <td class="bg-primary-subtle fw-semibold">429 zł netto / mc</td>
-                <td>749 zł netto / mc</td>
+                <td class="bg-primary-subtle fw-semibold">359 zł netto / mc</td>
+                <td>719 zł netto / mc</td>
               </tr>
               <tr>
                 <td class="text-start fw-semibold text-secondary">Dziennik elektroniczny & Zapisy</td>
@@ -712,6 +719,13 @@
                 <td>Pomoc e-mail</td>
                 <td class="bg-primary-subtle fw-bold text-primary">Dedykowane wdrożenie online</td>
                 <td><strong>Dedykowany opiekun</strong></td>
+              </tr>
+              <tr>
+                <td class="text-start fw-semibold text-secondary">Promocja placówki w Zajęciowni</td>
+                <td>Zwykły wpis</td>
+                <td>Zwykły wpis</td>
+                <td class="bg-primary-subtle fw-bold text-primary">Wyróżnienie w katalogu</td>
+                <td><strong>Wyróżnienie na stronie głównej + katalogu</strong></td>
               </tr>
             </tbody>
           </table>
@@ -848,7 +862,7 @@ function switchBilling(type) {
 <section class="py-6 bg-white">
   <div class="container-xl">
     <div class="cta-banner text-center">
-      <h2 class="display-5 fw-extrabold mb-3">Gotowy na Automatyzację Twojej Pracy?</h2>
+      <h2 class="display-5 fw-extrabold mb-3 test-white">Gotowy na Automatyzację Twojej Pracy?</h2>
       <p class="fs-2 text-blue-100 max-w-2xl mx-auto mb-4">
         Dołącz do nowoczesnych placówek edukacyjnych. Zarejestruj się w 2 minuty i przetestuj pełne możliwości platformy przez 14 dni bez żadnych zobowiązań.
       </p>

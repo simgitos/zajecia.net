@@ -69,11 +69,11 @@
                                     </li>
                                 @endforeach
                                 <li><hr class="dropdown-divider my-1"></li>
-                                <li>
+                                <!-- <li>
                                     <a href="{{ route('schools.index') }}" class="dropdown-item py-2 text-primary">
                                         <i class="ti ti-plus me-2"></i> Przeglądaj katalog placówek
                                     </a>
-                                </li>
+                                </li> -->
                             </ul>
                         </div>
                     </div>
@@ -87,9 +87,9 @@
                                     </span>
                                     <span class="text-truncate fw-medium small" title="{{ $activeSchool->name }}">{{ $activeSchool->name }}</span>
                                 </div>
-                                <a href="{{ route('schools.index') }}" class="text-secondary" title="Dołącz do innej placówki">
+                                <!-- <a href="{{ route('schools.index') }}" class="text-secondary" title="Dołącz do innej placówki">
                                     <i class="ti ti-plus fs-3"></i>
-                                </a>
+                                </a> -->
                             </div>
                         </div>
                     </div>
