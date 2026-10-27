@@ -22,6 +22,13 @@ class Course extends Model
         'description',
         'schedule_info',
         'is_active',
+        'schedule_day_of_week',
+        'schedule_start_time',
+        'schedule_end_time',
+        'schedule_frequency',
+        'slot_duration_minutes',
+        'slot_break_minutes',
+        'schedule_slots',
     ];
 
     protected $casts = [
@@ -30,6 +37,10 @@ class Course extends Model
         'max_participants' => 'integer',
         'min_age' => 'integer',
         'max_age' => 'integer',
+        'schedule_day_of_week' => 'integer',
+        'slot_duration_minutes' => 'integer',
+        'slot_break_minutes' => 'integer',
+        'schedule_slots' => 'array',
     ];
 
     public function school(): BelongsTo

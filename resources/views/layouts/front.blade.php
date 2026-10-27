@@ -38,13 +38,13 @@
   <!-- Twitter Card -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="{{ url()->current() }}">
-  <meta property="twitter:title" content="@yield('title', 'EduZajęcia.net - System Obsługi Zajęć Pozalekcyjnych')">
+  <meta property="twitter:title" content="@yield('title', 'Zajęciownia.pl - System Obsługi Zajęć Pozalekcyjnych')">
   <meta property="twitter:description"
     content="@yield('meta_description', 'Platforma SaaS dla szkół i rodziców. Zapisy, frekwencja i płatności online w jednym miejscu.')">
   <meta property="twitter:image" content="{{ asset('images/hero-mockup.jpg') }}">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/jpeg" href="{{ asset('images/logo.png') }}">
+  <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">

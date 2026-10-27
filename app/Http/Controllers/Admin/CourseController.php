@@ -125,6 +125,13 @@ class CourseController extends Controller
             'child_ids' => ['nullable', 'array'],
             'child_ids.*' => ['integer', 'exists:children,id'],
             'create_separate_for_each' => ['nullable', 'boolean'],
+            'schedule_day_of_week' => ['nullable', 'integer', 'between:1,7'],
+            'schedule_start_time' => ['nullable', 'date_format:H:i'],
+            'schedule_end_time' => ['nullable', 'date_format:H:i', 'after:schedule_start_time'],
+            'schedule_frequency' => ['nullable', 'in:weekly,biweekly,once'],
+            'slot_duration_minutes' => ['nullable', 'integer', 'in:30,45,60'],
+            'slot_break_minutes' => ['nullable', 'integer', 'in:0,5,10'],
+            'schedule_slots' => ['nullable', 'json'],
         ]);
 
         $roomId = $request->input('room_id');
@@ -140,6 +147,16 @@ class CourseController extends Controller
 
         $seasonId = $request->input('season_id') ?: Auth::user()->activeSchool()?->activeSeason()?->id;
 
+        $scheduleData = [
+            'schedule_day_of_week' => $request->input('schedule_day_of_week'),
+            'schedule_start_time' => $request->input('schedule_start_time'),
+            'schedule_end_time' => $request->input('schedule_end_time'),
+            'schedule_frequency' => $request->input('schedule_frequency'),
+            'slot_duration_minutes' => $request->input('slot_duration_minutes'),
+            'slot_break_minutes' => $request->input('slot_break_minutes'),
+            'schedule_slots' => $request->input('schedule_slots') ? json_decode($request->input('schedule_slots'), true) : null,
+        ];
+
         $selectedChildIds = $request->input('child_ids', []);
         $separateForEach = $request->boolean('create_separate_for_each') && $request->type === 'individual' && !empty($selectedChildIds);
 
@@ -152,7 +169,7 @@ class CourseController extends Controller
                 }
                 $title = $child ? $request->title . ' - ' . $child->name : $request->title;
 
-                $newCourse = Course::create([
+                $newCourse = Course::create(array_merge([
                     'school_id' => $schoolId,
                     'season_id' => $seasonId,
                     'instructor_id' => $request->instructor_id,
@@ -167,7 +184,7 @@ class CourseController extends Controller
                     'schedule_info' => $request->schedule_info,
                     'description' => $request->description,
                     'is_active' => $request->has('is_active'),
-                ]);
+                ], $scheduleData));
 
                 $newCourse->children()->attach($childId, [
                     'sort_order' => 1,
@@ -180,7 +197,7 @@ class CourseController extends Controller
                 ->with('success', 'Pomyślnie utworzono osobne zajęcia indywidualne dla ' . count($selectedChildIds) . ' uczestników.');
         }
 
-        $course = Course::create([
+        $course = Course::create(array_merge([
             'school_id' => $schoolId,
             'season_id' => $seasonId,
             'instructor_id' => $request->instructor_id,
@@ -195,7 +212,7 @@ class CourseController extends Controller
             'schedule_info' => $request->schedule_info,
             'description' => $request->description,
             'is_active' => $request->has('is_active'),
-        ]);
+        ], $scheduleData));
 
         if (!empty($selectedChildIds)) {
             $order = 1;
@@ -276,6 +293,13 @@ class CourseController extends Controller
             'max_age' => ['nullable', 'integer', 'min:0'],
             'schedule_info' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'schedule_day_of_week' => ['nullable', 'integer', 'between:1,7'],
+            'schedule_start_time' => ['nullable', 'date_format:H:i'],
+            'schedule_end_time' => ['nullable', 'date_format:H:i', 'after:schedule_start_time'],
+            'schedule_frequency' => ['nullable', 'in:weekly,biweekly,once'],
+            'slot_duration_minutes' => ['nullable', 'integer', 'in:30,45,60'],
+            'slot_break_minutes' => ['nullable', 'integer', 'in:0,5,10'],
+            'schedule_slots' => ['nullable', 'json'],
         ]);
 
         $roomId = $request->input('room_id');
@@ -302,6 +326,13 @@ class CourseController extends Controller
             'schedule_info' => $request->schedule_info,
             'description' => $request->description,
             'is_active' => $request->has('is_active'),
+            'schedule_day_of_week' => $request->input('schedule_day_of_week'),
+            'schedule_start_time' => $request->input('schedule_start_time'),
+            'schedule_end_time' => $request->input('schedule_end_time'),
+            'schedule_frequency' => $request->input('schedule_frequency'),
+            'slot_duration_minutes' => $request->input('slot_duration_minutes'),
+            'slot_break_minutes' => $request->input('slot_break_minutes'),
+            'schedule_slots' => $request->input('schedule_slots') ? json_decode($request->input('schedule_slots'), true) : null,
         ]);
 
         return redirect()->route('admin.courses.index')->with('success', 'Zajęcia zostały pomyślnie zaktualizowane.');
