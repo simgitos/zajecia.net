@@ -224,7 +224,8 @@
                                                                 <select name="payment_method" class="form-select" required>
                                                                     <option value="transfer" selected>Przelew bankowy</option>
                                                                     <option value="cash">Gotówka</option>
-                                                                    <option value="online">Płatność online</option>
+                                                                    <option value="online">Płatność online</option><option value="correct">Korekta</option>
+
                                                                 </select>
                                                             </div>
 

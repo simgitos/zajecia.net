@@ -311,6 +311,9 @@
                                                     @case('cash')
                                                         <span class="badge bg-green-lt"><i class="ti ti-cash me-1"></i> Gotówka</span>
                                                         @break
+                                                    @case('correct')
+                                                        <span class="badge bg-green-lt"><i class="ti ti-cash me-1"></i> Korekta</span>
+                                                        @break
                                                     @default
                                                         <span class="badge bg-purple-lt"><i class="ti ti-building-bank me-1"></i> Przelew bankowy</span>
                                                 @endswitch

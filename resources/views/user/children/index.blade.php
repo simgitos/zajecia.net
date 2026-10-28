@@ -206,7 +206,7 @@
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title fw-bold fs-3">
-                            <i class="ti ti-user-plus me-1.5 text-primary"></i> Dodaj dane uczestnika
+                            <i class="ti ti-user-plus me-1.5 text-primary"></i> Dodaj dane uczestnika zajęć
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -224,8 +224,8 @@
                             <input type="text" name="pesel" class="form-control" placeholder="11 cyfr" maxlength="11" value="{{ old('pesel') }}">
                         </div> -->
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Uwagi / Informacje zdrowotne dla prowadzącego</label>
-                            <textarea name="parent_comment" class="form-control" rows="3" placeholder="np. alergie, przeciwwskazania, informacje dodatkowe">{{ old('parent_comment') }}</textarea>
+                            <label class="form-label fw-bold">Uwagi / Informacje dla prowadzącego (opcjonalnie)</label>
+                            <textarea name="parent_comment" class="form-control" rows="3" placeholder="np. informacje dodatkowe">{{ old('parent_comment') }}</textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

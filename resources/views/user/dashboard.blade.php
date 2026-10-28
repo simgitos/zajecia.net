@@ -81,7 +81,7 @@
                 </div>
 
                 <!-- 2. KAFELEK UCZESTNICY (50% szerokości na mobile) -->
-               <x-stats icon="ti ti-mood-kid" color="primary" title="Uczestnicy zajęć" value="{{ $children->count() }}" route="{{ route('user.children.index') }}" description="Zarządzaj uczestnikami" ></x-stats> 
+               <x-stats icon="ti ti-mood-kid" color="primary" title="Uczestnicy zajęć" value="{{ $children->count() }}" route="{{ route('user.children.index') }}" description="Dodaj/Edytuj uczestników" ></x-stats> 
                 
 
                 <!-- 3. KAFELEK OFERTA ZAJĘĆ (50% szerokości na mobile) -->

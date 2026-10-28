@@ -4,10 +4,10 @@
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <h2 class="page-title text-primary fw-bold">
-                        <i class="ti ti-edit me-2"></i> Edycja Profilu Dziecka
+                        <i class="ti ti-edit me-2"></i> Edycja Profilu Uczestnika
                     </h2>
                     <div class="text-secondary mt-1">
-                        Zaktualizuj dane swojego dziecka.
+                        Zaktualizuj dane uczestnika zajęć.
                     </div>
                 </div>
                 <div class="col-auto ms-auto">
@@ -37,7 +37,7 @@
 
                     <div class="card shadow-sm border-0">
                         <div class="card-header bg-surface border-bottom">
-                            <h3 class="card-title fw-bold">Dane dziecka: {{ $child->name }}</h3>
+                            <h3 class="card-title fw-bold">Dane Uczestnika: {{ $child->name }}</h3>
                         </div>
                         <form action="{{ route('user.children.update', $child) }}" method="POST">
                             @csrf
@@ -45,7 +45,7 @@
 
                             <div class="card-body">
                                 <div class="mb-3">
-                                    <label class="form-label required">Imię i nazwisko dziecka</label>
+                                    <label class="form-label required">Imię i nazwisko uczestnika zajęć</label>
                                     <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $child->name) }}" required>
                                     @error('name')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -69,8 +69,8 @@
                                 </div> -->
 
                                 <div class="mb-3">
-                                    <label class="form-label">Uwagi / Komentarz dla organizatora</label>
-                                    <textarea name="parent_comment" class="form-control @error('parent_comment') is-invalid @enderror" rows="3" placeholder="Informacje o zdrowiu, alergiach itp.">{{ old('parent_comment', $child->parent_comment) }}</textarea>
+                                    <label class="form-label">Uwagi / Komentarz dla instruktora (opcjonalnie)</label>
+                                    <textarea name="parent_comment" class="form-control @error('parent_comment') is-invalid @enderror" rows="3" placeholder="Informacje dla instruktora">{{ old('parent_comment', $child->parent_comment) }}</textarea>
                                     @error('parent_comment')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

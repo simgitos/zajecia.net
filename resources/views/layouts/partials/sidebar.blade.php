@@ -77,8 +77,8 @@
                             </ul>
                         </div>
                     </div>
-                @elseif($activeSchool)
-                    <div class="px-3 pt-3 pb-1">
+                 @elseif($activeSchool)
+                 <!--   <div class="px-3 pt-3 pb-1">
                         <div class="card bg-surface border shadow-xs p-2 mb-1">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center gap-2 text-truncate me-2">
@@ -87,12 +87,12 @@
                                     </span>
                                     <span class="text-truncate fw-medium small" title="{{ $activeSchool->name }}">{{ $activeSchool->name }}</span>
                                 </div>
-                                <!-- <a href="{{ route('schools.index') }}" class="text-secondary" title="Dołącz do innej placówki">
+                                 <a href="{{ route('schools.index') }}" class="text-secondary" title="Dołącz do innej placówki">
                                     <i class="ti ti-plus fs-3"></i>
-                                </a> -->
+                                </a> 
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                 @endif
 
                 {{-- Przełącznik roli użytkownika --}}
