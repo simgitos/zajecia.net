@@ -218,8 +218,8 @@ class TpayPaymentService
             throw new RuntimeException('Brak skonfigurowanych globalnych poświadczeń Tpay w ustawieniach SU.');
         }
 
-        $oauthBaseUrl = $productionMode ? 'https://openapi.tpay.com' : 'https://openapi.sandbox.tpay.com';
-        $apiBaseUrl = $productionMode ? 'https://api.tpay.com' : 'https://api.tpay.com'; // lub sandbox
+        $oauthBaseUrl = $productionMode ? 'https://api.tpay.com' : 'https://openapi.sandbox.tpay.com';
+        $apiBaseUrl = $productionMode ? 'https:api.tpay.com' : 'https://openapi.sandbox.tpay.com'; // lub sandbox
 
         // 1. Pobranie Bearer Token z OAuth
         $authResponse = Http::asJson()->timeout(15)->post("{$oauthBaseUrl}/oauth/auth", [

@@ -1,21 +1,9 @@
 <x-app-layout>
-    <div class="page-header d-print-none mb-3">
-        <div class="container-xl">
-            <div class="row g-2 align-items-center">
-                <div class="col">
-                    <div class="text-secondary fw-semibold" style="font-size:0.8rem; text-transform:uppercase; letter-spacing:.06em;">
-                        <i class="ti ti-users me-1"></i> Instrukcja / Uczestnicy
-                    </div>
-                    <h2 class="page-title fw-bold mb-0">
-                        Moi Uczestnicy
-                    </h2>
-                    <div class="text-secondary mt-1" style="font-size:0.85rem;">
-                        Lista wszystkich dzieci zapisanych na Twoje zajęcia.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-user-header 
+        title="Uczestnicy zajęć" 
+        description="Lista wszystkich uczestników zapisanych na Twoje zajęcia." 
+    />
+    
 
     <div class="page-body">
         <div class="container-xl">
