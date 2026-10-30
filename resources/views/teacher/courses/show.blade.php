@@ -1,28 +1,9 @@
 <x-app-layout>
-    <div class="page-header d-print-none mb-4">
-        <div class="container-xl">
-            <div class="row g-2 align-items-center">
-                <div class="col">
-                    <div class="mb-1">
-                        <a href="{{ route('teacher.courses.index') }}" class="text-secondary">
-                            <i class="ti ti-arrow-left me-1"></i> Powrót do moich zajęć
-                        </a>
-                    </div>
-                    <h2 class="page-title text-primary fw-bold">
-                        <i class="ti ti-school me-2"></i> Zajęcia: {{ $course->title }}
-                    </h2>
-                </div>
-                <div class="col-auto ms-auto d-print-none d-flex gap-2">
-                    <!-- <a href="{{ route('teacher.lessons.create', $course->id) }}" class="btn btn-success">
-                        <i class="ti ti-checkup-list me-1"></i> Przeprowadź zajęcia
-                    </a> -->
-                    <!-- <button type="button" onclick="window.print();" class="btn btn-outline-secondary">
-                        <i class="ti ti-printer me-1"></i> Drukuj listę
-                    </button> -->
-                </div>
-            </div>
-        </div>
-    </div>
+ <x-user-header 
+        title='Szczegóły zajęć - {{ $course->title }}'
+        description="Przeglądaj informacje o zajęciach i zarządzaj uczestnikami" />
+
+         
 
     <div class="page-body">
         <div class="container-xl">

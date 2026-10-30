@@ -1,29 +1,8 @@
 <x-app-layout>
-    <div class="page-header d-print-none mb-3 mb-md-4">
-        <div class="container-xl">
-            <div class="row g-2 align-items-center">
-                <div class="col">
-                   
-                    <h2 class="page-title text-primary fw-extrabold fs-1">
-                        <i class="ti ti-mood-kid me-2"></i> Uczestnicy Zajęć
-                        @if(isset($activeSeason) && $activeSeason)
-                            <span class="badge bg-primary-lt fs-6 ms-2 align-middle">
-                                <i class="ti ti-calendar me-1"></i> {{ $activeSeason->name }}
-                            </span>
-                        @endif
-                    </h2>
-                    <div class="text-secondary mt-1 fs-5 d-sm-block">
-                        Zarządzaj danymi swoich uczestników i zapisuj ich na dostępne zajęcia w bieżącym sezonie.
-                    </div>
-                </div>
-                <div class="col-auto ms-auto d-print-none">
-                    <button type="button" class="btn btn-sm btn-primary fw-bold shadow-sm py-2 px-3" data-bs-toggle="modal" data-bs-target="#modal-add-child">
-                        <i class="ti ti-user-plus me-1.5 fs-2"></i> Dodaj uczestnika
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+<x-user-header title="Uczestnicy Zajęć" description="Zarządzaj danymi swoich uczestników i zapisuj ich na dostępne zajęcia w bieżącym sezonie." icon="ti ti-mood-kid">
+    
+</x-user-header>    
+
 
     <div class="page-body">
         <div class="container-xl">
@@ -54,6 +33,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
+             <div class="col-auto ms-auto d-print-none">
+                    <button type="button" class="btn btn-sm btn-primary fw-bold shadow-sm py-2 px-3" data-bs-toggle="modal" data-bs-target="#modal-add-child">
+                        <i class="ti ti-user-plus me-1.5 fs-2"></i> Dodaj uczestnika
+                    </button>
+                </div>
 
             @if($children->isEmpty())
                 <div class="card card-md shadow-sm text-center py-5 border-0 rounded-3">

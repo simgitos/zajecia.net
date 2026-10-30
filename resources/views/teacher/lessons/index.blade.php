@@ -1,6 +1,6 @@
 <x-app-layout>
     
-<x-user-header title="Historia zajęć" description="Przegląd i historia zrealizowanych terminów zajęć." ></x-user-header>
+<x-user-header title="Historia zajęć" description="Przegląd i historia zrealizowanych zajęć." icon="ti ti-calendar-check"></x-user-header>
 
 
 

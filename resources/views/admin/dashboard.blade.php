@@ -1,51 +1,9 @@
 <x-app-layout>
-    <div class="page-header d-print-none mb-4">
-        <div class="container-xl">
-            <div class="row g-2 align-items-center">
-                <div class="col">
-                    <div class="page-pretitle text-uppercase fw-bold text-secondary">
-                        <i class="ti ti-shield-check me-1"></i> Panel Administratora 
-                    </div>
-                    <h2 class="page-title text-primary fw-extrabold fs-1">
-                        Pulpit Zarządzania Placówką
 
-                    </h2>
-                    <div class="text-secondary mt-1 fs-4">
-                        Przegląd kluczowych wskaźników, obłożenia sal oraz finansów szkoły.
-                    </div>
-                    @if(isset($activeSeason) && $activeSeason)
-                        <a href="{{ route('admin.seasons.index') }}"
-                            class="badge bg-primary-lt fs-6 ms-2 align-middle text-decoration-none"
-                            title="Zarządzaj sezonami">
-                            <i class="ti ti-calendar me-1"></i> Sezon: {{ $activeSeason->name }}
-                        </a>
-                    @else
-                        <a href="{{ route('admin.seasons.create') }}"
-                            class="badge bg-danger-lt fs-6 ms-2 align-middle text-decoration-none"
-                            title="Brak aktywnego sezonu">Dodaj sezon</a>
-                    @endif
-                    
-                    <a href="#"
-                        class="badge bg-primary-lt fs-6 ms-2 align-middle text-decoration-none"
-                        title="Ustaw uprawnienia dla instruktorów">
-                        <i class="ti ti-user-edit me-1"></i> Ustaw uprawnienia dla instruktorów
-                    </a>
-
-                </div>
-                <!-- Szybkie akcje dyrektora -->
-                <!-- <div class="col-auto ms-auto d-print-none">
-                    <div class="d-flex gap-2">
-                        <a href="{{ route('admin.courses.create') }}" class="btn btn-primary fw-bold shadow-sm">
-                            <i class="ti ti-plus me-1 fs-3"></i> Dodaj Zajęcia
-                        </a>
-                        <a href="{{ route('admin.billing.index') }}" class="btn btn-outline-primary fw-bold">
-                            <i class="ti ti-receipt-2 me-1 fs-3"></i> Rozliczenia
-                        </a>
-                    </div>
-                </div> -->
-            </div>
-        </div>
-    </div>
+<x-user-header title="Pulpit Zarządzania Placówką"
+        description="Przegląd kluczowych wskaźników, obłożenia sal oraz finansów szkoły." />
+    
+    
 
     <div class="page-body">
         <div class="container-xl">

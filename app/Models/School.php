@@ -160,17 +160,10 @@ class School extends Model
     }
 
     /**
-     * Zwraca aktualnie aktywny sezon szkoły (uwzględnia wybrany w sesji).
+     * Zwraca aktualnie aktywny sezon szkoły.
      */
     public function activeSeason(): ?Season
     {
-        if (request()?->hasSession() && session()->has('active_season_id')) {
-            $season = $this->seasons()->where('id', (int) session('active_season_id'))->first();
-            if ($season) {
-                return $season;
-            }
-        }
-
         return $this->seasons()->where('is_active', true)->first()
             ?? $this->seasons()->latest('id')->first();
     }

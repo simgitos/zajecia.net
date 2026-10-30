@@ -1,19 +1,8 @@
 <x-app-layout>
-    <div class="page-header d-print-none mb-3 mb-md-4">
-        <div class="container-xl">
-            <div class="row g-2 align-items-center">
-                <div class="col">
-                    <h2 class="page-title text-primary fw-extrabold fs-1">
-                        <i class="ti ti-files me-2"></i> Dokumenty i Zgody
-                    </h2>
-                    <div class="text-secondary mt-1 fs-5">
-                        Dokumenty obowiązujące w placówce <strong>{{ $school->name }}</strong> oraz status Twoich oświadczeń i zgód.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
+<x-user-header title="Dokumenty i Zgody" description="Dokumenty obowiązujące w placówce {{ $school->name }} oraz status Twoich oświadczeń i zgód." icon="ti ti-files"></x-user-header>
+
+   
     <div class="page-body">
         <div class="container-xl">
 

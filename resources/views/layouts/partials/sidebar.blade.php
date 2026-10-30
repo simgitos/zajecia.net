@@ -1,5 +1,5 @@
 <!-- Pasek boczny (Sidebar) -->
-<aside class="navbar navbar-vertical navbar-expand-lg sticky-top">
+<aside class="navbar navbar-vertical navbar-expand-lg sticky-top" data-bs-theme="dark">
     <div class="container-fluid">
 
         <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu"
@@ -9,8 +9,8 @@
 
 
         <div class="navbar-brand navbar-brand-autodark">
-            <a href="/"><img src="/images/logo.png" alt="Logo" class="rounded-2 me-2 shadow-xs"
-                    style="height: 30px;  object-fit: cover;" onerror="this.style.display='none'"></a>
+            <a href="/"><img src="/images/logo.png" alt="Logo" class="rounded-2 me-2 shadow-xs p-1 bg-light"
+                    style="height: 30px;  object-fit: cover;" onerror="this.style.display='none'" ></a>
 
             <button type="button" class="btn btn-action btn-sm d-none d-lg-inline-flex" data-bs-toggle="sidebar-folded"
                 aria-pressed="false" aria-label="Pin sidebar">

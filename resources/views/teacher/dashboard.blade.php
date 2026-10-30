@@ -1,9 +1,7 @@
 <x-app-layout>
-    
-    <x-user-header 
-        title="Witaj, {{ explode(' ',Auth::user()->name)[0] }} 👋" 
-        description="Zarządzaj swoimi grupami, realizuj zajęcia i dbaj o ewidencję obecności." 
-    />
+   
+
+    <x-user-header title="Witaj, {{ explode(' ',Auth::user()->name)[0] }} 👋" description="Zarządzaj swoimi grupami, realizuj zajęcia i dbaj o ewidencję obecności." />
 
     <div class="page-body">
         <div class="container-xl">
@@ -14,7 +12,7 @@
 
                 {{-- Kafelek: Moje zajęcia --}}
                 
-                <x-stats icon="ti ti-books" color="success" title="Moje zajęcia" value="{{ $teacherCourses->count() }}" route="{{ route('teacher.courses.index') }}" description="Zarządzaj swoimi zajęciami" ></x-stats>
+                <x-stats icon="ti ti-books" color="success" title="Moje zajęcia" value="{{ $teacherCourses->count() }}" route="{{ route('teacher.courses.index') }}" description="Zarządzaj i realizuj zajęciami" ></x-stats>
                 
 
                 {{-- Kafelek: Uczestnicy --}}

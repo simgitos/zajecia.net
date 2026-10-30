@@ -103,13 +103,13 @@
             @endauth
 
             {{-- Theme Switcher --}}
-            <div class="nav-item me-2 me-md-3">
+            <!-- <div class="nav-item me-2 me-md-3">
                 <a href="#" class="nav-link px-0 d-flex align-items-center" id="theme-toggle"
                     data-bs-toggle="tooltip" data-bs-placement="bottom" title="Zmień motyw">
                     <i class="ti ti-sun fs-2 d-none" id="theme-icon-light"></i>
                     <i class="ti ti-moon fs-2 d-none" id="theme-icon-dark"></i>
                 </a>
-            </div>
+            </div> -->
 
             {{-- Separator --}}
             <div class="vr d-none d-md-block mx-2 opacity-25"></div>
@@ -185,10 +185,10 @@
                                 </form>
                             @endforeach
                         @endif
-                        <div class="dropdown-divider"></div>
+                        <!-- <div class="dropdown-divider"></div>
                         <a href="{{ route('schools.index') }}" class="dropdown-item">
                             <i class="ti ti-search me-2 text-secondary"></i>Katalog placówek
-                        </a>
+                        </a> -->
                         <div class="dropdown-divider"></div>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -213,7 +213,7 @@
 </header>
 
 {{-- Theme Switcher Script --}}
-<script>
+<!-- <script>
     document.addEventListener('DOMContentLoaded', function () {
         const toggle = document.getElementById('theme-toggle');
         const iconLight = document.getElementById('theme-icon-light');
@@ -253,4 +253,4 @@
             html.setAttribute('data-bs-theme', saved);
         }
     });
-</script>
+</script> -->

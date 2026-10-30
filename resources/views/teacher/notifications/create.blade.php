@@ -3,23 +3,8 @@
 @section('title', 'Wyślij powiadomienie do grupy')
 
 @section('content')
-<div class="page-header d-print-none mb-3">
-    <div class="container-xl">
-        <div class="row g-2 align-items-center">
-            <div class="col">
-                <div class="page-pretitle">Panel Instruktora</div>
-                <h2 class="page-title d-flex align-items-center">
-                    <i class="ti ti-send me-2 text-primary"></i> Wyślij powiadomienie do uczestników
-                </h2>
-            </div>
-            <div class="col-auto ms-auto d-print-none">
-                <a href="{{ route('teacher.courses.index') }}" class="btn btn-outline-secondary">
-                    <i class="ti ti-arrow-left me-1"></i> Moje zajęcia
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
+
+<x-user-header title="Powiadomienia" description="Wyślij powiadomienia do opiekunów lub grup." icon="ti ti-send"></x-user-header>
 
 <div class="page-body">
     <div class="container-xl">

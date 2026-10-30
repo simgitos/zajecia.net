@@ -66,7 +66,6 @@ Route::middleware(['auth', 'verified'])
         Route::get('/pulpit', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
         Route::post('/switch-role', \App\Http\Controllers\SwitchRoleController::class)->name('role.switch');
         Route::post('/switch-school', \App\Http\Controllers\SwitchSchoolController::class)->name('school.switch');
-        Route::post('/switch-season', \App\Http\Controllers\SwitchSeasonController::class)->name('season.switch');
         Route::post('/school-terms/accept', \App\Http\Controllers\AcceptSchoolTermsController::class)->name('school.terms.accept');
         Route::get('/profil', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profil', [ProfileController::class, 'update'])->name('profile.update');

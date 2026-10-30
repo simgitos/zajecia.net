@@ -36,7 +36,6 @@ class SwitchSchoolController extends Controller
         $school = School::findOrFail($schoolId);
 
         session(['active_school_id' => $school->id]);
-        session()->forget('active_season_id');
 
         // Pobierz role użytkownika dla nowej placówki
         $schoolRoles = $user->rolesForSchool($school);

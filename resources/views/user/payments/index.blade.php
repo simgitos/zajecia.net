@@ -1,18 +1,6 @@
 <x-app-layout>
-    <div class="page-header d-print-none mb-4">
-        <div class="container-xl">
-            <div class="row g-2 align-items-center">
-                <div class="col">
-                    <h2 class="page-title text-primary fw-bold fs-2">
-                        <i class="ti ti-wallet me-2"></i> Płatności
-                    </h2>
-                    <div class="text-secondary mt-1 fs-4">
-                        Zestawienie nieopłaconych zajęć oraz historia dokonanych wpłat.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+<x-user-header title="Płatności" description="Zestawienie nieopłaconych zajęć oraz historia dokonanych wpłat." icon="ti ti-wallet"></x-user-header>
 
     <div class="page-body">
         <div class="container-xl">
