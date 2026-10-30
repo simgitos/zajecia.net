@@ -1,44 +1,16 @@
 <x-app-layout>
-<x-user-header title="Uczestnicy Zajęć" description="Zarządzaj danymi swoich uczestników i zapisuj ich na dostępne zajęcia w bieżącym sezonie." icon="ti ti-mood-kid">
     
-</x-user-header>    
+<x-user-header title="Uczestnicy Zajęć" description="Zarządzaj danymi swoich uczestników i zapisuj ich na dostępne zajęcia w bieżącym sezonie." icon="ti ti-mood-kid">
+    <x-slot:actions>
+        <button type="button" class="btn btn-sm btn-primary fw-bold shadow-sm py-2 px-3" data-bs-toggle="modal" data-bs-target="#modal-add-child">
+            <i class="ti ti-user-plus me-1.5 fs-2"></i> Dodaj uczestnika
+        </button>
+    </x-slot:actions>
+</x-user-header>
 
 
     <div class="page-body">
         <div class="container-xl">
-
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show shadow-sm mb-3" role="alert">
-                    <div class="d-flex align-items-center">
-                        <i class="ti ti-circle-check fs-2 me-2"></i>
-                        <div>{{ session('success') }}</div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-
-            @if ($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show shadow-sm mb-3" role="alert">
-                    <div class="d-flex align-items-center">
-                        <i class="ti ti-alert-circle fs-2 me-2"></i>
-                        <div>
-                            <strong>Wystąpiły błędy:</strong>
-                            <ul class="mb-0 mt-1 ps-3">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-             <div class="col-auto ms-auto d-print-none">
-                    <button type="button" class="btn btn-sm btn-primary fw-bold shadow-sm py-2 px-3" data-bs-toggle="modal" data-bs-target="#modal-add-child">
-                        <i class="ti ti-user-plus me-1.5 fs-2"></i> Dodaj uczestnika
-                    </button>
-                </div>
-
             @if($children->isEmpty())
                 <div class="card card-md shadow-sm text-center py-5 border-0 rounded-3">
                     <div class="card-body">

@@ -6,12 +6,7 @@
         <h3 class="card-title"><i class="ti ti-users me-2"></i> Lista użytkowników</h3>
     </div>
 
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show m-3 mb-0" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+   
 
     <div class="table-responsive">
         <table class="table table-vcenter card-table">

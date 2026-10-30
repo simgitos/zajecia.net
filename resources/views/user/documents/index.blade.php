@@ -6,15 +6,7 @@
     <div class="page-body">
         <div class="container-xl">
 
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show shadow-sm mb-3" role="alert">
-                    <div class="d-flex align-items-center">
-                        <i class="ti ti-circle-check fs-2 me-2"></i>
-                        <div>{{ session('success') }}</div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+            
 
             <div class="row row-cards">
                 {{-- Lista oficjalnych dokumentów placówki --}}

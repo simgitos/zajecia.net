@@ -35,12 +35,7 @@
 <div class="page-body">
     <div class="container-xl">
 
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show shadow-sm mb-3" role="alert">
-                <i class="ti ti-check me-1"></i> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+       
 
         <!-- 3 Kafelki Raportowe z aktywnym linkowaniem do filtrowania -->
         <div class="row row-cards mb-4">

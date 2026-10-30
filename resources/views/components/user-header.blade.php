@@ -1,4 +1,4 @@
-@props(['title' => '', 'description' => ''])
+@props(['title' => '', 'description' => '', 'icon' => ''])
 
 @php
     $user = Auth::user();
@@ -21,8 +21,8 @@
                     {{ $panelLabel }}{{ $activeSchool ? ' - ' . $activeSchool->name : '' }}
                 </div>
                 <h2 class="page-title fw-bold mb-0">
-                    @if(!empty($icon)) <i class="{{ $icon }} me-2"></i> 
-                    @endif 
+                    @if(!empty($icon)) <i class="{{ $icon }} me-2"></i>
+                    @endif
                     {{ $title }}
                 </h2>
                 @if(!empty($description))
@@ -30,6 +30,9 @@
                         {{ $description }}
                     </div>
                 @endif
+            </div>
+            <div class="col-md-3 ms-auto d-print-none">
+                {{ $actions ?? '' }}
             </div>
         </div>
     </div>

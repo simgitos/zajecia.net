@@ -43,16 +43,7 @@
 
 <div class="page-body">
     <div class="container-xl">
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible shadow-xs mb-3" role="alert">
-                <div class="d-flex">
-                    <div><i class="ti ti-check fs-2 me-2"></i></div>
-                    <div>{{ session('success') }}</div>
-                </div>
-                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-            </div>
-        @endif
-
+       
         <div class="card shadow-xs border-0">
             <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2 py-3 bg-surface border-bottom">
                 <ul class="nav nav-pills card-header-pills m-0">

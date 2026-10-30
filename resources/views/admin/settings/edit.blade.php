@@ -17,30 +17,7 @@
     </div>
 
     <div class="container-xl">
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
-                <div class="d-flex align-items-center">
-                    <i class="ti ti-circle-check fs-2 me-2"></i>
-                    <div class="fw-semibold">{{ session('success') }}</div>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
-                <div class="d-flex align-items-center mb-1">
-                    <i class="ti ti-alert-triangle fs-2 me-2"></i>
-                    <div class="fw-bold">Wystąpiły błędy podczas zapisywania formularza:</div>
-                </div>
-                <ul class="mb-0 ps-4">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+       
 
         <form action="{{ route('admin.settings.update') }}" method="POST">
             @csrf

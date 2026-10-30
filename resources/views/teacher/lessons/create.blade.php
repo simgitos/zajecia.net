@@ -9,33 +9,17 @@
         }
     @endphp
 
-    <x-user-header title="Realizacja zajęć: {{ $course->title }}" 
-                   description="{{ $description }}"
-                   icon="ti ti-checkup-list" />
+    <x-user-header title="Realizacja zajęć: {{ $course->title }}" description="{{ $description }}"
+        icon="ti ti-checkup-list">
+        <x-slot:actions>
+            <a href="{{ route('teacher.courses.index') }}" class="btn btn-outline-secondary">
+                <i class="ti ti-arrow-left me-1"></i> Powrót do zajęć
+            </a>
+        </x-slot:actions>
+    </x-user-header>
 
 
 
-
-
-    <div class="page-header d-print-none mb-4">
-        <div class="container-xl">
-            <div class="row g-2 align-items-center">
-                <div class="col">
-                    <div class="mb-1">
-                        <a href="{{ route('teacher.courses.index') }}" class="text-secondary">
-                            <i class="ti ti-arrow-left me-1"></i> Powrót do zajęć
-                        </a>
-                    </div>
-                    <h2 class="page-title text-primary fw-bold">
-                        <i class="ti ti-checkup-list me-2"></i> Realizacja zajęć: {{ $course->title }}
-                    </h2>
-                    <div class="text-secondary mt-1">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="page-body">
         <div class="container-xl">

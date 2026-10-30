@@ -23,37 +23,7 @@
 
 <div class="page-body">
     <div class="container-xl">
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible shadow-xs mb-3" role="alert">
-                <div class="d-flex">
-                    <div><i class="ti ti-check fs-2 me-2"></i></div>
-                    <div>{{ session('success') }}</div>
-                </div>
-                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible shadow-xs mb-3" role="alert">
-                <div class="d-flex">
-                    <div><i class="ti ti-alert-circle fs-2 me-2"></i></div>
-                    <div>{{ session('error') }}</div>
-                </div>
-                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible shadow-xs mb-3" role="alert">
-                <div class="fw-bold mb-1"><i class="ti ti-alert-triangle me-1"></i> Proszę poprawić błędy w formularzu:</div>
-                <ul class="mb-0 ps-3">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-            </div>
-        @endif
+       
 
         <div class="row row-cards">
             {{-- Główny formularz --}}

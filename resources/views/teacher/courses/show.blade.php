@@ -7,12 +7,7 @@
 
     <div class="page-body">
         <div class="container-xl">
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show shadow-sm mb-3" role="alert">
-                    <i class="ti ti-check me-1"></i> {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+           
 
             <!-- Toast / Powiadomienie o zmianie kolejności Drag & Drop -->
             <div id="reorder-toast" class="alert alert-success shadow-sm mb-3 d-none align-items-center" role="alert">

@@ -28,12 +28,7 @@
 
 <div class="page-body">
     <div class="container-xl">
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show shadow-sm mb-3" role="alert">
-                <i class="ti ti-check me-1"></i> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+       
 
         <div id="reorder-toast-admin" class="alert alert-success shadow-sm mb-3 d-none align-items-center" role="alert">
             <i class="ti ti-arrows-sort fs-2 me-2"></i>

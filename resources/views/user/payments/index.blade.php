@@ -4,35 +4,7 @@
 
     <div class="page-body">
         <div class="container-xl">
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show shadow-sm mb-3" role="alert">
-                    <div class="d-flex align-items-center">
-                        <i class="ti ti-circle-check fs-2 me-2"></i>
-                        <div>{{ session('success') }}</div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-
-            @if (session('info'))
-                <div class="alert alert-info alert-dismissible fade show shadow-sm mb-3" role="alert">
-                    <div class="d-flex align-items-center">
-                        <i class="ti ti-info-circle fs-2 me-2"></i>
-                        <div>{{ session('info') }}</div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-
-            @if (session('error'))
-                <div class="alert alert-danger alert-dismissible fade show shadow-sm mb-3" role="alert">
-                    <div class="d-flex align-items-center">
-                        <i class="ti ti-alert-triangle fs-2 me-2"></i>
-                        <div>{{ session('error') }}</div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+            
 
             <!-- 2 Kafelki podsumowujące (dostosowane pod mobile) -->
             <div class="row row-cards mb-3 mb-md-4">

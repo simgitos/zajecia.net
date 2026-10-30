@@ -33,12 +33,7 @@
         </div>
     </div>
 
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show m-3 mb-0" role="alert">
-            <i class="ti ti-check me-1"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+   
 
     <div class="table-responsive">
         <table class="table table-vcenter card-table table-hover">
