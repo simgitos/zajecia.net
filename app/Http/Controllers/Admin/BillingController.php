@@ -38,7 +38,7 @@ class BillingController extends Controller
 
         $query = BillingItem::where('school_id', $schoolId)
             ->where('amount', '>', 0)
-            ->with(['child', 'parent', 'course']);
+            ->with(['child', 'parent', 'course', 'lesson']);
 
         $statsQuery = BillingItem::where('school_id', $schoolId)->where('amount', '>', 0);
 

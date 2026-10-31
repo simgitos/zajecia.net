@@ -159,25 +159,51 @@
                                                                 <div class="fw-bold text-dark fs-3">
                                                                     {{ $course?->title ?? 'Zajęcia' }}
                                                                 </div>
-                                                                <small class="text-secondary d-block mt-1">
-                                                                    <i class="ti ti-calendar me-1"></i> Okres: <strong>{{ ucfirst($monthLabel) }}</strong>
-                                                                </small>
-                                                                <div class="d-flex align-items-center gap-1.5 flex-wrap mt-1">
-                                                                    <span class="badge bg-success-lt text-success fs-6" title="Obecności (płatne)">
-                                                                        <i class="ti ti-check me-0.5"></i>{{ $item->present_count }} obecności
-                                                                    </span>
-                                                                    @if($item->absent_count > 0)
-                                                                        <span class="badge bg-danger-lt text-danger fs-6" title="Nieobecności (płatne)">
-                                                                            <i class="ti ti-x me-0.5"></i>{{ $item->absent_count }} nieobecności
+                                                                @if($item->lesson)
+                                                                    <div class="d-flex align-items-center gap-1.5 flex-wrap mt-1">
+                                                                        <span class="badge bg-blue-lt text-primary">
+                                                                            <i class="ti ti-calendar me-1"></i>Lekcja: {{ \Carbon\Carbon::parse($item->lesson->realized_at)->format('d.m.Y') }}
                                                                         </span>
+                                                                        @if($item->present_count > 0)
+                                                                            <span class="badge bg-success-lt text-success" title="Obecność">
+                                                                                <i class="ti ti-check me-0.5"></i>Obecny
+                                                                            </span>
+                                                                        @elseif($item->absent_count > 0)
+                                                                            <span class="badge bg-danger-lt text-danger" title="Nieobecność (płatna)">
+                                                                                <i class="ti ti-x me-0.5"></i>Nieobecny
+                                                                            </span>
+                                                                        @elseif($item->excused_count > 0)
+                                                                            <span class="badge bg-warning-lt text-warning" title="Usprawiedliwiony">
+                                                                                <i class="ti ti-clock me-0.5"></i>Usprawiedliwiony
+                                                                            </span>
+                                                                        @endif
+                                                                    </div>
+                                                                    @if($item->lesson->topic)
+                                                                        <small class="text-secondary d-block mt-1">
+                                                                            Temat: <strong>{{ $item->lesson->topic }}</strong>
+                                                                        </small>
                                                                     @endif
-                                                                    @if($item->excused_count > 0)
-                                                                        <span class="badge bg-warning-lt text-warning fs-6" title="Usprawiedliwione (bezpłatne)">
-                                                                            <i class="ti ti-clock me-0.5"></i>{{ $item->excused_count }} uspr.
+                                                                @else
+                                                                    <small class="text-secondary d-block mt-1">
+                                                                        <i class="ti ti-calendar me-1"></i> Okres: <strong>{{ ucfirst($monthLabel) }}</strong>
+                                                                    </small>
+                                                                    <div class="d-flex align-items-center gap-1.5 flex-wrap mt-1">
+                                                                        <span class="badge bg-success-lt text-success fs-6" title="Obecności (płatne)">
+                                                                            <i class="ti ti-check me-0.5"></i>{{ $item->present_count }} obecności
                                                                         </span>
-                                                                    @endif
-                                                                </div>
-                                                                @if($item->notes)
+                                                                        @if($item->absent_count > 0)
+                                                                            <span class="badge bg-danger-lt text-danger fs-6" title="Nieobecności (płatne)">
+                                                                                <i class="ti ti-x me-0.5"></i>{{ $item->absent_count }} nieobecności
+                                                                            </span>
+                                                                        @endif
+                                                                        @if($item->excused_count > 0)
+                                                                            <span class="badge bg-warning-lt text-warning fs-6" title="Usprawiedliwione (bezpłatne)">
+                                                                                <i class="ti ti-clock me-0.5"></i>{{ $item->excused_count }} uspr.
+                                                                            </span>
+                                                                        @endif
+                                                                    </div>
+                                                                @endif
+                                                                @if($item->notes && !$item->lesson)
                                                                     <small class="text-muted d-block mt-1 bg-light p-1 px-2 rounded">
                                                                         {{ $item->notes }}
                                                                     </small>

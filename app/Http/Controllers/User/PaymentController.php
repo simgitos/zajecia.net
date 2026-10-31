@@ -48,7 +48,7 @@ class PaymentController extends Controller
         $allBillingItems = BillingItem::where('parent_id', $user->id)
             ->where('school_id', $user->school_id)
             ->where('amount', '>', 0)
-            ->with(['child', 'course.instructor', 'course.room'])
+            ->with(['child', 'course.instructor', 'course.room', 'lesson'])
             ->latest('year_month')
             ->get();
 

@@ -17,6 +17,7 @@ class BillingItem extends Model
         'parent_id',
         'child_id',
         'course_id',
+        'lesson_id',
         'year_month',
         'billing_type',
         'price_per_unit',
@@ -63,6 +64,11 @@ class BillingItem extends Model
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function lesson(): BelongsTo
+    {
+        return $this->belongsTo(Lesson::class);
     }
 
     public function payments(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
