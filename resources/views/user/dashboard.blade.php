@@ -5,6 +5,7 @@
     <div class="page-body">
         <div class="container-xl">
             <div class="row col-md-9 row-cards g-3">
+                @if($children->count() > 0)
                 <!-- 1. KAFELEK PŁATNOŚCI / ROZLICZEŃ (100% szerokości na mobile) -->
                 <div class="col-12">
                     @if($totalUnpaidAmount > 0)
@@ -73,9 +74,11 @@
                         </div>
                     @endif
                 </div>
+@else
 
+@endif
                 <!-- 2. KAFELEK UCZESTNICY (50% szerokości na mobile) -->
-                <x-stats icon="ti ti-mood-kid" color="primary" title="Uczestnicy zajęć" value="{{ $children->count() }}"
+                <x-stats icon="ti ti-mood-kid" color="primary" title="Uczestnicy zajęć" value="{{ $children->count()>0 ? $children->count() : 'Dodaj' }}"
                     route="{{ route('user.children.index') }}" description="Dodaj/Edytuj uczestników"></x-stats>
 
 

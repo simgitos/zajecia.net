@@ -2,7 +2,7 @@
     
 <x-user-header title="Uczestnicy Zajęć" description="Zarządzaj danymi swoich uczestników i zapisuj ich na dostępne zajęcia w bieżącym sezonie." icon="ti ti-mood-kid">
     <x-slot:actions>
-        <button type="button" class="btn btn-sm btn-primary fw-bold shadow-sm py-2 px-3" data-bs-toggle="modal" data-bs-target="#modal-add-child">
+        <button type="button" class="btn btn-sm btn-outline-secondary fw-bold shadow-sm py-2 px-3" data-bs-toggle="modal" data-bs-target="#modal-add-child">
             <i class="ti ti-user-plus me-1.5 fs-2"></i> Dodaj uczestnika
         </button>
     </x-slot:actions>
@@ -30,7 +30,7 @@
                 <div class="row row-cards g-4">
                     @foreach($children as $child)
                         <div class="col-12 col-md-4 col-lg-4">
-                            <div class="card shadow-sm h-100 border-0 rounded-3 bg-surface overflow-hidden">
+                            <div class="card shadow h-100 border-0 rounded-3 bg-surface overflow-hidden">
                                 <div class="card-header bg-surface d-flex justify-content-between align-items-center border-bottom p-3">
                                     <div class="d-flex align-items-center">
                                         <span class="avatar avatar-md bg-blue-lt me-3 fw-bold fs-2 rounded-circle shadow-xs">
@@ -90,7 +90,7 @@
                                 </div>
 
                                 <div class="card-footer bg-surface border-top p-3 text-end">
-                                    <button type="button" class="btn btn-outline-primary w-100 fw-bold py-2" data-bs-toggle="modal" data-bs-target="#modal-enroll-{{ $child->id }}">
+                                    <button type="button" class="btn btn-primary w-100 fw-bold py-2" data-bs-toggle="modal" data-bs-target="#modal-enroll-{{ $child->id }}">
                                         <i class="ti ti-circle-plus me-1.5 fs-3"></i> Zapisz na nowe zajęcia
                                     </button>
                                 </div>
@@ -110,7 +110,8 @@
                                         </div>
                                         <div class="modal-body">
                                             <p class="text-secondary mb-3">
-                                                Wybierz zajęcia z oferty placówki, na które chcesz zapisać uczestnika.
+                                                Wybierz zajęcia z oferty placówki, na które chcesz zapisać uczestnika.<br>
+                                                Szczegółowe informacje o danym kursie, w tym dni i godziny zajęć, znajdziesz <a href="{{ route('user.courses.index') }}" class="text-primary fw-bold">tutaj</a>. 
                                             </p>
                                             <div class="mb-3">
                                                 <label class="form-label required fw-bold">Dostępne zajęcia</label>
