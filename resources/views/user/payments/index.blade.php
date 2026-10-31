@@ -143,21 +143,12 @@
                                         @else
                                             <div class="d-flex flex-column gap-2">
                                                 @foreach($items as $item)
-                                                    @php
-                                                        $course = $item->course;
-                                                        // Formatowanie miesiąca YYYY-MM na czytelną nazwę
-                                                        try {
-                                                            $itemDate = \Carbon\Carbon::createFromFormat('Y-m', $item->year_month);
-                                                            $monthLabel = $itemDate->translatedFormat('F Y');
-                                                        } catch(\Exception $e) {
-                                                            $monthLabel = $item->year_month;
-                                                        }
-                                                    @endphp
+                                                   
                                                     <div class="card shadow-none border p-3 bg-surface rounded">
                                                         <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
                                                             <div >
                                                                 <div class="fw-bold text-dark fs-3">
-                                                                    {{ $course?->title ?? 'Zajęcia' }}
+                                                                    {{ $item->course?->title ?? 'Zajęcia' }}
                                                                 </div>
                                                                 @if($item->lesson)
                                                                     <div class="d-flex align-items-center gap-1.5 flex-wrap mt-1">
@@ -185,7 +176,7 @@
                                                                     @endif
                                                                 @else
                                                                     <small class="text-secondary d-block mt-1">
-                                                                        <i class="ti ti-calendar me-1"></i> Okres: <strong>{{ ucfirst($monthLabel) }}</strong>
+                                                                        <i class="ti ti-calendar me-1"></i> Okres: <strong>{{ $item->year_month }}</strong>
                                                                     </small>
                                                                     <div class="d-flex align-items-center gap-1.5 flex-wrap mt-1">
                                                                         <span class="badge bg-success-lt text-success fs-6" title="Obecności (płatne)">
@@ -226,7 +217,7 @@
                                                                     @endif
                                                                 </div>
                                                                 @if($isTpayConfigured)
-                                                                    <form action="{{ route('user.payments.pay-item', $item) }}" method="POST" class="d-inline" onsubmit="return confirm('Czy na pewno chcesz opłacić online zajęcia &quot;{{ $course?->title }}&quot; ({{ number_format((float) $item->amount, 2, ',', ' ') }} zł + prowizja {{ $commissionPercent ?? 1.5 }}%: {{ number_format($itemCommission, 2, ',', ' ') }} zł)?');">
+                                                                    <form action="{{ route('user.payments.pay-item', $item) }}" method="POST" class="d-inline" onsubmit="return confirm('Czy na pewno chcesz opłacić online zajęcia &quot;{{ $item->course?->title }}&quot; ({{ number_format((float) $item->amount, 2, ',', ' ') }} zł + prowizja {{ $commissionPercent ?? 1.5 }}%: {{ number_format($itemCommission, 2, ',', ' ') }} zł)?');">
                                                                         @csrf
                                                                         <button type="submit" class="btn btn-sm btn-success fw-bold px-2 py-1 shadow-sm">
                                                                             <i class="ti ti-credit-card me-1"></i> Zapłać

@@ -118,8 +118,11 @@ class LessonController extends Controller
             }
         }
 
+        $minDate = now()->subDays(50)->startOfDay()->format('Y-m-d');
+        $maxDate = now()->endOfDay()->format('Y-m-d');
+
         $validationRules = [
-            'realized_at' => ['required', 'date'],
+            'realized_at' => ['required', 'date', "after_or_equal:{$minDate}", "before_or_equal:{$maxDate}"],
             'topic' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:1000'],
             'attendance' => ['required', 'array'],
@@ -134,6 +137,8 @@ class LessonController extends Controller
         $customMessages = [
             'realized_at.required' => 'Wybór daty przeprowadzenia zajęć jest wymagany.',
             'realized_at.date' => 'Wprowadź poprawną datę.',
+            'realized_at.after_or_equal' => 'Możesz zrealizować lekcję maksymalnie do 7 dni wstecz.',
+            'realized_at.before_or_equal' => 'Nie można zrealizować lekcji z datą przyszłą.',
             'child_id.required' => 'Dla zajęć indywidualnych wybór uczestnika jest wymagany.',
             'attendance.required' => 'Lista obecności jest wymagana.',
         ];

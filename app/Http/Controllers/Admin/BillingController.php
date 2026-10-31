@@ -82,17 +82,30 @@ class BillingController extends Controller
         $totalPaid = (float) (clone $statsQuery)->where('status', 'paid')->sum('amount');
         $totalUnpaid = (float) (clone $statsQuery)->where('status', 'unpaid')->sum('amount');
 
-        // Opcje wyboru miesiąca (Wszystkie okresy + Ostatnie 12 miesięcy)
+        // Opcje wyboru miesiąca (Wszystkie okresy + wyłącznie miesiące istniejące w bazie)
         $monthOptions = [
             'all' => 'Wszystkie okresy (Rozliczenia ogółem)',
         ];
-        for ($i = 0; $i < 12; $i++) {
-            $d = now()->subMonths($i);
-            $key = $d->format('Y-m');
-            $label = ($this->polishMonths[$d->month] ?? $d->format('F')) . ' ' . $d->year;
+
+        // Pobieramy unikalne miesiące z bazy dla szkoły posortowane malejąco
+        $dbMonths = BillingItem::where('school_id', $schoolId)
+            ->whereNotNull('year_month')
+            ->distinct()
+            ->orderByDesc('year_month')
+            ->pluck('year_month')
+            ->toArray();
+
+        foreach ($dbMonths as $key) {
+            $parts = explode('-', (string) $key);
+            if (count($parts) === 2) {
+                $y = (int) $parts[0];
+                $m = (int) $parts[1];
+                $label = ($this->polishMonths[$m] ?? $key) . ' ' . $y;
+            } else {
+                $label = (string) $key;
+            }
             $monthOptions[$key] = $label;
         }
-
         return view('admin.billing.index', compact(
             'billingItems',
             'totalAmount',

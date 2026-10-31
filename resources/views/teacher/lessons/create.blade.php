@@ -53,7 +53,12 @@
                         <div class="col-md-4">
                             <label class="form-label required">Data przeprowadzenia</label>
                             <input type="date" name="realized_at" id="realized_at" class="form-control"
+                                min="{{ now()->subDays(50)->format('Y-m-d') }}"
+                                max="{{ now()->format('Y-m-d') }}"
                                 value="{{ old('realized_at', date('Y-m-d')) }}" required>
+                            <small class="text-secondary d-block mt-1">
+                                Realizacja możliwa maksymalnie do 7 dni wstecz.
+                            </small>
                         </div>
                         <div class="col-md-8">
                             <label class="form-label">Temat zajęć</label>
@@ -295,6 +300,27 @@
             function checkEnrollmentDates() {
                 const selectedDate = dateInput ? dateInput.value : null;
                 if (!selectedDate) return;
+
+                const todayStr = '{{ now()->format('Y-m-d') }}';
+                const minAllowedStr = '{{ now()->subDays(50)->format('Y-m-d') }}';
+
+                if (selectedDate > todayStr) {
+                    dateInput.classList.add('is-invalid');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.title = 'Nie można zrealizować lekcji z datą przyszłą.';
+                    }
+                    return;
+                }
+
+                if (selectedDate < minAllowedStr) {
+                    dateInput.classList.add('is-invalid');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.title = 'Możesz zrealizować lekcję maksymalnie do 7 dni wstecz.';
+                    }
+                    return;
+                }
 
                 if (isIndividual) {
                     const warningBox = document.getElementById('individual-enrollment-warning');
