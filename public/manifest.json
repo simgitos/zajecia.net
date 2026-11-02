@@ -2,7 +2,7 @@
   "name": "Zajęciownia.pl",
   "short_name": "Zajęciownia",
   "description": "Zarządzanie zajęciami, zapisy, frekwencja i płatności online",
-  "start_url": "/",
+  "start_url": "/pulpit",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",

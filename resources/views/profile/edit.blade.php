@@ -49,6 +49,18 @@
                             @include('profile.partials.update-profile-information-form')
                         </div>
                     </div>
+
+                    {{-- Sekcja 2: Powiadomienia Push (Web Push API) --}}
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header bg-surface border-bottom">
+                            <h3 class="card-title fw-bold text-dark mb-0">
+                                <i class="ti ti-bell-ringing me-2 text-primary"></i> Powiadomienia Push w przeglądarce & telefonie
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            @include('profile.partials.manage-push-notifications')
+                        </div>
+                    </div>
                 </div>
 
                 {{-- Kolumna boczna: Hasło i Usunięcie konta --}}
