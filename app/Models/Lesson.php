@@ -49,6 +49,11 @@ class Lesson extends Model
         return $this->hasMany(LessonAttendance::class);
     }
 
+    public function billingItems(): HasMany
+    {
+        return $this->hasMany(BillingItem::class);
+    }
+
     /**
      * Liczba obecnych dzieci na danej lekcji.
      */

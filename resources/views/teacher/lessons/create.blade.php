@@ -53,7 +53,7 @@
                         <div class="col-md-4">
                             <label class="form-label required">Data przeprowadzenia</label>
                             <input type="date" name="realized_at" id="realized_at" class="form-control"
-                                min="{{ now()->subDays(50)->format('Y-m-d') }}"
+                                min="{{ now()->subDays(7)->format('Y-m-d') }}"
                                 max="{{ now()->format('Y-m-d') }}"
                                 value="{{ old('realized_at', date('Y-m-d')) }}" required>
                             <small class="text-secondary d-block mt-1">
@@ -302,7 +302,7 @@
                 if (!selectedDate) return;
 
                 const todayStr = '{{ now()->format('Y-m-d') }}';
-                const minAllowedStr = '{{ now()->subDays(50)->format('Y-m-d') }}';
+                const minAllowedStr = '{{ now()->subDays(7)->format('Y-m-d') }}';
 
                 if (selectedDate > todayStr) {
                     dateInput.classList.add('is-invalid');

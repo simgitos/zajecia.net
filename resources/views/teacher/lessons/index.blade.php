@@ -13,21 +13,29 @@
                         <span class="badge bg-blue-lt text-primary ms-1" style="font-size:0.72rem;">{{ $recentLessons->count() }}</span>
                     </h3>
 
-                    {{-- Filtr miesiąca --}}
-                    <form method="GET" action="{{ url()->current() }}" class="d-flex align-items-center gap-2">
-                        <select name="month" class="form-select form-select-sm" onchange="this.form.submit()">
-                            @for($m = 1; $m <= 12; $m++)
-                                <option value="{{ $m }}" {{ $m == $filterMonth ? 'selected' : '' }}>
-                                    {{ \Carbon\Carbon::create()->month($m)->locale('pl')->isoFormat('MMMM') }}
-                                </option>
-                            @endfor
-                        </select>
-                        <select name="year" class="form-select form-select-sm" style="width:auto;" onchange="this.form.submit()">
-                            @for($y = now()->year; $y >= now()->year - 2; $y--)
-                                <option value="{{ $y }}" {{ $y == $filterYear ? 'selected' : '' }}>{{ $y }}</option>
-                            @endfor
-                        </select>
-                    </form>
+                    {{-- Filtr miesiąca i przycisk drukowania --}}
+                    <div class="d-flex align-items-center gap-2">
+                        <form method="GET" action="{{ url()->current() }}" class="d-flex align-items-center gap-2 m-0 d-print-none">
+                            <select name="month" class="form-select form-select-sm" onchange="this.form.submit()">
+                                @for($m = 1; $m <= 12; $m++)
+                                    <option value="{{ $m }}" {{ $m == $filterMonth ? 'selected' : '' }}>
+                                        {{ \Carbon\Carbon::create()->month($m)->locale('pl')->isoFormat('MMMM') }}
+                                    </option>
+                                @endfor
+                            </select>
+                            <select name="year" class="form-select form-select-sm" style="width:auto;" onchange="this.form.submit()">
+                                @for($y = now()->year; $y >= now()->year - 2; $y--)
+                                    <option value="{{ $y }}" {{ $y == $filterYear ? 'selected' : '' }}>{{ $y }}</option>
+                                @endfor
+                            </select>
+                        </form>
+
+                        @if(!empty($summaryByCourse) && count($summaryByCourse) > 0)
+                            <button type="button" class="btn btn-sm btn-outline-secondary d-print-none shadow-xs" onclick="window.print()">
+                                <i class="ti ti-printer me-1"></i> Drukuj zestawienie
+                            </button>
+                        @endif
+                    </div>
                 </div>
 
                 @if($recentLessons->isEmpty())
@@ -44,7 +52,7 @@
                                     <th>Temat</th>
                                     <th>Data zrealizowania</th>
                                     <th>Obecności</th>
-                                    <th class="text-end">Akcje</th>
+                                    <th class="text-end d-print-none">Akcje</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -104,7 +112,7 @@
                                                 </div>
                                             @endif
                                         </td>
-                                        <td class="text-end">
+                                        <td class="text-end d-print-none">
                                             <a href="{{ route('teacher.lessons.show', $lesson) }}"
                                                class="btn btn-sm btn-outline-primary fw-semibold"
                                                style="border-radius:7px; font-size:0.75rem;">
@@ -118,6 +126,73 @@
                     </div>
                 @endif
             </div>
+
+            {{-- Podsumowanie do wydruku i rozliczenia miesiąca --}}
+            @if(!empty($summaryByCourse) && count($summaryByCourse) > 0)
+                <div class="card shadow-sm border-0 mb-4" style="border-radius:14px; overflow:hidden;">
+                    <div class="card-header bg-surface border-bottom d-flex align-items-center justify-content-between">
+                        <h3 class="fw-bold mb-0" style="font-size:0.95rem;">
+                            <i class="ti ti-file-analytics me-2 text-primary"></i> Podsumowanie rozliczeniowe: {{ \Carbon\Carbon::create()->month($filterMonth)->locale('pl')->isoFormat('MMMM') }} {{ $filterYear }}
+                        </h3>
+                        <div class="text-secondary small d-none d-print-inline">
+                            Prowadzący: <strong>{{ Auth::user()->name }}</strong>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-vcenter table-bordered mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th style="width: 50px;">Lp.</th>
+                                    <th>Nazwa zajęć</th>
+                                    <th class="text-center" style="width: 140px;">Ilość lekcji</th>
+                                    <th class="text-end" style="width: 160px;">Kwota (stawka)</th>
+                                    <th class="text-end" style="width: 180px;">Wartość</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($summaryByCourse as $index => $item)
+                                    <tr>
+                                        <td class="text-secondary">{{ $index + 1 }}</td>
+                                        <td>
+                                            <strong class="text-dark">{{ $item['course_title'] }}</strong>
+                                            @if($item['course']?->billing_type === 'monthly_flat')
+                                                <span class="badge bg-secondary-lt text-secondary ms-1" style="font-size:0.7rem;">Ryczałt</span>
+                                            @else
+                                                <span class="badge bg-blue-lt text-primary ms-1" style="font-size:0.7rem;">Za lekcję</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-light text-dark fw-bold px-2.5 py-1">
+                                                {{ $item['lessons_count'] }}
+                                            </span>
+                                        </td>
+                                        <td class="text-end text-secondary">
+                                            {{ number_format((float) $item['price_per_unit'], 2, ',', ' ') }} zł
+                                        </td>
+                                        <td class="text-end fw-bold text-dark fs-4">
+                                            {{ number_format((float) $item['total_value'], 2, ',', ' ') }} zł
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot class="table-light border-top-2">
+                                <tr>
+                                    <th colspan="2" class="text-uppercase fw-extrabold text-dark fs-4 text-end pe-3">
+                                        SUMA ŁĄCZNA:
+                                    </th>
+                                    <th class="text-center fw-extrabold text-primary fs-3">
+                                        {{ $totalLessonsCount }}
+                                    </th>
+                                    <th></th>
+                                    <th class="text-end fw-extrabold text-success fs-2">
+                                        {{ number_format($totalAmountSum, 2, ',', ' ') }} zł
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

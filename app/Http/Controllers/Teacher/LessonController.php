@@ -26,15 +26,69 @@ class LessonController extends Controller
         $filterMonth = (int) $request->get('month', now()->month);
         $filterYear  = (int) $request->get('year', now()->year);
 
+        $yearMonth = sprintf('%04d-%02d', $filterYear, $filterMonth);
+
         $recentLessons = Lesson::where('teacher_id', $user->id)
             ->where('school_id', $user->school_id)
             ->whereYear('realized_at', $filterYear)
             ->whereMonth('realized_at', $filterMonth)
-            ->with(['course', 'attendances.child'])
+            ->with(['course', 'attendances.child', 'billingItems'])
             ->latest('realized_at')
             ->get();
 
-        return view('teacher.lessons.index', compact('recentLessons', 'filterMonth', 'filterYear'));
+        // Podsumowanie zajęć do zestawienia i wydruku: grupowanie według kursów
+        $summaryByCourse = [];
+        $totalLessonsCount = $recentLessons->count();
+        $totalAmountSum = 0.0;
+
+        $groupedByCourse = $recentLessons->groupBy('course_id');
+
+        foreach ($groupedByCourse as $courseId => $lessons) {
+            $course = $lessons->first()?->course;
+            $lessonsCount = $lessons->count();
+            $pricePerUnit = (float) ($course?->price_per_unit ?? 0.0);
+
+            // Obliczenie wartości:
+            // 1. Jeśli istnieją pozycje rozliczeniowe powiązane z lekcjami (per_lesson)
+            $billingItemsSum = (float) $lessons->flatMap->billingItems->sum('amount');
+
+            // 2. Jeśli kurs rozliczany ryczałtowo lub brak per-lesson billingItems
+            if ($billingItemsSum > 0) {
+                $totalCourseValue = $billingItemsSum;
+            } elseif ($course && $course->billing_type === 'monthly_flat') {
+                // Ryczałt miesięczny
+                $totalCourseValue = (float) \App\Models\BillingItem::where('course_id', $course->id)
+                    ->where('school_id', $user->school_id)
+                    ->where('year_month', $yearMonth)
+                    ->whereNull('lesson_id')
+                    ->sum('amount');
+                if ($totalCourseValue <= 0) {
+                    $totalCourseValue = $pricePerUnit;
+                }
+            } else {
+                // Domyślna kalkulacja: liczba lekcji * stawka
+                $totalCourseValue = $lessonsCount * $pricePerUnit;
+            }
+
+            $totalAmountSum += $totalCourseValue;
+
+            $summaryByCourse[] = [
+                'course' => $course,
+                'course_title' => $course?->title ?? '—',
+                'lessons_count' => $lessonsCount,
+                'price_per_unit' => $pricePerUnit,
+                'total_value' => $totalCourseValue,
+            ];
+        }
+
+        return view('teacher.lessons.index', compact(
+            'recentLessons',
+            'filterMonth',
+            'filterYear',
+            'summaryByCourse',
+            'totalLessonsCount',
+            'totalAmountSum'
+        ));
     }
 
     /**
@@ -118,7 +172,7 @@ class LessonController extends Controller
             }
         }
 
-        $minDate = now()->subDays(50)->startOfDay()->format('Y-m-d');
+        $minDate = now()->subDays(7)->startOfDay()->format('Y-m-d');
         $maxDate = now()->endOfDay()->format('Y-m-d');
 
         $validationRules = [
