@@ -18,7 +18,7 @@
                 <div class="text-secondary fw-semibold"
                     style="font-size:0.8rem; text-transform:uppercase; letter-spacing:.06em;">
                     <i class="ti ti-user-check me-1"></i>
-                    {{ $panelLabel }}{{ $activeSchool ? ' - ' . $activeSchool->name : '' }}
+                   <a href="/pulpit" class="link-secondary"> {{ $panelLabel }}{{ $activeSchool ? ' - ' . $activeSchool->name : '' }} </a>
                 </div>
                 <h2 class="page-title fw-bold mb-0">
                     @if(!empty($icon)) <i class="{{ $icon }} me-2"></i>

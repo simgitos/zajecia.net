@@ -74,9 +74,6 @@
                         </div>
                     @endif
                 </div>
-@else
-
-@endif
                 <!-- 2. KAFELEK UCZESTNICY (50% szerokości na mobile) -->
                 <x-stats icon="ti ti-mood-kid" color="primary" title="Uczestnicy zajęć" value="{{ $children->count()>0 ? $children->count() : 'Dodaj' }}"
                     route="{{ route('user.children.index') }}" description="Dodaj/Edytuj uczestników"></x-stats>
@@ -85,6 +82,69 @@
                 <!-- 3. KAFELEK OFERTA ZAJĘĆ (50% szerokości na mobile) -->
                 <x-stats icon="ti ti-school" color="secondary" title="Oferta Zajęć" value="Katalog"
                     route="{{ route('user.courses.index') }}" description="Zapisz się na zajęcia"></x-stats>
+                @else
+                    <!-- Samouczek: Pierwsze kroki (wyświetlany przed dodaniem pierwszego uczestnika) -->
+                    <div class="col-12">
+                        <div class="card shadow-sm border-0 rounded-3 bg-surface overflow-hidden">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <span class="avatar avatar-sm bg-primary-lt text-primary rounded-circle me-2">
+                                        <i class="ti ti-compass fs-2"></i>
+                                    </span>
+                                    <h3 class="card-title fw-bold text-dark mb-0">Pierwsze kroki – jak zacząć?</h3>
+                                </div>
+                                <p class="text-secondary mb-4">
+                                    Witaj w Zajęciowni! Aby w pełni korzystać z konta, wykonaj poniższe proste kroki:
+                                </p>
+
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-4">
+                                        <div class="p-3 bg-body rounded-3 border h-100">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <span class="badge bg-primary text-white rounded-pill px-2 py-1 me-2 fw-bold">1</span>
+                                                <strong class="text-dark">Dodaj uczestnika</strong>
+                                            </div>
+                                            <p class="text-secondary small mb-0">
+                                                Wprowadź dane dziecka lub swoje, aby móc przypisywać uczestnika do zajęć.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-4">
+                                        <div class="p-3 bg-body rounded-3 border h-100">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <span class="badge bg-primary-lt text-primary rounded-pill px-2 py-1 me-2 fw-bold">2</span>
+                                                <strong class="text-dark">Zapisz na zajęcia</strong>
+                                            </div>
+                                            <p class="text-secondary small mb-0">
+                                                Przejrzyj ofertę w katalogu i zapisz uczestnika na wybrane kursy i grupy.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-4">
+                                        <div class="p-3 bg-body rounded-3 border h-100">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <span class="badge bg-primary-lt text-primary rounded-pill px-2 py-1 me-2 fw-bold">3</span>
+                                                <strong class="text-dark">Kontroluj i opłacaj</strong>
+                                            </div>
+                                            <p class="text-secondary small mb-0">
+                                                Śledź obecności na zajęciach oraz wygodnie opłacaj składki przez internet.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 text-start">
+                                    <a href="{{ route('user.children.index') }}" class="btn btn-primary fw-bold px-3 py-2 shadow-sm">
+                                        <i class="ti ti-user-plus me-1.5 fs-2"></i> Dodaj pierwszego uczestnika
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                
 
             </div>
         </div>

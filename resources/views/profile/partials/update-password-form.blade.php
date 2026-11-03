@@ -14,25 +14,25 @@
         @method('put')
 
         <div>
-            <x-input-label for="update_password_current_password" :value="__('Current Password')" />
-            <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
+            <label class="form-label fw-bold" for="update_password_current_password">Aktualne hasło</label>   
+            <input type="password" id="update_password_current_password" name="current_password" class="form-control @error('current_password') is-invalid @enderror" value="{{ old('current_password', $user->current_password) }}" required autocomplete="current-password">  
             <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
         </div>
 
         <div>
-            <x-input-label for="update_password_password" :value="__('New Password')" />
-            <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+            <label class="form-label fw-bold" for="update_password_password">Nowe hasło</label>
+            <input type="password" id="update_password_password" name="password" class="form-control @error('password') is-invalid @enderror" value="{{ old('password', $user->password) }}" required autocomplete="new-password">  
             <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
         </div>
 
         <div>
-            <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+            <label class="form-label fw-bold" for="update_password_password_confirmation">Potwierdź nowe hasło</label>
+            <input type="password" id="update_password_password_confirmation" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" value="{{ old('password_confirmation', $user->password_confirmation) }}" required autocomplete="new-password">  
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
         </div>
 
         <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
 
             @if (session('status') === 'password-updated')
                 <p

@@ -66,7 +66,7 @@ class ChildController extends Controller
         Child::create($data);
 
         return redirect()->route('user.children.index')
-            ->with('success', 'Dziecko zostało pomyślnie dodane.');
+            ->with('success', 'Uczestnik został pomyślnie dodany. Teraz możesz zapisać go na dostępne zajęcia.');
     }
 
     /**
@@ -89,7 +89,7 @@ class ChildController extends Controller
         $child->update($request->validated());
 
         return redirect()->route('user.children.index')
-            ->with('success', 'Dane dziecka zostały pomyślnie zaktualizowane.');
+            ->with('success', 'Dane uczestnika zostały pomyślnie zaktualizowane.');
     }
 
     /**
@@ -102,7 +102,7 @@ class ChildController extends Controller
         $child->delete();
 
         return redirect()->route('user.children.index')
-            ->with('success', 'Profil dziecka został usunięty.');
+            ->with('success', 'Profil uczestnika został usunięty.');
     }
 
     /**
@@ -123,7 +123,7 @@ class ChildController extends Controller
         $service->enroll($child, $course, $user);
 
         return redirect()->back()
-            ->with('success', "Dziecko {$child->name} zostało pomyślnie zapisane na zajęcia \"{$course->title}\".");
+            ->with('success', "{$child->name} został pomyślnie zapisany na zajęcia \"{$course->title}\".");
     }
 
     /**

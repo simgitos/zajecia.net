@@ -52,7 +52,7 @@
                 </div>
 
                 {{-- Kolumna boczna: Hasło i Usunięcie konta --}}
-                <div class="col-12 col-lg-4">
+                <div class="col-12 col-lg-8">
                     <div class="card shadow-sm border-0 mb-4">
                         <div class="card-header bg-surface border-bottom">
                             <h3 class="card-title fw-bold text-dark mb-0">
@@ -64,7 +64,7 @@
                         </div>
                     </div>
 
-                    <div class="card shadow-sm border-0 border-start border-danger border-4">
+                    <div class="card shadow-sm border-0">
                         <div class="card-header bg-surface border-bottom">
                             <h3 class="card-title fw-bold text-danger mb-0">
                                 <i class="ti ti-alert-triangle me-2"></i> Usunięcie konta
