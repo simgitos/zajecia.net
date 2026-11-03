@@ -9,6 +9,7 @@
   <!-- CSS Tablera -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.6.0/dist/css/tabler.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.48.0/dist/tabler-icons.min.css" />
+  @include('partials.pwa')
 </head>
 
 <body class="d-flex flex-column">

@@ -77,6 +77,12 @@ Route::middleware(['auth', 'verified'])
         Route::get('/powiadomienia/{id}/go', [\App\Http\Controllers\NotificationController::class, 'read'])->name('notifications.go');
         Route::post('/powiadomienia/mark-all-read', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
         Route::get('/powiadomienia/unread-count', [\App\Http\Controllers\NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
+
+        // Subskrypcje Web Push
+        Route::get('/push/key', [\App\Http\Controllers\PushSubscriptionController::class, 'key'])->name('push.key');
+        Route::post('/push/subscribe', [\App\Http\Controllers\PushSubscriptionController::class, 'subscribe'])->name('push.subscribe');
+        Route::post('/push/unsubscribe', [\App\Http\Controllers\PushSubscriptionController::class, 'unsubscribe'])->name('push.unsubscribe');
+        Route::post('/push/test', [\App\Http\Controllers\PushSubscriptionController::class, 'test'])->name('push.test');
     });
 
 Route::middleware(['auth', 'verified', 'role:user'])

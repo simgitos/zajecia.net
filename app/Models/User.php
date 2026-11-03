@@ -244,4 +244,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Child::class, 'parent_id');
     }
+
+    public function pushSubscriptions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PushSubscription::class);
+    }
 }

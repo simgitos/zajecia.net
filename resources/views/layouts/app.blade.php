@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.48.0/dist/tabler-icons.min.css" />
   @livewireStyles
 
+  @include('partials.pwa')
 </head>
 
 <body>

@@ -158,6 +158,12 @@ class NotificationService
         }
     }
 
+    public function __construct(
+        private ?WebPushNotificationService $webPushService = null
+    ) {
+        $this->webPushService ??= app(WebPushNotificationService::class);
+    }
+
     /**
      * Wysyła powiadomienie do wyselekcjonowanych odbiorców.
      *
@@ -187,6 +193,18 @@ class NotificationService
         );
 
         Notification::send($recipients, $notification);
+
+        // Wysyłka Web Push do subskrybujących urządzeń
+        try {
+            $this->webPushService?->sendToUsers(
+                users: $recipients,
+                title: (string) $data['title'],
+                body: (string) $data['message'],
+                url: !empty($data['url']) ? (string) $data['url'] : '/pulpit'
+            );
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Błąd Web Push w NotificationService: ' . $e->getMessage());
+        }
 
         return $recipients->count();
     }
@@ -273,6 +291,21 @@ class NotificationService
             );
 
             $parent->notify($notification);
+
+            // Web Push do rodzica
+            try {
+                $this->webPushService?->sendToUser(
+                    user: $parent,
+                    title: $title,
+                    body: $unpaidParentAmount > 0
+                        ? "Masz nieopłacone pozycje za {$monthName} (" . number_format($unpaidParentAmount, 2, ',', ' ') . " zł). Kliknij, aby przejść do płatności."
+                        : "Wszystkie opłaty za {$monthName} zostały opłacone.",
+                    url: route('user.payments.index', [], false)
+                );
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Błąd Web Push w sendMonthlyBillingSummary: ' . $e->getMessage());
+            }
+
             $notifiedCount++;
         }
 

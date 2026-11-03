@@ -300,6 +300,7 @@
   </style>
 
   @yield('styles')
+  @include('partials.pwa')
 </head>
 
 <body>
